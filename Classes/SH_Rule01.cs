@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rhino.Geometry;
 
 
 namespace SimpleShapeGrammar.Classes
@@ -23,11 +24,16 @@ namespace SimpleShapeGrammar.Classes
         // --- constructors ---
         public SH_Rule01()
         {
-            
+            // empty constructor
+        }
+        public SH_Rule01(Vector3d _translate_start, Vector3d _translate_end)
+        {
+            P0X = _translate_start.X; P0Y = _translate_start.Y; P0Z = _translate_start.Z;
+            P1X = _translate_end.X; P1Y = _translate_end.Y; P1Z = _translate_end.Z;
         }
 
         // --- methods ---
-        void RuleOperation(SH_SimpleShape _ss)
+        public override void RuleOperation(SH_SimpleShape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
