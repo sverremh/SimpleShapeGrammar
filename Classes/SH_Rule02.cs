@@ -35,8 +35,8 @@ namespace SimpleShapeGrammar.Classes
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
-            SH_Line newLine0 = new SH_Line(new SH_Node[] { line.nodes[0], newNode });
-            SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.nodes[1] });
+            SH_Line newLine0 = new SH_Line(new SH_Node[] { line.Nodes[0], newNode });
+            SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.Nodes[1] });
 
             // add the lines to the _ss list
             _ss.Lines.Add(newLine0);
@@ -53,12 +53,12 @@ namespace SimpleShapeGrammar.Classes
 
         private SH_Node AddNode(SH_Line _line, double _t)
         {
-            double sx = _line.nodes[0].X;
-            double sy = _line.nodes[0].Y;
-            double sz = _line.nodes[0].Z;
-            double ex = _line.nodes[1].X;
-            double ey = _line.nodes[1].Y;
-            double ez = _line.nodes[1].Z;
+            double sx = _line.Nodes[0].X;
+            double sy = _line.Nodes[0].Y;
+            double sz = _line.Nodes[0].Z;
+            double ex = _line.Nodes[1].X;
+            double ey = _line.Nodes[1].Y;
+            double ez = _line.Nodes[1].Z;
 
             double mx = (1 - _t) * sx + _t * ex;
             double my = (1 - _t) * sy + _t * ey;
@@ -68,12 +68,6 @@ namespace SimpleShapeGrammar.Classes
 
             return newNode;
         }
-
-        public SH_Rule02()
-        {
-
-        }
-
 
         public override void RuleOperation(SH_SimpleShape _ss)
         {
