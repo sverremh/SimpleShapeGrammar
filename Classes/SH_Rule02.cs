@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_Rule02 : SH_Rule
+    public class SH_Rule02 : SH_Rule
     {
+
     }
 }
