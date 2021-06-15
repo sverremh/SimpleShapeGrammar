@@ -9,8 +9,9 @@ namespace SimpleShapeGrammar.Classes
     class SH_SimpleShape
     {
         // --- properties ---
-        private List<SH_Line> Lines { get; set; }
-        private static int NodeCount { get; }
+        public List<SH_Line> Lines { get; set; }
+        public List<SH_Node> Nodes { get; set; }
+        
         
         
         
@@ -21,5 +22,9 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
+        public void AddLine(SH_Line _line)
+        {
+            Lines.Add(_line);
+        }
     }
 }
