@@ -67,6 +67,7 @@
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
     <Compile Include="Components\Assembly.cs" />
+    <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="SimpleShapeGrammarInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_Support
+    public class SH_Support
     {
         // --- properties ---
         public SH_Node node;

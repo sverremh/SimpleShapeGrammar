@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
     public enum State { alpha = 0, beta = 1, gamma = 2 };
@@ -11,7 +11,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_SimpleShape
     {
         // --- properties ---
-        public List<SH_Line> Lines { get; set; }
+        public List<SH_Line> Lines { get; set; } = new List<SH_Line>();
         public List<SH_Node> Nodes { get; set; }
         public State SimpleShapeState { get; set; }
 
@@ -25,6 +25,32 @@ namespace SimpleShapeGrammar.Classes
         public void AddLine(SH_Line _line)
         {
             Lines.Add(_line);
+        }
+        public List<Line> GetLinesFromShape()
+        {
+            //Variable
+            List<Line> lines = new List<Line>();
+
+            //Get Line from each element
+            foreach (SH_Line sh_line in Lines)
+            {
+                // Create Start point
+                Point3d sPt = new Point3d();
+                sPt.X = sh_line.Nodes[0].X;
+                sPt.Y = sh_line.Nodes[0].Y;
+                sPt.Z = sh_line.Nodes[0].Z;
+
+                // Create End point
+                Point3d ePt = new Point3d();
+                ePt.X = sh_line.Nodes[1].X;
+                ePt.Y = sh_line.Nodes[1].Y;
+                ePt.Z = sh_line.Nodes[1].Z;
+
+                lines.Add(new Line(sPt, ePt));
+
+            }
+
+            return lines; 
         }
     }
 }
