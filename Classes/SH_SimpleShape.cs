@@ -10,8 +10,9 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public List<SH_Line> Lines { get; set; }
+
         public List<SH_Node> Nodes { get; set; }
-        
+
         
         
         
