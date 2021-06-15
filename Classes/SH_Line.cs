@@ -9,12 +9,13 @@ namespace SimpleShapeGrammar.Classes
     class SH_Line
     {
         // --- properties ---
-        private int ID { get; }
+        public int ID { get; }
         public SH_Node[] nodes;
         // --- constructors ---
-        public SH_Line(int _id, SH_Node[] _nodes) 
+        public SH_Line(SH_Node[] _nodes) 
         {
-            ID = _id;
+            SH_UtilityClass.LineCount += 1;
+            ID = SH_UtilityClass.LineCount;
             nodes = _nodes;
         }
 

@@ -10,7 +10,7 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public SH_Node node;
-        private int SupportCondition { get; set; }
+        public int SupportCondition { get; set; }
 
         // --- constructors ---
         public SH_Support(string _support_conditions, SH_Node _node)
