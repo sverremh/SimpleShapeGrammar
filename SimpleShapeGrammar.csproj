@@ -56,7 +56,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Rule.cs" />
+    <Compile Include="Classes\SH_Line.cs" />
+    <Compile Include="Classes\SH_Node.cs" />
+    <Compile Include="Classes\SH_Rule.cs" />
+    <Compile Include="Classes\SH_Rule01.cs" />
+    <Compile Include="Classes\SH_Rule02.cs" />
+    <Compile Include="Classes\SH_RuleA.cs" />
+    <Compile Include="Classes\SH_SimpleShape.cs" />
+    <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Components\SimpleShapeGrammarComponent.cs" />
     <Compile Include="SimpleShapeGrammarInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
