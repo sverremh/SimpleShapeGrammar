@@ -68,6 +68,8 @@
     <Compile Include="Classes\SH_UtilityClass.cs" />
     <Compile Include="Components\Assembly.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
+    <Compile Include="Components\GrammarInterpreter.cs" />
+    <Compile Include="Components\Rule01.cs" />
     <Compile Include="SimpleShapeGrammarInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

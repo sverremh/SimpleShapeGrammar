@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    public class SH_Rule
+    public abstract class SH_Rule
     {
 
         public SH_Rule()
         { 
             
         }
+        public abstract void RuleOperation(SH_SimpleShape _ss);
+        
         
     }
 
