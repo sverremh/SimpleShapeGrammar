@@ -8,5 +8,18 @@ namespace SimpleShapeGrammar.Classes
 {
     class SH_SimpleShape
     {
+        // --- properties ---
+        private List<SH_Line> Lines { get; set; }
+        private static int NodeCount { get; }
+        
+        
+        
+        // --- constructors ---
+        public SH_SimpleShape()
+        {
+            // empty constructor
+        }
+
+        // --- methods ---
     }
 }
