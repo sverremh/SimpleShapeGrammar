@@ -15,7 +15,7 @@ namespace SimpleShapeGrammar.Classes
         public double X { get; set; }
         public double Y { get; set; }
         public double Z { get; set; }
-        public SH_Support support { get; set; }
+        public SH_Support Support { get; set; }
 
 
 
