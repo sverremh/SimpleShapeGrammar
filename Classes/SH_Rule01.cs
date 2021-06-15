@@ -26,9 +26,17 @@ namespace SimpleShapeGrammar.Classes
 
         // --- methods ---
         void RuleOperation(SH_SimpleShape _ss)
-        { 
+        {
             // take the 1st element
-            // SH_Line sh_line = _ss
+            SH_Line sh_line = _ss.Lines[0];
+
+            sh_line.nodes[0].X += P0X;
+            sh_line.nodes[0].Y += P0Y;
+            sh_line.nodes[0].Z += P0Z;
+            sh_line.nodes[1].X += P1X;
+            sh_line.nodes[1].Y += P1Y;
+            sh_line.nodes[1].Z += P1Z;
+
         }
 
     }

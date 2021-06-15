@@ -10,9 +10,9 @@ namespace SimpleShapeGrammar.Classes
     {           
         // --- properties ---
         private int ID { get; }
-        private double X { get; set; }
-        private double Y { get; set; }
-        private double Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
         private SH_Support support { get; set; }
 
         // --- constructors --- 
