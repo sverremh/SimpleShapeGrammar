@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_Rule
+    public class SH_Rule
     {
+        enum State{ alpha, beta, gamma }
+
+        public SH_Rule()
+        { 
+            
+        }
+        
     }
+
+
 }
