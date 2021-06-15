@@ -18,6 +18,8 @@ namespace SimpleShapeGrammar.Classes
 
         public double P1Z { get; private set; }
 
+        public State RuleState = State.alpha;
+
         // --- constructors ---
         public SH_Rule01()
         {
@@ -27,15 +29,25 @@ namespace SimpleShapeGrammar.Classes
         // --- methods ---
         void RuleOperation(SH_SimpleShape _ss)
         {
+            // check if the state maches the simple shape state
+            if (_ss.SimpleShapeState != RuleState)
+            {
+                return;
+            }
+
             // take the 1st element
             SH_Line sh_line = _ss.Lines[0];
 
+            // apply the change
             sh_line.nodes[0].X += P0X;
             sh_line.nodes[0].Y += P0Y;
             sh_line.nodes[0].Z += P0Z;
             sh_line.nodes[1].X += P1X;
             sh_line.nodes[1].Y += P1Y;
             sh_line.nodes[1].Z += P1Z;
+
+            // change the state
+            _ss.SimpleShapeState = State.beta;
 
         }
 

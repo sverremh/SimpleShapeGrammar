@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_Node
-    {
+    public class SH_Node
+    {           
+
         // --- properties ---
 
         public int ID { get; }

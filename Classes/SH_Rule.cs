@@ -8,7 +8,6 @@ namespace SimpleShapeGrammar.Classes
 {
     public class SH_Rule
     {
-        enum State{ alpha, beta, gamma }
 
         public SH_Rule()
         { 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_Line
+    public class SH_Line
     {
         // --- properties ---
         public int ID { get; }
