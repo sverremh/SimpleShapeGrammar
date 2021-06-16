@@ -6,15 +6,15 @@ using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
 {
-    public class LineToElement : GH_Component
+    public class CreateMaterial : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the CreateMaterial class.
         /// </summary>
-        public LineToElement()
-          : base("LineToElement", "lnToEl",
-              "Creates a SH_Element from a Line",
-              "SimpleGrammar", "Element")
+        public CreateMaterial()
+          : base("CreateMaterial", "material",
+              "CreateMaterial",
+              "SimpleGrammar", "Material")
         {
         }
 
@@ -23,8 +23,11 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Cross Section to assign the element", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "name", "Name.", GH_ParamAccess.item, "S355");
+            pManager.AddNumberParameter("Young's Modulus", "E", "Young's Modulus of material [N/mm^2]", GH_ParamAccess.item, 210000);
+            pManager.AddNumberParameter("Poisson's Ratio", "v", "Poisson's ratio of the material", GH_ParamAccess.item, 0.3);
+            pManager.AddNumberParameter("Yield Strength", "fy", "Yield strength [N/mm^2]", GH_ParamAccess.item, 355);
+            pManager.AddNumberParameter("Density", "rho", "Density of material [kg/m^3]", GH_ParamAccess.item, 7800);
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Material", "m", "SH_Material Class", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,33 +45,24 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            Line line = new Line();
-            SH_CrossSection crossSection = new SH_CrossSection();
+            double e = 0.0;
+            double v = 0.0;
+            double fy = 0.0;
+            string name = "";
+            double rho = 0.0;
 
-            // --- input --- 
-            if (!DA.GetData(0, ref line)) return;
-            if (!DA.GetData(1, ref crossSection)) return; 
+            // --- input ---
+            DA.GetData(0, ref name);
+            DA.GetData(1, ref e);
+            DA.GetData(2, ref v);
+            DA.GetData(3, ref fy);
+            DA.GetData(4, ref rho);
 
             // --- solve ---
+            SH_Material material = new SH_Material(name, e, v, fy, rho);
 
-            // Restart the counter
-            
-
-            //Initiate the Simple Shape
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
-
-            // Create the SH_Node and SH_Lines. 
-            SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(line.From, null);
-            nodes[1] = new SH_Node(line.To, null);
-                   
-            SH_Element sH_Line = new SH_Element(nodes, null);
-            sH_Line.CrossSection = crossSection;
-            
-          
             // --- output ---
-            DA.SetData(0, sH_Line);
-
+            DA.SetData(0, material);
         }
 
         /// <summary>
@@ -80,7 +74,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Elem1D;
+                return null;
             }
         }
 
@@ -89,7 +83,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("465674f0-3773-4201-b55d-a6010b4368a5"); }
         }
     }
 }
