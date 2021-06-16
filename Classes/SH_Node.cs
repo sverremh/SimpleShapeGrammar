@@ -12,8 +12,10 @@ namespace SimpleShapeGrammar.Classes
 
         // --- properties ---
 
+
         public int ID { get; }
         public Point3d Position { get; set; }
+
 
         public SH_Support Support { get; set; }
 
