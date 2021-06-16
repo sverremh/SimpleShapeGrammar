@@ -12,7 +12,7 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public State RuleState = State.beta;
-        public int LineID { get; set; }
+        public int LineIndex { get; set; }
         public double Param { get; set; }
 
         // --- constructors ---
@@ -21,9 +21,9 @@ namespace SimpleShapeGrammar.Classes
             
         }
 
-        public SH_Rule02(int _lineid, double _param)
+        public SH_Rule02(int _line_index, double _param)
         {
-            LineID = _lineid;
+            LineIndex = _line_index;
             Param = _param;
         }
 
@@ -37,8 +37,10 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // choose the line to split
-            SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First();
-            
+            //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
+            SH_Element line = _ss.Lines[LineIndex];
+
+
             int elInd = _ss.Lines.IndexOf(line);
             // add the intermediate node
             SH_Node newNode = AddNode(line, Param);
@@ -56,17 +58,6 @@ namespace SimpleShapeGrammar.Classes
 
             // insert the new lines in its position
             _ss.Lines.Insert(elInd, newLine0);
-
-            #region Delete if code is working
-            // add the lines to the _ss list
-            //_ss.Lines.Add(newLine0);
-            //_ss.Lines.Add(newLine1);
-
-            // remove the line from the line list
-            //_ss.Lines.RemoveAll((l) => l.ID == LineID);
-            #endregion
-
-
 
             // no change in the state (remains in beta state)
             // _ss.SimpleShapeState = State.beta; 
