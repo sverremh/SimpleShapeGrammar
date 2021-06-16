@@ -10,7 +10,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Element
     {
         // --- properties ---
-        public static int IDCounter { get; set; };
+        public static int IDCounter { get; set; }
         public int ID { get; }
         // public int ID { get; }
         public SH_Node[] Nodes { get; }
