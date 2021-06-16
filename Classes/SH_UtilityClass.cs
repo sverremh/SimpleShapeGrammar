@@ -7,7 +7,11 @@ using System.IO;
 
 namespace SimpleShapeGrammar.Classes
 {
-   
+
+    // --- properties ---
+    // --- constructors --
+    // --- methods ---
+
     public static class SH_UtilityClass
     {
         public static int NodeCount = 0;
