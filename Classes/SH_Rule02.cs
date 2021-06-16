@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -66,18 +66,11 @@ namespace SimpleShapeGrammar.Classes
 
         private SH_Node AddNode(SH_Element _line, double _t)
         {
-            double sx = _line.Nodes[0].X;
-            double sy = _line.Nodes[0].Y;
-            double sz = _line.Nodes[0].Z;
-            double ex = _line.Nodes[1].X;
-            double ey = _line.Nodes[1].Y;
-            double ez = _line.Nodes[1].Z;
-
-            double mx = (1 - _t) * sx + _t * ex;
-            double my = (1 - _t) * sy + _t * ey;
-            double mz = (1 - _t) * sz + _t * ez;
-
-            SH_Node newNode = new SH_Node(mx, my, mz);
+            double mx = (1 - _t) * _line.Nodes[0].Position.X + _t * _line.Nodes[1].Position.X;
+            double my = (1 - _t) * _line.Nodes[0].Position.Y + _t * _line.Nodes[1].Position.Y;
+            double mz = (1 - _t) * _line.Nodes[0].Position.Z + _t * _line.Nodes[1].Position.Z;
+            Point3d newPoint = new Point3d(mx, my, mz);
+            SH_Node newNode = new SH_Node(newPoint);
 
             return newNode;
         }

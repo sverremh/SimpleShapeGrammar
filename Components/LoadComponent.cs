@@ -1,20 +1,19 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
 {
-    public class LineToElement : GH_Component
+    public class LoadComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the LoadComponent class.
         /// </summary>
-        public LineToElement()
-          : base("LineToElement", "lnToEl",
-              "Creates a SH_Element from a Line",
-              "SimpleGrammar", "Element")
+        public LoadComponent()
+          : base("LoadComponent", "loads",
+              "Assign Loads To the structure",
+              "SimpleGrammar", "Loads")
         {
         }
 
@@ -23,7 +22,9 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Load Vector", "load", "Load as Vector in x,y,z direction", GH_ParamAccess.item, new Vector3d(0,0,0));
+            pManager.AddVectorParameter("Moment Vector", "moment", "Moment as Vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
+            pManager.AddPointParameter("Position", "pos", "Position as Point3d", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Loads", "loads", "An instance of the load class", GH_ParamAccess.item); 
         }
 
         /// <summary>
@@ -41,30 +42,22 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            Line line = new Line();
+            Vector3d forces = new Vector3d();
+            Vector3d moments = new Vector3d();
+            Point3d position = new Point3d();
 
             // --- input --- 
-            if (!DA.GetData(0, ref line)) return;
+            if (!DA.GetData(2, ref position)) return;
+            DA.GetData(0, ref forces);
+            DA.GetData(1, ref moments);
 
             // --- solve ---
+            SH_PointLoad load = new SH_PointLoad(forces, moments, position);
 
-            // Restart the counter
-            SH_Element.IDCounter = 0; 
 
-            //Initiate the Simple Shape
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
 
-            // Create the SH_Node and SH_Lines. 
-            SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(line.From);
-            nodes[1] = new SH_Node(line.To);
-                   
-            SH_Element sH_Line = new SH_Element(nodes);
-            
-          
             // --- output ---
-            DA.SetData(0, sH_Line);
-
+            DA.SetData(0, load);
         }
 
         /// <summary>
@@ -76,7 +69,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Mdl;
+                return null;
             }
         }
 
@@ -85,7 +78,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("4e7d75ab-498c-4e30-9e3a-addf180b9a4d"); }
         }
     }
 }
