@@ -22,6 +22,11 @@ namespace SimpleShapeGrammar.Classes
     // --- constructors --
     // --- methods ---
 
+    // --- variables ---
+    // --- input ---
+    // --- solve ---
+    // --- output ---
+
     public static class SH_UtilityClass
     {
         public static int NodeCount = 0;
