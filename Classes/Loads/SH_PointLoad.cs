@@ -7,6 +7,7 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Classes
 {
+    [Serializable]
     public class SH_PointLoad : SH_Load
     {
         // --- properties ---

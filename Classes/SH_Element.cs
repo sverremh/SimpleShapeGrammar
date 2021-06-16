@@ -14,6 +14,9 @@ namespace SimpleShapeGrammar.Classes
         public int? ID { get; set; }
         // public int ID { get; }
         public SH_Node[] Nodes { get; }
+
+        public SH_CrossSection CrossSection { get; set; }
+
         // --- constructors ---
         public SH_Element(SH_Node[] _nodes, int? _id) 
         {

@@ -59,26 +59,31 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CrossSections\SH_CrossSection.cs" />
     <Compile Include="Classes\SH_Element.cs" />
-    <Compile Include="Classes\SH_Load.cs" />
-    <Compile Include="Classes\SH_PointLoad.cs" />
+    <Compile Include="Classes\Loads\SH_Load.cs" />
+    <Compile Include="Classes\SH_Material.cs" />
+    <Compile Include="Classes\Loads\SH_PointLoad.cs" />
     <Compile Include="Classes\SH_Node.cs" />
-    <Compile Include="Classes\SH_Rule.cs" />
-    <Compile Include="Classes\SH_Rule01.cs" />
-    <Compile Include="Classes\SH_Rule02.cs" />
-    <Compile Include="Classes\SH_RuleA.cs" />
+    <Compile Include="Classes\CrossSections\SH_Rectangle.cs" />
+    <Compile Include="Classes\Rules\SH_Rule.cs" />
+    <Compile Include="Classes\Rules\SH_Rule01.cs" />
+    <Compile Include="Classes\Rules\SH_Rule02.cs" />
+    <Compile Include="Classes\Rules\SH_RuleA.cs" />
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
     <Compile Include="Components\Assembly.cs" />
+    <Compile Include="Components\CreateMaterial.cs" />
+    <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
     <Compile Include="Components\KarambaTest.cs" />
     <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
     <Compile Include="Components\LoadComponent.cs" />
-    <Compile Include="Components\Rule01.cs" />
-    <Compile Include="Components\Rule02.cs" />
-    <Compile Include="Components\RuleA.cs" />
+    <Compile Include="Components\RuleComponents\Rule01.cs" />
+    <Compile Include="Components\RuleComponents\Rule02.cs" />
+    <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\SupportComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -115,6 +120,7 @@
   <ItemGroup>
     <None Include="Resources\icons_I_DrawCS.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
