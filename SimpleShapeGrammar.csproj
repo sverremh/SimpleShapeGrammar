@@ -66,6 +66,7 @@
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
+    <Compile Include="Components\Assembly.cs" />
     <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />

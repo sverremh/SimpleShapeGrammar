@@ -11,7 +11,7 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public static int IDCounter { get; set; }
-        public int ID { get; }
+        public int ID { get; set; }
         // public int ID { get; }
         public SH_Node[] Nodes { get; }
         // --- constructors ---
