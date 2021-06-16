@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
+    [Serializable]
     public class SH_Rule02 : SH_Rule
     {
         // --- properties ---
