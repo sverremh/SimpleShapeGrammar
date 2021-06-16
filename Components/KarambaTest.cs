@@ -3,8 +3,15 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 
-using Karamba.Models;
 using Karamba.GHopper.Models;
+using Karamba.Models;
+using Karamba.Utilities;
+using Karamba.Geometry;
+using Karamba.CrossSections;
+using Karamba.Supports;
+using Karamba.Loads;
+
+
 namespace SimpleShapeGrammar.Components
 {
     public class KarambaTest : GH_Component
@@ -13,8 +20,8 @@ namespace SimpleShapeGrammar.Components
         /// Initializes a new instance of the KarambaTest class.
         /// </summary>
         public KarambaTest()
-          : base("KarambaTest", "Nickname",
-              "Description",
+          : base("Karamba Analysis Th.I", "Karamba Th.I",
+              "Karamba Analysis Th.I",
               "SimpleGrammar", "Karamba")
         {
         }
@@ -24,8 +31,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Model(), "Model_in", "Model_in",
-                       "Model to be manipulated", GH_ParamAccess.item);
+            // pManager.AddParameter(new Param_Model(), "Model_in", "Model_in",
+            //          "Model to be manipulated", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -35,11 +42,6 @@ namespace SimpleShapeGrammar.Components
         {
             pManager.RegisterParam(new Param_Model(), "Model_out", "Model_out",
                         "Model after eliminating all tension elements");
-            pManager.Register_BooleanParam("isActive", "isActive",
-                "List of boolean values corresponding to each element in the model." +
-                "True if the element is active.");            
-            pManager.Register_DoubleParam("maximum displacement", "maxDisp",
-                " Maximum displacement [m] of the model after eliminationprocess.");
         }
 
         /// <summary>
@@ -48,108 +50,63 @@ namespace SimpleShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            GH_Model in_gh_model = null;
-            if (!DA.GetData<GH_Model>(0, ref in_gh_model)) return;
-            var model = in_gh_model.Value;
+            // --- variables ---
+            var nodes = new List<Point3>();
+            var logger = new MessageLogger();
+            var k3d = new KarambaCommon.Toolkit();
 
-            // maximum number of iterations
-            int max_iter = 10;
-            DA.GetData<int>(1, ref max_iter);
+            // --- input --- 
 
-            // load case to consider for elimination of elements
-            int lc_num = 0;
 
-            // clone model to avoid side effects
-            model = (Karamba.Models.Model)model.Clone();
 
-            // clone its elements to avoid side effects
-            model.cloneElements();
+            // --- solve ---
 
-            // clone the feb-model to avoid side effects
-            model.deepCloneFEModel();
+            // points
+            var p0 = new Point3(0, 0, 0);
+            var p1 = new Point3(0, 0, 10);
+            var L0 = new Line3(p0, p1);
 
-            string singular_system_msg = "The stiffness matrix of the system is singular.";
+            // material
 
-            // do the iteration and remove elements with tensile axial forces
-            for (int iter = 0; iter < max_iter; iter++)
-            {
-                // create an analysis and response object for calculating and retrieving results
-                feb.Deform analysis = new feb.Deform(model.febmodel);
-                feb.Response response = new feb.Response(analysis);
+            // crosecs
 
-                try
-                {
-                    // calculate the displacements
-                    response.updateNodalDisplacements();
-                    // calculate the member forces
-                    response.updateMemberForces();
-                }
-                catch
-                {
-                    // send an error message in case something went wrong
-                    throw new Exception(singular_system_msg);
-                }
+            //var crosec = new Karamba.CrossSections.CroSec_Trapezoid(
+            //    "", "Rect", "EN", System.Drawing.Color.HotPink, new Karamba.Materials.FemMaterial_Isotrop(), 30, 20, 20);
+            // var crosecs = new List<CroSec>() { crosec };
 
-                // check the normal force of each element and deactivate those under tension
-                double N, V, M;
-                bool has_changed = false;
-                foreach (var elem in model.elems)
-                {
-                    // retrieve resultant cross section forces
-                    elem.resultantCroSecForces(model, lc_num, out N, out V, out M);
-                    // check whether normal force is tensile
-                    if (!(N >= 0)) continue;
-                    // set element inactive
-                    elem.set_is_active(model, false);
-                    has_changed = true;
-                }
+            // elems
+            var elems = k3d.Part.LineToBeam(new List<Line3>() { L0 },
+                new List<string>() { "C1" },
+                new List<CroSec>(), logger, out nodes);
 
-                // leave iteration loop if nothing changed
-                if (!has_changed) break;
+            // supports
+            var cond = new List<bool>() { true, true, true, true, true, true };
+            var support = k3d.Support.Support(0, cond);
+            var supports = new List<Support>() { support };
 
-                // if something changed inform the feb-model about it (otherwise it won't recalculate)
-                model.febmodel.touch();
+            // loads
+            var pload = k3d.Load.PointLoad(1,
+                new Vector3(10, 0, 0), new Vector3());
+            var ploads = new List<Load>() { pload };
 
-                // this guards the objects from being freed prematurely
-                GC.KeepAlive(analysis);
-                GC.KeepAlive(response);
-            }
+            // assembly
+            double mass;
+            Point3 cog;
+            bool flag;
+            string info;
+            var model = k3d.Model.AssembleModel(elems, supports, ploads,
+              out info, out mass, out cog, out info, out flag);
 
-            // update model to its final state
-            double max_disp = 0;
-            try
-            {
-                // create an analysis and response object for calculating and retrieving results
-                feb.Deform analysis = new feb.Deform(model.febmodel);
-                feb.Response response = new feb.Response(analysis);
+            // calculate Th.I response
+            List<double> max_disp;
+            List<double> out_g;
+            List<double> out_comp;
+            string message;
+            model = k3d.Algorithms.AnalyzeThI(model, out max_disp, out out_g, out out_comp, out message);
 
-                // calculate the displacements
-                response.updateNodalDisplacements();
-                // calculate the member forces
-                response.updateMemberForces();
+            // --- output ---
 
-                max_disp = response.maxDisplacement();
-
-                // this guards the objects from being freed prematurely
-                GC.KeepAlive(analysis);
-                GC.KeepAlive(response);
-            }
-            catch
-            {
-                // send an error message in case something went wrong
-                throw new Exception(singular_system_msg);
-            }
-
-            // set up list of true/false values that corresponds to the element states
-            List<bool> elem_activity = new List<bool>();
-            foreach (var elem in model.elems)
-            {
-                elem_activity.Add(elem.is_active);
-            }
-
-            DA.SetData(0, new GH_Model(model));
-            DA.SetDataList(1, elem_activity);
-            DA.SetData(2, max_disp);
+            DA.SetData(0, new Karamba.GHopper.Models.GH_Model(model));
         }
 
         /// <summary>
