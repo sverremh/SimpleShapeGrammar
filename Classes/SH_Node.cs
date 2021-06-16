@@ -13,7 +13,7 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
 
 
-        public int ID { get; }
+        public int? ID { get; set;}
         public Point3d Position { get; set; }
 
 
@@ -24,14 +24,11 @@ namespace SimpleShapeGrammar.Classes
         // --- constructors --- 
         public SH_Node()
         {
-            SH_UtilityClass.NodeCount += 1;
-            ID = SH_UtilityClass.NodeCount;
-            
+            // empty            
         }
-        public SH_Node(Point3d _location)
+        public SH_Node(Point3d _location, int? _id)
         {
-            SH_UtilityClass.NodeCount += 1;
-            ID = SH_UtilityClass.NodeCount;
+            ID = _id;
             
             Support = new SH_Support("000000", Position);
             Position = _location;
