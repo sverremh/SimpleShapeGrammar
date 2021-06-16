@@ -12,14 +12,9 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Rule01 : SH_Rule
     {
         // --- properties ---
-        public double P0X { get; private set; }
-        public double P0Y { get; private set; }
-        public double P0Z { get; private set; }
-        public double P1X { get; private set; }
-        public double P1Y { get; private set; }
-
-        public double P1Z { get; private set; }
-
+        public Vector3d TranslateStart { get; private set; }
+        public Vector3d TranslateEnd { get; private set; }
+        
         public State RuleState = State.alpha;
 
         // --- constructors ---
@@ -29,8 +24,9 @@ namespace SimpleShapeGrammar.Classes
         }
         public SH_Rule01(Vector3d _translate_start, Vector3d _translate_end)
         {
-            P0X = _translate_start.X; P0Y = _translate_start.Y; P0Z = _translate_start.Z;
-            P1X = _translate_end.X; P1Y = _translate_end.Y; P1Z = _translate_end.Z;
+            TranslateStart = _translate_start;
+            TranslateEnd = _translate_end;
+            
         }
 
         // --- methods ---
@@ -48,9 +44,9 @@ namespace SimpleShapeGrammar.Classes
             // apply the change
             Point3d currentStart = sh_line.Nodes[0].Position;
             Point3d currentEnd = sh_line.Nodes[1].Position;
-            sh_line.Nodes[0].Position = new Point3d(currentStart.X + P0X, currentStart.Y + P0Y, currentStart.Z + P0Z);
-            sh_line.Nodes[1].Position = new Point3d(currentEnd.X + P1X, currentEnd.Y + P1Y, currentEnd.Z + P1Z);
-
+            
+            sh_line.Nodes[0].Position = currentStart + TranslateStart;
+            sh_line.Nodes[1].Position = currentEnd + TranslateEnd;
             // change the state
             _ss.SimpleShapeState = State.beta;
 
