@@ -11,15 +11,23 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public State RuleState = State.beta;
+        public int LineID { get; set; }
+        public double Param { get; set; }
 
         // --- constructors ---
         public SH_Rule02()
         {
+            
+        }
 
+        public SH_Rule02(int _lineid, double _param)
+        {
+            LineID = _lineid;
+            Param = _param;
         }
 
         // --- methods ---
-        void RuleOperation(SH_SimpleShape _ss, int _lineid, double _param)
+        public override void RuleOperation(SH_SimpleShape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
@@ -28,10 +36,10 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // choose the line to split
-            SH_Line line = _ss.Lines.Where(l => l.ID == _lineid).First();
+            SH_Line line = _ss.Lines.Where(l => l.ID == LineID).First();
 
             // add the intermediate node
-            SH_Node newNode = AddNode(line, _param);
+            SH_Node newNode = AddNode(line, Param);
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
@@ -43,11 +51,11 @@ namespace SimpleShapeGrammar.Classes
             _ss.Lines.Add(newLine1);
 
             // remove the line from the line list
-            _ss.Lines.RemoveAll((l) => l.ID == _lineid);
+            _ss.Lines.RemoveAll((l) => l.ID == LineID);
 
 
-            // change the state
-            // _ss.SimpleShapeState = State.beta;
+            // no change in the state (remains in beta state)
+            // _ss.SimpleShapeState = State.beta; 
 
         }
 
@@ -69,10 +77,6 @@ namespace SimpleShapeGrammar.Classes
             return newNode;
         }
 
-        public override void RuleOperation(SH_SimpleShape _ss)
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }
