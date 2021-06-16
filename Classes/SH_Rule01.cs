@@ -46,12 +46,10 @@ namespace SimpleShapeGrammar.Classes
             SH_Element sh_line = _ss.Lines[0];
 
             // apply the change
-            sh_line.Nodes[0].X += P0X;
-            sh_line.Nodes[0].Y += P0Y;
-            sh_line.Nodes[0].Z += P0Z;
-            sh_line.Nodes[1].X += P1X;
-            sh_line.Nodes[1].Y += P1Y;
-            sh_line.Nodes[1].Z += P1Z;
+            Point3d currentStart = sh_line.Nodes[0].Position;
+            Point3d currentEnd = sh_line.Nodes[1].Position;
+            sh_line.Nodes[0].Position = new Point3d(currentStart.X + P0X, currentStart.Y + P0Y, currentStart.Z + P0Z);
+            sh_line.Nodes[1].Position = new Point3d(currentEnd.X + P1X, currentEnd.Y + P1Y, currentEnd.Z + P1Z);
 
             // change the state
             _ss.SimpleShapeState = State.beta;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
@@ -11,10 +11,11 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public SH_Node node;
+        public Point3d Position { get; set; }
         public int SupportCondition { get; set; }
 
         // --- constructors ---
-        public SH_Support(string _support_conditions, SH_Node _node)
+        public SH_Support(string _support_conditions, Point3d _position)
         {
             // Test if the support condition are in the correct format
             if (_support_conditions.Length != 6) throw new Exception("The length of the string must be exactly 6 characters");
@@ -30,7 +31,7 @@ namespace SimpleShapeGrammar.Classes
             // Create the support
             SupportCondition = SetConditions(_support_conditions);
 
-            node = _node;
+            Position = _position;
             
         }
         // --- methods ---

@@ -35,16 +35,9 @@ namespace SimpleShapeGrammar.Classes
             foreach (SH_Element sh_line in Lines)
             {
                 // Create Start point
-                Point3d sPt = new Point3d();
-                sPt.X = sh_line.Nodes[0].X;
-                sPt.Y = sh_line.Nodes[0].Y;
-                sPt.Z = sh_line.Nodes[0].Z;
-
+                Point3d sPt = sh_line.Nodes[0].Position;
                 // Create End point
-                Point3d ePt = new Point3d();
-                ePt.X = sh_line.Nodes[1].X;
-                ePt.Y = sh_line.Nodes[1].Y;
-                ePt.Z = sh_line.Nodes[1].Z;
+                Point3d ePt = sh_line.Nodes[1].Position;             
 
                 lines.Add(new Line(sPt, ePt));
 

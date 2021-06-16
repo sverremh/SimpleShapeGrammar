@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
@@ -13,9 +13,8 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
 
         public int ID { get; }
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Z { get; set; }
+        public Point3d Position { get; set; }
+
         public SH_Support Support { get; set; }
 
 
@@ -27,14 +26,13 @@ namespace SimpleShapeGrammar.Classes
             ID = SH_UtilityClass.NodeCount;
             
         }
-        public SH_Node(double _x, double _y, double _z)
+        public SH_Node(Point3d _location)
         {
             SH_UtilityClass.NodeCount += 1;
             ID = SH_UtilityClass.NodeCount;
-            X = _x;
-            Y = _y;
-            Z = _z;
-
+            
+            Support = new SH_Support("000000", Position);
+            Position = _location;
         }
 
         // --- methods ---

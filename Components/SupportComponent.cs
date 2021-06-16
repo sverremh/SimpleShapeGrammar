@@ -3,18 +3,17 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
-
 namespace SimpleShapeGrammar.Components
 {
-    public class LineToElement : GH_Component
+    public class SupportComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the SupportComponent class.
         /// </summary>
-        public LineToElement()
-          : base("LineToElement", "lnToEl",
-              "Creates a SH_Element from a Line",
-              "SimpleGrammar", "Element")
+        public SupportComponent()
+          : base("SupportComponent", "support",
+              "Create The support for the element",
+              "SimpleGrammar", "Support")
         {
         }
 
@@ -23,7 +22,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
+            pManager.AddPointParameter("Location", "loc", "Point to add support.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Support condition", "string", "[Tx, Ty, Tz, Rx, Ry, Rz]. 1 for locked, 0 for free", GH_ParamAccess.item, "111111");
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Support", "sup", "Support Class instance.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,30 +41,18 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            Line line = new Line();
+            Point3d location = new Point3d();
+            string condition = "";
 
             // --- input --- 
-            if (!DA.GetData(0, ref line)) return;
+            if (!DA.GetData(0, ref location)) return;
+            DA.GetData(1, ref condition);
 
             // --- solve ---
+            SH_Support support = new SH_Support(condition, location);
 
-            // Restart the counter
-            SH_Element.IDCounter = 0; 
-
-            //Initiate the Simple Shape
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
-
-            // Create the SH_Node and SH_Lines. 
-            SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(line.From);
-            nodes[1] = new SH_Node(line.To);
-                   
-            SH_Element sH_Line = new SH_Element(nodes);
-            
-          
             // --- output ---
-            DA.SetData(0, sH_Line);
-
+            DA.SetData(0, support);
         }
 
         /// <summary>
@@ -76,7 +64,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Mdl;
+                return null;
             }
         }
 
@@ -85,7 +73,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("1a9f7c0e-6698-48ea-841a-5fff1f07f329"); }
         }
     }
 }
