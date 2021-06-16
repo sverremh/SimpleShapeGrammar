@@ -50,7 +50,7 @@ namespace SimpleShapeGrammar.Components
 
             //Create a deep copy of the simple Shape before performing rule operations
             SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(simpleShape);
-
+            
             // --- solve ---
             foreach (SH_Rule rule in rules)
             {

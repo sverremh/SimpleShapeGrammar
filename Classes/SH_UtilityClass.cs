@@ -29,8 +29,7 @@ namespace SimpleShapeGrammar.Classes
 
     public static class SH_UtilityClass
     {
-        public static int NodeCount = 0;
-        public static int LineCount = 0;
+        
 
 
         /*

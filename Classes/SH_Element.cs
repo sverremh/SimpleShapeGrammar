@@ -10,16 +10,15 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Element
     {
         // --- properties ---
-        public static int IDCounter { get; set; }
-        public int ID { get; set; }
+        
+        public int? ID { get; set; }
         // public int ID { get; }
         public SH_Node[] Nodes { get; }
         // --- constructors ---
-        public SH_Element(SH_Node[] _nodes) 
+        public SH_Element(SH_Node[] _nodes, int? _id) 
         {
-            //SH_UtilityClass.LineCount += 1;
-            //ID = SH_UtilityClass.LineCount;
-            ID = ++IDCounter;
+            
+            ID = _id;
             Nodes = _nodes;
         }
 

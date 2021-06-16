@@ -63,17 +63,19 @@ namespace SimpleShapeGrammar.Components
 
             // --- solve ---
 
-            // renumbering Node IDs
-            SH_UtilityClass.NodeCount = 0;
-
+            
             // renumbering Element Ids
-            SH_UtilityClass.LineCount = 0;
+            simpleShape.LineCount = 0;
+            // renumbering Node IDs
+            simpleShape.NodeCount = 0;
+            
+            
 
             List<SH_Node> nodes = new List<SH_Node>();
             foreach (SH_Element e in elems)
             {
-                e.ID = SH_UtilityClass.LineCount;
-                SH_UtilityClass.LineCount++;
+                e.ID = simpleShape.LineCount;
+                simpleShape.LineCount++;
 
                 simpleShape.Lines.Add(e);
 
@@ -85,8 +87,8 @@ namespace SimpleShapeGrammar.Components
                         continue;
                     }
 
-                    node.ID = SH_UtilityClass.NodeCount;
-                    SH_UtilityClass.NodeCount++;
+                    node.ID = simpleShape.NodeCount;
+                    simpleShape.NodeCount++;
 
                 }
 

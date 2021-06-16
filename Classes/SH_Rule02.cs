@@ -43,12 +43,16 @@ namespace SimpleShapeGrammar.Classes
 
             int elInd = _ss.Lines.IndexOf(line);
             // add the intermediate node
-            SH_Node newNode = AddNode(line, Param);
+            SH_Node newNode = AddNode(line, Param, _ss.NodeCount);
+            _ss.NodeCount++;
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode });
-            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] });
+           
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.LineCount);
+            _ss.LineCount++;
+            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.LineCount);
+            _ss.LineCount++;
 
             
             
@@ -64,13 +68,13 @@ namespace SimpleShapeGrammar.Classes
 
         }
 
-        private SH_Node AddNode(SH_Element _line, double _t)
+        private SH_Node AddNode(SH_Element _line, double _t, int _id)
         {
             double mx = (1 - _t) * _line.Nodes[0].Position.X + _t * _line.Nodes[1].Position.X;
             double my = (1 - _t) * _line.Nodes[0].Position.Y + _t * _line.Nodes[1].Position.Y;
             double mz = (1 - _t) * _line.Nodes[0].Position.Z + _t * _line.Nodes[1].Position.Z;
             Point3d newPoint = new Point3d(mx, my, mz);
-            SH_Node newNode = new SH_Node(newPoint);
+            SH_Node newNode = new SH_Node(newPoint, _id);
 
             return newNode;
         }

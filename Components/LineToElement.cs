@@ -49,17 +49,17 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
 
             // Restart the counter
-            SH_Element.IDCounter = 0; 
+            
 
             //Initiate the Simple Shape
             SH_SimpleShape simpleShape = new SH_SimpleShape();
 
             // Create the SH_Node and SH_Lines. 
             SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(line.From);
-            nodes[1] = new SH_Node(line.To);
+            nodes[0] = new SH_Node(line.From, null);
+            nodes[1] = new SH_Node(line.To, null);
                    
-            SH_Element sH_Line = new SH_Element(nodes);
+            SH_Element sH_Line = new SH_Element(nodes, null);
             
           
             // --- output ---

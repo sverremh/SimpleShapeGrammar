@@ -11,6 +11,8 @@ namespace SimpleShapeGrammar.Classes
     public class SH_SimpleShape
     {
         // --- properties ---
+        public int NodeCount = 0;
+        public int LineCount = 0;
         public List<SH_Element> Lines { get; set; } = new List<SH_Element>();
         public List<SH_Node> Nodes { get; set; }
         public State SimpleShapeState { get; set; }
