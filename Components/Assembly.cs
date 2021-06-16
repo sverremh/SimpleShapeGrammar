@@ -97,6 +97,8 @@ namespace SimpleShapeGrammar.Components
             simpleShape.SimpleShapeState = State.alpha;
 
             // --- output ---
+            DA.SetData(0, simpleShape); 
+
 
         }
 
