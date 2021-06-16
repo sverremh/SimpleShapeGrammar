@@ -8,6 +8,16 @@ using System.IO;
 namespace SimpleShapeGrammar.Classes
 {
 
+    // --- variables ---
+
+    // --- input --- 
+
+    // --- solve ---
+
+    // --- output ---
+
+
+
     // --- properties ---
     // --- constructors --
     // --- methods ---

@@ -70,6 +70,8 @@
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
     <Compile Include="Components\Rule01.cs" />
+    <Compile Include="Components\Rule02.cs" />
+    <Compile Include="Components\RuleA.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
