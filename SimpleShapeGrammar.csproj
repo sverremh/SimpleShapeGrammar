@@ -57,7 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\SH_Line.cs" />
+    <Compile Include="Classes\SH_Element.cs" />
     <Compile Include="Classes\SH_Node.cs" />
     <Compile Include="Classes\SH_Rule.cs" />
     <Compile Include="Classes\SH_Rule01.cs" />
@@ -66,10 +66,11 @@
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
-    <Compile Include="Components\Assembly.cs" />
+    <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
     <Compile Include="Components\Rule01.cs" />
+    <Compile Include="Components\Rule02.cs" />
     <Compile Include="SimpleShapeGrammarInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

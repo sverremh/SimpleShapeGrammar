@@ -37,22 +37,35 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // choose the line to split
-            SH_Line line = _ss.Lines.Where(l => l.ID == LineID).First();
-
+            SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First();
+            
+            int elInd = _ss.Lines.IndexOf(line);
             // add the intermediate node
             SH_Node newNode = AddNode(line, Param);
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
-            SH_Line newLine0 = new SH_Line(new SH_Node[] { line.Nodes[0], newNode });
-            SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.Nodes[1] });
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode });
+            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] });
 
+            
+            
+            // remove the line which has been split
+            _ss.Lines.RemoveAt(elInd);
+            _ss.Lines.Insert(elInd, newLine1);
+
+            // insert the new lines in its position
+            _ss.Lines.Insert(elInd, newLine0);
+
+            #region Delete if code is working
             // add the lines to the _ss list
-            _ss.Lines.Add(newLine0);
-            _ss.Lines.Add(newLine1);
+            //_ss.Lines.Add(newLine0);
+            //_ss.Lines.Add(newLine1);
 
             // remove the line from the line list
-            _ss.Lines.RemoveAll((l) => l.ID == LineID);
+            //_ss.Lines.RemoveAll((l) => l.ID == LineID);
+            #endregion
+
 
 
             // no change in the state (remains in beta state)
@@ -60,7 +73,7 @@ namespace SimpleShapeGrammar.Classes
 
         }
 
-        private SH_Node AddNode(SH_Line _line, double _t)
+        private SH_Node AddNode(SH_Element _line, double _t)
         {
             double sx = _line.Nodes[0].X;
             double sy = _line.Nodes[0].Y;

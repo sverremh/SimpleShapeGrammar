@@ -6,15 +6,15 @@ using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
 {
-    public class Assembly : GH_Component
+    public class Rule02 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the Rule02 class.
         /// </summary>
-        public Assembly()
-          : base("Assembly", "Nickname",
-              "Description",
-              "SimpleGrammar", "Assembly")
+        public Rule02()
+          : base("Rule02", "rule2",
+              "Rule 2 which splits a line at its given parameter",
+              "SimpleGrammar", "Rules")
         {
         }
 
@@ -23,7 +23,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("ElementID", "ID", "The ID of the element to operate on", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Split parameter", "splitParam", "The parameter to split the line", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape instance", "sShape", "In instance of the Simple Shape class.", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Rule Class 2", "rule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,27 +42,18 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            Line line = new Line();
+            int elId = 0;
+            double t = 0.0;
 
             // --- input --- 
-            if (!DA.GetData(0, ref line)) return;
+            if (!DA.GetData(0, ref elId)) return;
+            if (!DA.GetData(1, ref t)) return;
 
             // --- solve ---
-
-            //Initiate the Simple Shape
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
-
-            // Create the SH_Node and SH_Lines. 
-            SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(line.FromX, line.FromY, line.FromZ);
-            nodes[1] = new SH_Node(line.ToX, line.ToY, line.ToZ);            
-            SH_Line sH_Line = new SH_Line(nodes);
-            simpleShape.Lines.Add(sH_Line);
-            simpleShape.SimpleShapeState = State.alpha;
+            SH_Rule02 rule2 = new SH_Rule02(elId, t);
 
             // --- output ---
-            DA.SetData(0, simpleShape);
-
+            DA.SetData(0, rule2);
         }
 
         /// <summary>
@@ -82,7 +74,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("5a267320-425c-4502-8516-25b8cb828d0b"); }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Rule Class", "rule", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Rule Class 1", "rule1", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>

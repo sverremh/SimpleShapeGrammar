@@ -11,7 +11,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_SimpleShape
     {
         // --- properties ---
-        public List<SH_Line> Lines { get; set; } = new List<SH_Line>();
+        public List<SH_Element> Lines { get; set; } = new List<SH_Element>();
         public List<SH_Node> Nodes { get; set; }
         public State SimpleShapeState { get; set; }
 
@@ -22,7 +22,7 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public void AddLine(SH_Line _line)
+        public void AddLine(SH_Element _line)
         {
             Lines.Add(_line);
         }
@@ -32,7 +32,7 @@ namespace SimpleShapeGrammar.Classes
             List<Line> lines = new List<Line>();
 
             //Get Line from each element
-            foreach (SH_Line sh_line in Lines)
+            foreach (SH_Element sh_line in Lines)
             {
                 // Create Start point
                 Point3d sPt = new Point3d();

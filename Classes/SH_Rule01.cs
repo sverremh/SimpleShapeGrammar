@@ -43,7 +43,7 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // take the 1st element
-            SH_Line sh_line = _ss.Lines[0];
+            SH_Element sh_line = _ss.Lines[0];
 
             // apply the change
             sh_line.Nodes[0].X += P0X;

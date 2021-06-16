@@ -3,17 +3,18 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+
 namespace SimpleShapeGrammar.Components
 {
-    public class CreateGeometry : GH_Component
+    public class LineToElement : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CreateGeometry class.
+        /// Initializes a new instance of the Assembly class.
         /// </summary>
-        public CreateGeometry()
-          : base("CreateGeometry", "geom",
-              "Create geometry from Simple Shape",
-              "SimpleGrammar", "Utility")
+        public LineToElement()
+          : base("Assembly", "Nickname",
+              "Description",
+              "SimpleGrammar", "Element")
         {
         }
 
@@ -22,7 +23,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape", "sShape", "The Simple Shape element", GH_ParamAccess.item) ;
+            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -30,8 +31,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddLineParameter("Lines", "l", "Lines from the simple shape", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Test", "test", "test", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Simple Shape instance", "sShape", "In instance of the Simple Shape class.", GH_ParamAccess.item); 
         }
 
         /// <summary>
@@ -41,21 +41,30 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
+            Line line = new Line();
 
             // --- input --- 
-            if (!DA.GetData(0, ref simpleShape)) return;
+            if (!DA.GetData(0, ref line)) return;
 
             // --- solve ---
-            List<Line> lines = simpleShape.GetLinesFromShape();
-            List<int> ids = new List<int>();
-            foreach (var item in simpleShape.Lines)
-            {
-                ids.Add(item.ID);
-            }
+
+            // Restart the counter
+            SH_Element.IDCounter = 0; 
+
+            //Initiate the Simple Shape
+            SH_SimpleShape simpleShape = new SH_SimpleShape();
+
+            // Create the SH_Node and SH_Lines. 
+            SH_Node[] nodes = new SH_Node[2];
+            nodes[0] = new SH_Node(line.FromX, line.FromY, line.FromZ);
+            nodes[1] = new SH_Node(line.ToX, line.ToY, line.ToZ);            
+            SH_Element sH_Line = new SH_Element(nodes);
+            simpleShape.Lines.Add(sH_Line);
+            simpleShape.SimpleShapeState = State.alpha;
+
             // --- output ---
-            DA.SetDataList(0, lines);
-            DA.SetDataList(1, ids);
+            DA.SetData(0, simpleShape);
+
         }
 
         /// <summary>
@@ -76,7 +85,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("70361ee6-5a32-45c9-a4c7-8e7228a2c48d"); }
+            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
         }
     }
 }
