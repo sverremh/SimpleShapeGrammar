@@ -48,14 +48,17 @@ namespace SimpleShapeGrammar.Components
             if (!DA.GetData(0, ref simpleShape)) return;
             if (!DA.GetDataList(1, rules)) return;
 
+            //Create a deep copy of the simple Shape before performing rule operations
+            SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(simpleShape);
+
             // --- solve ---
             foreach (SH_Rule rule in rules)
             {
-                rule.RuleOperation(simpleShape);
+                rule.RuleOperation(copyShape);
             }
-
+            
             // --- output ---
-            DA.SetData(0, simpleShape);
+            DA.SetData(0, copyShape);
         }
 
         /// <summary>

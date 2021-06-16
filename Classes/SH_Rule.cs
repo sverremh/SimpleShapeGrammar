@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
+    [Serializable]
     public abstract class SH_Rule
     {
 

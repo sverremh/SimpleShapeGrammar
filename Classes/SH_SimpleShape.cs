@@ -7,7 +7,7 @@ using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
     public enum State { alpha = 0, beta = 1, gamma = 2 };
-
+    [Serializable]
     public class SH_SimpleShape
     {
         // --- properties ---

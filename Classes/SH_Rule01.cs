@@ -8,6 +8,7 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Classes
 {
+    [Serializable]
     public class SH_Rule01 : SH_Rule
     {
         // --- properties ---
