@@ -65,29 +65,31 @@ namespace SimpleShapeGrammar.Components
 
             
             // renumbering Element Ids
-            simpleShape.LineCount = 0;
+            simpleShape.ElementCount = 0;
             // renumbering Node IDs
             simpleShape.NodeCount = 0;
-            
-            
 
+
+            
             List<SH_Node> nodes = new List<SH_Node>();
             foreach (SH_Element e in elems)
             {
-                e.ID = simpleShape.LineCount;
-                simpleShape.LineCount++;
+                e.ID = simpleShape.ElementCount;
+                simpleShape.ElementCount++;
 
-                simpleShape.Lines.Add(e);
+                simpleShape.Elements.Add(e);
 
                 // node check and renumbering
                 foreach (SH_Node node in e.Nodes)
                 {
-                    if (e.Nodes.Any(n => n == node))
-                    {
+                    // test if there is already a node in this position
+                    if (nodes.Any(n => n.Position.DistanceToSquared(node.Position) < 0.001 ))
+                    {                        
                         continue;
                     }
 
                     node.ID = simpleShape.NodeCount;
+                    nodes.Add(node);
                     simpleShape.NodeCount++;
 
                 }
@@ -95,7 +97,7 @@ namespace SimpleShapeGrammar.Components
             }
 
 
-
+            simpleShape.Nodes = nodes;
             simpleShape.SimpleShapeState = State.alpha;
 
             // --- output ---

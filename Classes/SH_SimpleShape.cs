@@ -12,8 +12,8 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public int NodeCount = 0;
-        public int LineCount = 0;
-        public List<SH_Element> Lines { get; set; } = new List<SH_Element>();
+        public int ElementCount = 0;
+        public List<SH_Element> Elements { get; set; } = new List<SH_Element>();
         public List<SH_Node> Nodes { get; set; }
         public State SimpleShapeState { get; set; }
 
@@ -26,7 +26,7 @@ namespace SimpleShapeGrammar.Classes
         // --- methods ---
         public void AddLine(SH_Element _line)
         {
-            Lines.Add(_line);
+            Elements.Add(_line);
         }
         public List<Line> GetLinesFromShape()
         {
@@ -34,7 +34,7 @@ namespace SimpleShapeGrammar.Classes
             List<Line> lines = new List<Line>();
 
             //Get Line from each element
-            foreach (SH_Element sh_line in Lines)
+            foreach (SH_Element sh_line in Elements)
             {
                 // Create Start point
                 Point3d sPt = sh_line.Nodes[0].Position;

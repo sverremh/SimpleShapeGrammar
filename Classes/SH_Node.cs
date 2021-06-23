@@ -35,7 +35,13 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        
+        public void Translate(Vector3d vector)
+        {
+            Position = Position + vector; // translate the point
+
+            // update the corresponding node. 
+            Support.Position += vector;
+        }
 
 
     }

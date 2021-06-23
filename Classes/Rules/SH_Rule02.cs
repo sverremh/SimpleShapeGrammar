@@ -38,10 +38,10 @@ namespace SimpleShapeGrammar.Classes
 
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
-            SH_Element line = _ss.Lines[LineIndex];
+            SH_Element line = _ss.Elements[LineIndex];
 
 
-            int elInd = _ss.Lines.IndexOf(line);
+            int elInd = _ss.Elements.IndexOf(line);
             // add the intermediate node
             SH_Node newNode = AddNode(line, Param, _ss.NodeCount);
             _ss.NodeCount++;
@@ -49,19 +49,19 @@ namespace SimpleShapeGrammar.Classes
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
            
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.LineCount);
-            _ss.LineCount++;
-            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.LineCount);
-            _ss.LineCount++;
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.ElementCount);
+            _ss.ElementCount++;
+            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.ElementCount);
+            _ss.ElementCount++;
 
             
             
             // remove the line which has been split
-            _ss.Lines.RemoveAt(elInd);
-            _ss.Lines.Insert(elInd, newLine1);
+            _ss.Elements.RemoveAt(elInd);
+            _ss.Elements.Insert(elInd, newLine1);
 
             // insert the new lines in its position
-            _ss.Lines.Insert(elInd, newLine0);
+            _ss.Elements.Insert(elInd, newLine0);
 
             // no change in the state (remains in beta state)
             // _ss.SimpleShapeState = State.beta; 

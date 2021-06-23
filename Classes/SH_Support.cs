@@ -11,6 +11,8 @@ namespace SimpleShapeGrammar.Classes
     {
         // --- properties ---
         public SH_Node node;
+        // Not implemented. Change the SH_Node to simply the node index: When done the SH_Node property may be removed.
+        //public int? nodeInd;
         public Point3d Position { get; set; }
         public int SupportCondition { get; set; }
 
@@ -41,7 +43,7 @@ namespace SimpleShapeGrammar.Classes
             int n = 0;
             foreach (char el in _stringCondition)
             {
-                if (el == 1)
+                if (el == '1')
                 {
                     condition += (int) Math.Pow(2, n);
                 }
