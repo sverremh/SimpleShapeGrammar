@@ -80,7 +80,7 @@
     <Compile Include="Components\Assembly.cs" />
     <Compile Include="Components\CreateMaterial.cs" />
     <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
-    <Compile Include="Components\KarambaTest.cs" />
+    <Compile Include="Components\KarambaComponents\KarambaTest.cs" />
     <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Components\RuleComponents\Rule01.cs" />
     <Compile Include="Components\RuleComponents\Rule02.cs" />
     <Compile Include="Components\RuleComponents\RuleA.cs" />
+    <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
