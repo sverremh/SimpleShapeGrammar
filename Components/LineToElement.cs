@@ -43,7 +43,7 @@ namespace SimpleShapeGrammar.Components
         {
             // --- variables ---
             Line line = new Line();
-            SH_CrossSection crossSection = new SH_CrossSection();
+            SH_CrossSection_Beam crossSection = new SH_CrossSection_Beam();
 
             // --- input --- 
             if (!DA.GetData(0, ref line)) return;

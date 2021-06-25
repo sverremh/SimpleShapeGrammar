@@ -39,14 +39,29 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // take the 1st element
-            SH_Element sh_line = _ss.Elements[0];
+            SH_Element sh_elem = _ss.Elements[0];
 
             // apply the change
+            #region NewMethod
+            // new points
+            //Point3d newStart = sh_elem.Nodes[0].Position + TranslateStart;
+            //Point3d newEnd = sh_elem.Nodes[1].Position + TranslateEnd;            
+            _ss.TranslateNode(TranslateStart, (int)sh_elem.Nodes[0].ID);
+            _ss.TranslateNode(TranslateEnd, (int)sh_elem.Nodes[1].ID);
+
+            #endregion
+
+            #region Original Method
+
+            /*
             Point3d currentStart = sh_line.Nodes[0].Position;
             Point3d currentEnd = sh_line.Nodes[1].Position;
             
             sh_line.Nodes[0].Position = currentStart + TranslateStart;
             sh_line.Nodes[1].Position = currentEnd + TranslateEnd;
+            */
+
+            #endregion
             // change the state
             _ss.SimpleShapeState = State.beta;
 

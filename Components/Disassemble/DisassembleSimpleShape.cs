@@ -3,19 +3,17 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
-
-
 namespace SimpleShapeGrammar.Components
 {
-    public class RectangleCrossSection : GH_Component
+    public class DisassembleSimpleShape : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CrossSection class.
+        /// Initializes a new instance of the DisassembleSimpleShape class.
         /// </summary>
-        public RectangleCrossSection()
-          : base("RectangularCrossSection", "rec_crossec",
-              "Define the CrossSection",
-              "SimpleGrammar", "CrossSection")
+        public DisassembleSimpleShape()
+          : base("DisassembleSimpleShape", "Nickname",
+              "Description",
+              "SimpleGrammar", "Disassemble")
         {
         }
 
@@ -24,9 +22,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material", "mat", "Material.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "w", "Width.", GH_ParamAccess.item, 50.0);
-            pManager.AddNumberParameter("Heigth", "h", "Heigth.", GH_ParamAccess.item, 50.0);
+            pManager.AddGenericParameter("SH_SimpleShape", "sShape", "The instance of a SH_SimpleShape to disassemble", GH_ParamAccess.item); // 0
         }
 
         /// <summary>
@@ -34,7 +30,14 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Rectangular cross section", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SH_Elements", "elems", "SH_Elements", GH_ParamAccess.list); // 0
+            pManager.AddGenericParameter("SH_Supports", "sups", "SH_Supports", GH_ParamAccess.list); // 1
+            pManager.AddGenericParameter("SH_Nodes", "nodes", "SH_Node", GH_ParamAccess.list); // 2
+
+            // future implementations
+
+            
+            //pManager.AddGenericParameter("SH_Loads", "loads", "SH_Loads", GH_ParamAccess.list); // 0
         }
 
         /// <summary>
@@ -44,22 +47,32 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            double width = 0.0;
-            double height = 0.0;
-            SH_Material material = new SH_Material(); // For now, this only works for Isotrop material. How to make a constructor which work for both iso- and orthotropic materials
+            SH_SimpleShape ss = new SH_SimpleShape();
 
             // --- input ---
-            if (!DA.GetData(0, ref material)) return;
-            DA.GetData(1, ref width);
-            DA.GetData(2, ref height);
+            if (!DA.GetData(0, ref ss)) return;
 
             // --- solve ---
-            SH_CrossSection_Rectangle crossSection = new SH_CrossSection_Rectangle("Test",height, width);
-            crossSection.Material = material;
-            
+
+            // list of elements
+            List<SH_Element> elems = new List<SH_Element>();
+            elems.AddRange(ss.Elements);
+
+            // list of supports
+            List<SH_Support> sups = new List<SH_Support>();
+            sups.AddRange(ss.Supports);
+
+            // list of nodes
+            List<SH_Node> nodes = new List<SH_Node>();
+            nodes.AddRange(ss.Nodes);
 
             // --- output ---
-            DA.SetData(0, crossSection);
+            DA.SetDataList(0, elems);
+            DA.SetDataList(1, sups);
+            DA.SetDataList(2, nodes);
+
+
+
         }
 
         /// <summary>
@@ -80,7 +93,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("dca699fa-91c7-4400-8e78-ec1bbed3caa5"); }
+            get { return new Guid("86c43654-6fb9-4c5f-873f-7422e06a9d38"); }
         }
     }
 }

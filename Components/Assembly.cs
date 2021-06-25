@@ -25,11 +25,13 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Elements", "SH_Elements", "SH_Elements", GH_ParamAccess.list);
-            
+            pManager.AddGenericParameter("SH_Elements", "elems", "SH_Elements", GH_ParamAccess.list); // 0
+            pManager.AddGenericParameter("SH_Supports", "sup", "SH_Supports", GH_ParamAccess.list); // 1
+
+            pManager[1].Optional = true;
             // future implementation below
-            
-            // pManager.AddGenericParameter("SH_Supports", "SH_Supports", "SH_Supports", GH_ParamAccess.list);
+
+
             // pManager.AddGenericParameter("SH_Supports", "SH_Supports", "SH_Supports", GH_ParamAccess.list);
         }
 
@@ -49,35 +51,44 @@ namespace SimpleShapeGrammar.Components
         {
             // --- variables ---
             List<SH_Element> elems = new List<SH_Element>();
+            List<SH_Support> sups = new List<SH_Support>();
 
             // future implementation below
-            // List<SH_Support> sups = new List<SH_Support>();
+
             // List<SH_Load> loads = new List<SH_Load>();
 
             // --- input ---
             if (!DA.GetDataList(0, elems)) return;
+           
+            if(!DA.GetDataList(1, sups))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are no supports in the assembly!");
+            }
 
-            // deep copy the elements
+            // deep copy the input
             elems = SH_UtilityClass.DeepCopy(elems);
+            sups = SH_UtilityClass.DeepCopy(sups);
             SH_SimpleShape simpleShape = new SH_SimpleShape();
 
             // --- solve ---
 
             
             // renumbering Element Ids
-            simpleShape.ElementCount = 0;
+            simpleShape.elementCount = 0;
             // renumbering Node IDs
-            simpleShape.NodeCount = 0;
+            simpleShape.nodeCount = 0;
+            simpleShape.supCount = 0;
 
 
             
             List<SH_Node> nodes = new List<SH_Node>();
+            List<SH_Element> numberedElems = new List<SH_Element>();
             foreach (SH_Element e in elems)
             {
-                e.ID = simpleShape.ElementCount;
-                simpleShape.ElementCount++;
-
-                simpleShape.Elements.Add(e);
+                e.ID = simpleShape.elementCount;
+                simpleShape.elementCount++;
+                numberedElems.Add(e);
+                //simpleShape.Elements.Add(e);
 
                 // node check and renumbering
                 foreach (SH_Node node in e.Nodes)
@@ -87,17 +98,45 @@ namespace SimpleShapeGrammar.Components
                     {                        
                         continue;
                     }
+                    
 
-                    node.ID = simpleShape.NodeCount;
+                    node.ID = simpleShape.nodeCount;
                     nodes.Add(node);
-                    simpleShape.NodeCount++;
+                    simpleShape.nodeCount++;
 
                 }
-
             }
+            simpleShape.Elements = numberedElems;
+
+            // add supports to the element
+            List<SH_Support> uniqueSupports = new List<SH_Support>();
+            foreach (var sup in sups)
+            {
+                if (uniqueSupports.Any(s => s.Position.DistanceToSquared(sup.Position) < 0.001))
+                {
+                    // if there is already a support at this position it is not added
+                    continue;
+                }
+
+                // find the index of the node where the support applies
+                int nodeInd = nodes.FindIndex( n => n.Position.DistanceToSquared(sup.Position) < 0.001 );
+                if (nodeInd != -1) // if -1 the location of the support don't match a node
+                {
+                    sup.ID = simpleShape.supCount++;
+                    sup.nodeInd = nodeInd;
+                    uniqueSupports.Add(sup);
+                    simpleShape.supCount++;
+                }
+                
+            }
+
+            
+
+
 
 
             simpleShape.Nodes = nodes;
+            simpleShape.Supports = uniqueSupports;
             simpleShape.SimpleShapeState = State.alpha;
 
             // --- output ---

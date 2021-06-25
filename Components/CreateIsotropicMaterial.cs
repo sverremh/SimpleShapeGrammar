@@ -6,14 +6,14 @@ using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
 {
-    public class CreateMaterial : GH_Component
+    public class CreateIsotropicMaterial : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the CreateMaterial class.
         /// </summary>
-        public CreateMaterial()
-          : base("CreateMaterial", "material",
-              "CreateMaterial",
+        public CreateIsotropicMaterial()
+          : base("CreateIsotropicMaterial", "material",
+              "CreateIsotropic Material",
               "SimpleGrammar", "Material")
         {
         }
@@ -24,10 +24,12 @@ namespace SimpleShapeGrammar.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "name", "Name.", GH_ParamAccess.item, "S355");
+            pManager.AddTextParameter("Family", "family", "Family of the material. E.g. steel.", GH_ParamAccess.item, "Steel");
             pManager.AddNumberParameter("Young's Modulus", "E", "Young's Modulus of material [N/mm^2]", GH_ParamAccess.item, 210000);
             pManager.AddNumberParameter("Poisson's Ratio", "v", "Poisson's ratio of the material", GH_ParamAccess.item, 0.3);
             pManager.AddNumberParameter("Yield Strength", "fy", "Yield strength [N/mm^2]", GH_ParamAccess.item, 355);
             pManager.AddNumberParameter("Density", "rho", "Density of material [kg/m^3]", GH_ParamAccess.item, 7800);
+            pManager.AddNumberParameter("AlphaT", "alpha", "Tempature-expansion coefficient", GH_ParamAccess.item, 0.0001);
         }
 
         /// <summary>
@@ -49,17 +51,21 @@ namespace SimpleShapeGrammar.Components
             double v = 0.0;
             double fy = 0.0;
             string name = "";
+            string family = "";
             double rho = 0.0;
+            double alphaT = 0.0;
 
             // --- input ---
             DA.GetData(0, ref name);
-            DA.GetData(1, ref e);
-            DA.GetData(2, ref v);
-            DA.GetData(3, ref fy);
-            DA.GetData(4, ref rho);
+            DA.GetData(1, ref family);
+            DA.GetData(2, ref e);
+            DA.GetData(3, ref v);
+            DA.GetData(4, ref fy);
+            DA.GetData(5, ref rho);
+            DA.GetData(6, ref alphaT);
 
             // --- solve ---
-            SH_Material material = new SH_Material(name, e, v, fy, rho);
+            SH_Material_Isotrop material = new SH_Material_Isotrop(family, name, e, v, fy, rho, alphaT);
 
             // --- output ---
             DA.SetData(0, material);

@@ -10,13 +10,20 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Support
     {
         // --- properties ---
-        public SH_Node node;
+        //public SH_Node node;
+        public int ID;
         // Not implemented. Change the SH_Node to simply the node index: When done the SH_Node property may be removed.
         //public int? nodeInd;
+        public int nodeInd;
         public Point3d Position { get; set; }
         public int SupportCondition { get; set; }
 
         // --- constructors ---
+
+        public SH_Support()
+        {
+
+        }
         public SH_Support(string _support_conditions, Point3d _position)
         {
             // Test if the support condition are in the correct format
@@ -51,5 +58,7 @@ namespace SimpleShapeGrammar.Classes
             }
             return condition;            
         }
+
+        
     }
 }

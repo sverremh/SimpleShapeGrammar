@@ -1,21 +1,19 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
 
-
-namespace SimpleShapeGrammar.Components
+namespace SimpleShapeGrammar.Components.Disassemble
 {
-    public class RectangleCrossSection : GH_Component
+    public class DisassemleSupport : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CrossSection class.
+        /// Initializes a new instance of the DisassemleSupport class.
         /// </summary>
-        public RectangleCrossSection()
-          : base("RectangularCrossSection", "rec_crossec",
-              "Define the CrossSection",
-              "SimpleGrammar", "CrossSection")
+        public DisassemleSupport()
+          : base("DisassemleSupport", "Nickname",
+              "Description",
+              "SimpleGrammar", "Disassemble")
         {
         }
 
@@ -24,9 +22,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Material", "mat", "Material.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Width", "w", "Width.", GH_ParamAccess.item, 50.0);
-            pManager.AddNumberParameter("Heigth", "h", "Heigth.", GH_ParamAccess.item, 50.0);
+            pManager.AddGenericParameter("SH_Support", "sup", "SH_Support", GH_ParamAccess.item) ;
         }
 
         /// <summary>
@@ -34,7 +30,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Rectangular cross section", GH_ParamAccess.item);
+            pManager.AddPointParameter("Position", "pos", "Point3d represenation of position", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("SupportCondition", "cond", "Integerr representation of support condition", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,23 +40,23 @@ namespace SimpleShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // --- variables ---
-            double width = 0.0;
-            double height = 0.0;
-            SH_Material material = new SH_Material(); // For now, this only works for Isotrop material. How to make a constructor which work for both iso- and orthotropic materials
+            // ---variables-- -
+            SH_Support sup = new SH_Support();
 
             // --- input ---
-            if (!DA.GetData(0, ref material)) return;
-            DA.GetData(1, ref width);
-            DA.GetData(2, ref height);
+            if(!DA.GetData(0, ref sup)) return;
 
             // --- solve ---
-            SH_CrossSection_Rectangle crossSection = new SH_CrossSection_Rectangle("Test",height, width);
-            crossSection.Material = material;
-            
+             Point3d pt = sup.Position;
+            int cond = sup.SupportCondition;
+
+            // future implementations
+            // - Node index
+            // - Support ID
 
             // --- output ---
-            DA.SetData(0, crossSection);
+            DA.SetData(0, pt);
+            DA.SetData(1, cond);
         }
 
         /// <summary>
@@ -80,7 +77,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("dca699fa-91c7-4400-8e78-ec1bbed3caa5"); }
+            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
         }
     }
 }

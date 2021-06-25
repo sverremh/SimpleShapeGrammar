@@ -43,16 +43,16 @@ namespace SimpleShapeGrammar.Classes
 
             int elInd = _ss.Elements.IndexOf(line);
             // add the intermediate node
-            SH_Node newNode = AddNode(line, Param, _ss.NodeCount);
-            _ss.NodeCount++;
+            SH_Node newNode = AddNode(line, Param, _ss.nodeCount);
+            _ss.nodeCount++;
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
            
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.ElementCount);
-            _ss.ElementCount++;
-            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.ElementCount);
-            _ss.ElementCount++;
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount);
+            _ss.elementCount++;
+            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount);
+            _ss.elementCount++;
 
             
             

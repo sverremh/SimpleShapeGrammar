@@ -63,13 +63,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\CrossSections\SH_CrossSection.cs" />
+    <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
+    <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\SH_Element.cs" />
     <Compile Include="Classes\Loads\SH_Load.cs" />
-    <Compile Include="Classes\SH_Material.cs" />
+    <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
     <Compile Include="Classes\SH_Node.cs" />
-    <Compile Include="Classes\CrossSections\SH_Rectangle.cs" />
+    <Compile Include="Classes\CrossSections\SH_CrossSection_Rectangle.cs" />
     <Compile Include="Classes\Rules\SH_Rule.cs" />
     <Compile Include="Classes\Rules\SH_Rule01.cs" />
     <Compile Include="Classes\Rules\SH_Rule02.cs" />
@@ -78,8 +79,10 @@
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
     <Compile Include="Components\Assembly.cs" />
-    <Compile Include="Components\CreateMaterial.cs" />
+    <Compile Include="Components\CreateIsotropicMaterial.cs" />
     <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
+    <Compile Include="Components\Disassemble\DisassembleSimpleShape.cs" />
+    <Compile Include="Components\Disassemble\DisassemleSupport.cs" />
     <Compile Include="Components\KarambaComponents\KarambaTest.cs" />
     <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />

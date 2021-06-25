@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
@@ -11,14 +9,9 @@ namespace SimpleShapeGrammar.Classes
     {           
 
         // --- properties ---
-
-
         public int? ID { get; set;}
         public Point3d Position { get; set; }
-
-
-        public SH_Support Support { get; set; }
-
+        public SH_Support Support { get; set; } // Do the node need this information? It does not in Karamba3D
 
 
         // --- constructors --- 
@@ -35,13 +28,16 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
+        /*
         public void Translate(Vector3d vector)
         {
             Position = Position + vector; // translate the point
 
             // update the corresponding node. 
             Support.Position += vector;
-        }
+
+
+        }*/
 
 
     }

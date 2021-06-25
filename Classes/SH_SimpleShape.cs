@@ -11,10 +11,12 @@ namespace SimpleShapeGrammar.Classes
     public class SH_SimpleShape
     {
         // --- properties ---
-        public int NodeCount = 0;
-        public int ElementCount = 0;
-        public List<SH_Element> Elements { get; set; } = new List<SH_Element>();
+        public int nodeCount = 0;
+        public int elementCount = 0;
+        public int supCount = 0;
+        public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
         public List<SH_Node> Nodes { get; set; }
+        public List<SH_Support> Supports { get; set; }
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---
@@ -46,6 +48,24 @@ namespace SimpleShapeGrammar.Classes
             }
 
             return lines; 
+        }
+
+        public void TranslateNode(Vector3d vec, int nodeInd)
+        {
+            
+            SH_Node node = Nodes[nodeInd];
+            Point3d newPoint = node.Position + vec;
+            // move the point
+            Nodes[nodeInd].Position = newPoint;
+            // find the correct support in the list
+            int supInd = Supports.IndexOf( Supports.Find(sup => sup.nodeInd == nodeInd) );
+            // move the support position if present
+            if(supInd != -1)
+            {
+                Supports[supInd].Position = newPoint;
+            }
+            
+
         }
     }
 }
