@@ -7,32 +7,34 @@ using System.Threading.Tasks;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
-    public class SH_Material
+    public class SH_Material_Isotrop : SH_Material
     {
         
         // --- properties ---
-        public string Tag { get; private set; }
-        public string Name { get; private set; }
-        public double Density { get; private set;  }
+        
+        
         public double E { get; private set; }
-        public double G { get; private set; }
+        public double G_ip { get; private set; }
+        public double G_tr { get; private set; }
         public double Fy { get; private set; }
+        public double alphaT { get; set; }
         public double Poisson { get; private set; }
 
         // --- constructors --
-        public SH_Material()
+        public SH_Material_Isotrop()
         {
 
         }
-        public SH_Material(string _name, double _e, double _v, double _fy, double _rho)
+        public SH_Material_Isotrop(string _family, string _name, double _e, double _v, double _fy, double _rho, double _alphaT)
         {
+            Family = _family;
             Name = _name;
             Density = _rho;
             E = _e;
             Poisson = _v;
             Fy = _fy;
-            G = _e / (2 * (1 + _v) );
-            
+            G_ip = G_tr = _e / (2 * (1 + _v) );
+            alphaT = _alphaT;
 
         }
         // --- methods ---

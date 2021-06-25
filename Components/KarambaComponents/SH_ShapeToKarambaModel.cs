@@ -77,24 +77,21 @@ namespace SimpleShapeGrammar.Components
             // supports
             // not implemented yet. Read through all the nodes. Create a support instance if the condition theres is not 0
             var supports = new List<Support>();
-            foreach (SH_Node node in ss.Nodes)
+            foreach (var sup in ss.Supports)
             {
-                if (node.Support.SupportCondition != 0)
-                {
-                    
-                    // karamba point
-                    Point3 loc = GeometryExtensions.Convert(node.Position);
-                                                          
-                    // conditions
-                    List<bool> conditions = CreateBooleanConditions(node.Support.SupportCondition);
+                // karamba point
+                Point3 loc = GeometryExtensions.Convert(sup.Position);
 
-                    // not implemented: Optional Plane
+                // conditions
+                List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
 
-                    // create support
-                    Support gh_sup = k3d.Support.Support(loc, conditions);
-                    supports.Add(gh_sup);
-                }
+                // not implemented: Optional Plane
+
+                // create support
+                Support gh_sup = k3d.Support.Support(loc, conditions);
+                supports.Add(gh_sup);
             }
+            
 
 
             // loads
