@@ -5,14 +5,14 @@ using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
 {
-    public class LoadComponent : GH_Component
+    public class LineLoad : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the LoadComponent class.
+        /// Initializes a new instance of the LineLoad class.
         /// </summary>
-        public LoadComponent()
-          : base("LoadComponent", "loads",
-              "Assign Loads To the structure",
+        public LineLoad()
+          : base("LineLoad", "l_load",
+              "Line load on element",
               "SimpleGrammar", "Loads")
         {
         }
@@ -22,9 +22,11 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddVectorParameter("Load Vector", "load", "Load as Vector in x,y,z direction", GH_ParamAccess.item, new Vector3d(0,0,0));
-            pManager.AddVectorParameter("Moment Vector", "moment", "Moment as Vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
-            pManager.AddPointParameter("Position", "pos", "Position as Point3d", GH_ParamAccess.item);
+            pManager.AddTextParameter("ElementIds", "e_id", "The element to apply the loads onto", GH_ParamAccess.item); // 0
+            pManager.AddIntegerParameter("LoadCase", "lc", "Load case that the load applies to", GH_ParamAccess.item, 0); // 1
+            pManager.AddVectorParameter("LoadVector", "loadvec", "The direction of the line load", GH_ParamAccess.item); // 2
+
+            pManager[0].Optional = true;  // element ids are not necessary. If none are present the laod applies to all. 
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Loads", "loads", "An instance of the load class", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("SH_LineLoad", "load", "SH_Load for assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,22 +44,22 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            Vector3d forces = new Vector3d();
-            Vector3d moments = new Vector3d();
-            Point3d position = new Point3d();
+            string elementID = "";
+            int lc = 0;
+            Vector3d lVec = new Vector3d();
 
-            // --- input --- 
-            if (!DA.GetData(2, ref position)) return;
-            DA.GetData(0, ref forces);
-            DA.GetData(1, ref moments);
+            // --- input ---
 
+            //bool idPresent = DA.GetData(0, ref elementID);
+            DA.GetData(0, ref elementID);
+            DA.GetData(1, ref lc);
+            if (!DA.GetData(2, ref lVec)) return;
             // --- solve ---
-            SH_PointLoad load = new SH_PointLoad(forces, moments, position);
-
-
+            SH_LineLoad ll = new SH_LineLoad(lc, lVec);
+            
 
             // --- output ---
-            DA.SetData(0, load);
+            DA.SetData(0, ll);
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Load_P;
+                return null;
             }
         }
 
@@ -78,7 +80,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4e7d75ab-498c-4e30-9e3a-addf180b9a4d"); }
+            get { return new Guid("d2f35a0d-76e0-4ebd-af17-8888febceab1"); }
         }
     }
 }
