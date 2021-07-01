@@ -27,12 +27,13 @@ namespace SimpleShapeGrammar.Components
         {
             pManager.AddGenericParameter("SH_Elements", "elems", "SH_Elements", GH_ParamAccess.list); // 0
             pManager.AddGenericParameter("SH_Supports", "sup", "SH_Supports", GH_ParamAccess.list); // 1
+            pManager.AddGenericParameter("SH_Loads", "loads", "SH_Loads", GH_ParamAccess.list); // 2
 
+            // make the support and load parameters optional
             pManager[1].Optional = true;
-            // future implementation below
+            pManager[2].Optional = true;
 
 
-            // pManager.AddGenericParameter("SH_Supports", "SH_Supports", "SH_Supports", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -52,10 +53,8 @@ namespace SimpleShapeGrammar.Components
             // --- variables ---
             List<SH_Element> elems = new List<SH_Element>();
             List<SH_Support> sups = new List<SH_Support>();
-
-            // future implementation below
-
-            // List<SH_Load> loads = new List<SH_Load>();
+            List<SH_Load> loads = new List<SH_Load>();
+            
 
             // --- input ---
             if (!DA.GetDataList(0, elems)) return;
@@ -65,9 +64,15 @@ namespace SimpleShapeGrammar.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are no supports in the assembly!");
             }
 
+            if(!DA.GetDataList(2, loads))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are no loads in the assembly!");
+            }
+
             // deep copy the input
             elems = SH_UtilityClass.DeepCopy(elems);
             sups = SH_UtilityClass.DeepCopy(sups);
+            loads = SH_UtilityClass.DeepCopy(loads);
             SH_SimpleShape simpleShape = new SH_SimpleShape();
 
             // --- solve ---

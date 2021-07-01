@@ -69,6 +69,7 @@
     <Compile Include="Classes\Loads\SH_Load.cs" />
     <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
+    <Compile Include="Classes\Loads\SH_LineLoad.cs" />
     <Compile Include="Classes\SH_Node.cs" />
     <Compile Include="Classes\CrossSections\SH_CrossSection_Rectangle.cs" />
     <Compile Include="Classes\Rules\SH_Rule.cs" />
@@ -84,10 +85,11 @@
     <Compile Include="Components\Disassemble\DisassembleSimpleShape.cs" />
     <Compile Include="Components\Disassemble\DisassemleSupport.cs" />
     <Compile Include="Components\KarambaComponents\KarambaTest.cs" />
+    <Compile Include="Components\Load Components\LineLoad.cs" />
     <Compile Include="Components\LineToElement.cs" />
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
-    <Compile Include="Components\LoadComponent.cs" />
+    <Compile Include="Components\Load Components\PointLoads.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />
     <Compile Include="Components\RuleComponents\Rule02.cs" />
     <Compile Include="Components\RuleComponents\RuleA.cs" />
