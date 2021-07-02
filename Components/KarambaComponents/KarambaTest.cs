@@ -88,6 +88,7 @@ namespace SimpleShapeGrammar.Components
             var pload = k3d.Load.PointLoad(1,
                 new Vector3(10, 0, 0), new Vector3());
             var ploads = new List<Load>() { pload };
+            
 
             // assembly
             double mass;
