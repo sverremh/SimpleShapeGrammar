@@ -17,6 +17,8 @@ namespace SimpleShapeGrammar.Classes
         public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
         public List<SH_Node> Nodes { get; set; }
         public List<SH_Support> Supports { get; set; }
+        public List<SH_LineLoad> LineLoads { get; set; }
+        public List<SH_PointLoad> PointLoads { get; set; }
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---

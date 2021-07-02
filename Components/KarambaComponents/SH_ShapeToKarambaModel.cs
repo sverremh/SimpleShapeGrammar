@@ -64,14 +64,15 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
 
             // create karamba Line3 elements
-            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elements, k3d);
+            List<string> element_names;
+            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elements, k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             /// <summary>
             /// not implemented: The cross section which should also come from the SH_SimpleElement.
             /// Names: the list of strings should also be obtained from the elements. 
             /// </summary>
-            List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, new List<string>() { "Test Elements" }, 
+            List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names, 
                 new List<CroSec>(), logger, out nodes);
 
             // supports
@@ -91,14 +92,41 @@ namespace SimpleShapeGrammar.Components
                 Support gh_sup = k3d.Support.Support(loc, conditions);
                 supports.Add(gh_sup);
             }
-            
+
 
 
             // loads
 
-            // not implemented yet
-            
+            ///<summary>
+            ///Note: Neither gravity load nor line load has a k3d (factory) initatior. 
+            /// </summary>
+
             var loads = new List<Load>();
+            // gravity load
+            var gLoad = new GravityLoad(new Vector3(0, 0, -1), 0);
+            loads.Add(gLoad);
+
+            // line loads
+            var lineLoads = new List<Load>();
+            foreach(var l in ss.LineLoads)
+            {
+                //var ids = l.ElementIds;
+                var ids = l.ElementId; 
+                var k_vec = GeometryExtensions.Convert(l.Load);
+                var orient = LoadOrientation.global;
+                int lc = l.LoadCase;
+                var k_lineLoad = new UniformlyDistLoad(ids, k_vec, orient, lc);
+                
+                lineLoads.Add(k_lineLoad);
+            }
+
+            loads.AddRange(lineLoads);
+            
+
+            // point loads : not implemented yet
+            
+            
+            
 
             // assembly
             double mass;
@@ -123,12 +151,12 @@ namespace SimpleShapeGrammar.Components
         /// <param name="elements"></param>
         /// <param name="k3d"></param>
         /// <returns></returns>
-        private List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d)
+        private List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
         {
             // initiate list
             
             List<Line3> k_lines = new List<Line3>();
-
+            List<string> k_names = new List<string>();
             // create karamabe BuilderBeam elements using Factory method
             foreach (SH_Element el in elements)
             {                
@@ -142,8 +170,13 @@ namespace SimpleShapeGrammar.Components
                 // create Line3
                 Line3 k_line = new Line3(k_sPt, k_ePt);
                 k_lines.Add(k_line);
+
+                // add name
+                k_names.Add(el.elementName);
+                
                 
             }
+            el_names = k_names;
             return k_lines;
         }
         private List<bool> CreateBooleanConditions(int condInt)

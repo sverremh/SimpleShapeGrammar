@@ -9,5 +9,10 @@ namespace SimpleShapeGrammar.Classes
     [Serializable]
     public class SH_Load
     {
+        // --- properties ---
+        
+        // --- constructors ---
+
+        // --- methods ---
     }
 }

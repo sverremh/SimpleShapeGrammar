@@ -113,7 +113,7 @@ namespace SimpleShapeGrammar.Components
             }
             simpleShape.Elements = numberedElems;
 
-            // add supports to the element
+            // add supports to the simple shape
             List<SH_Support> uniqueSupports = new List<SH_Support>();
             foreach (var sup in sups)
             {
@@ -135,8 +135,11 @@ namespace SimpleShapeGrammar.Components
                 
             }
 
-            
+            // add the loads to the simple shape            
+            SortLoads(loads, out List<SH_LineLoad> l_loads, out List<SH_PointLoad> p_loads);
 
+            simpleShape.LineLoads = l_loads;
+            simpleShape.PointLoads = p_loads;
 
 
 
@@ -149,6 +152,31 @@ namespace SimpleShapeGrammar.Components
 
 
         }
+        /// <summary>
+        /// Private methods for this components
+        /// </summary>
+        private void SortLoads(List<SH_Load> loads ,out List<SH_LineLoad> line_loads, out List<SH_PointLoad> point_loads)
+        {
+            // create the empty list
+            List<SH_PointLoad> pl = new List<SH_PointLoad>();
+            List<SH_LineLoad> ll = new List<SH_LineLoad>();
+
+            // iterate through all the loads
+            foreach (var l in loads)
+            {
+                if (l is SH_LineLoad)
+                {
+                    ll.Add( (SH_LineLoad) l);
+                }
+                if (l is SH_PointLoad)
+                {
+                    pl.Add( (SH_PointLoad) l);
+                }
+            }
+            line_loads = ll;
+            point_loads = pl;
+        }
+
 
         /// <summary>
         /// Provides an Icon for the component.

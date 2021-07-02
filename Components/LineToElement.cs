@@ -23,8 +23,11 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Cross Section to assign the element", GH_ParamAccess.item);
+            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item); // 0
+            pManager.AddGenericParameter("Cross Section", "crossSec", "Cross Section to assign the element", GH_ParamAccess.item); // 1
+            pManager.AddTextParameter("ElementName", "name", "Name of the element", GH_ParamAccess.item); // 2
+
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -44,11 +47,12 @@ namespace SimpleShapeGrammar.Components
             // --- variables ---
             Line line = new Line();
             SH_CrossSection_Beam crossSection = new SH_CrossSection_Beam();
+            string name = "";
 
             // --- input --- 
             if (!DA.GetData(0, ref line)) return;
-            if (!DA.GetData(1, ref crossSection)) return; 
-
+            if (!DA.GetData(1, ref crossSection)) return;
+            DA.GetData(2, ref name);
             // --- solve ---
 
             // Restart the counter
@@ -62,12 +66,13 @@ namespace SimpleShapeGrammar.Components
             nodes[0] = new SH_Node(line.From, null);
             nodes[1] = new SH_Node(line.To, null);
                    
-            SH_Element sH_Line = new SH_Element(nodes, null);
-            sH_Line.CrossSection = crossSection;
+            SH_Element sH_Element = new SH_Element(nodes, null);
+            sH_Element.CrossSection = crossSection;
+            sH_Element.elementName = name;
             
           
             // --- output ---
-            DA.SetData(0, sH_Line);
+            DA.SetData(0, sH_Element);
 
         }
 

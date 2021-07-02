@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
-    public class SH_Element : SH_CrossSection_Beam
+    public class SH_Element //: SH_CrossSection_Beam
     {
         // --- properties ---
         
         public int? ID { get; set; }
-        // public int ID { get; }
+        public string elementName { get; set; }
         public SH_Node[] Nodes { get; }
 
         public SH_CrossSection_Beam CrossSection { get; set; }
+        
 
         // --- constructors ---
         public SH_Element()

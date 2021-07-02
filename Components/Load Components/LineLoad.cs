@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
+using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
 
 namespace SimpleShapeGrammar.Components
@@ -51,11 +52,12 @@ namespace SimpleShapeGrammar.Components
             // --- input ---
 
             //bool idPresent = DA.GetData(0, ref elementID);
-            DA.GetData(0, ref elementID);
+            DA.GetData(0,ref elementID);
             DA.GetData(1, ref lc);
             if (!DA.GetData(2, ref lVec)) return;
             // --- solve ---
             SH_LineLoad ll = new SH_LineLoad(lc, lVec);
+            ll.ElementId = elementID;
             
 
             // --- output ---
