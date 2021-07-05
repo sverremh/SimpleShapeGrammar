@@ -49,9 +49,9 @@ namespace SimpleShapeGrammar.Classes
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
            
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount);
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too.
             _ss.elementCount++;
-            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount);
+            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
             _ss.elementCount++;
 
             

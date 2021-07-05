@@ -68,12 +68,12 @@ namespace SimpleShapeGrammar.Components
             List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elements, k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
+            List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,
+                new List<CroSec>(), logger, out nodes);
             /// <summary>
             /// not implemented: The cross section which should also come from the SH_SimpleElement.
-            /// Names: the list of strings should also be obtained from the elements. 
             /// </summary>
-            List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names, 
-                new List<CroSec>(), logger, out nodes);
+
 
             // supports
             // not implemented yet. Read through all the nodes. Create a support instance if the condition theres is not 0
