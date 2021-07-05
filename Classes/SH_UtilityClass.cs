@@ -25,27 +25,6 @@ namespace SimpleShapeGrammar.Classes
 
     public static class SH_UtilityClass
     {
-        
-
-
-        /*
-        public static T DeepCopy<T>(this T self) where T : class
-
-        {
-
-            var ret = Activator.CreateInstance(typeof(T), true) as T;
-
-            var type = self.GetType();
-
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic);
-
-            foreach (var field in fields)
-
-                field.SetValue(ret, field.GetValue(self));
-
-            return ret;
-
-        }*/
         public static T DeepCopy<T>(T target)
         {
             T result;
@@ -68,8 +47,36 @@ namespace SimpleShapeGrammar.Classes
             return result;
         }
 
+        public static void TakeRandomItem(List<object> fromList, List<double> weights, Random random, out object item)
+        {
+            // find the sum of weights
+            double sum_of_weights = weights.Sum();
+            object el = new object();
+            int ind = 0;
+            // initiate random
+            //var random = new Random();
+            double rnd = RandomExtensions.NextDouble(random, 0, sum_of_weights);
+            //Console.WriteLine("Random number selected: {0}", rnd);
+            for (int i = 0; i < weights.Count; i++)
+            {
+                if (rnd < weights[i])
+                {
+                    el = fromList[i];
+                    ind = i;
+                    break;
+                }
+                rnd -= weights[i];
+            }
+            item = el;
+        }
 
+        public static class RandomExtensions
+        {
 
-
+            public static double NextDouble(Random random, double min, double max)
+            {
+                return random.NextDouble() * (max - min) + min;
+            }
+        }
     }
 }

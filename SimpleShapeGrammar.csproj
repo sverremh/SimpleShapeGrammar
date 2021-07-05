@@ -90,6 +90,8 @@
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
     <Compile Include="Components\Load Components\PointLoads.cs" />
+    <Compile Include="Components\RuleComponents\RandomTest.cs" />
+    <Compile Include="Components\RuleComponents\RandomRules.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />
     <Compile Include="Components\RuleComponents\Rule02.cs" />
     <Compile Include="Components\RuleComponents\RuleA.cs" />

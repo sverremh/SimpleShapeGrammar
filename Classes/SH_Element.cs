@@ -29,6 +29,12 @@ namespace SimpleShapeGrammar.Classes
             ID = _id;
             Nodes = _nodes;
         }
+        public SH_Element(SH_Node[] _nodes, int? _id, string _el_name)
+        {
+            ID = _id;
+            Nodes = _nodes;
+            elementName = _el_name;
+        }
 
 
         // --- methods ---
