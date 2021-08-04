@@ -127,10 +127,10 @@ namespace SimpleShapeGrammar.Components
                 int nodeInd = nodes.FindIndex( n => n.Position.DistanceToSquared(sup.Position) < 0.001 );
                 if (nodeInd != -1) // if -1 the location of the support don't match a node
                 {
-                    sup.ID = simpleShape.supCount++;
+                    sup.ID = simpleShape.supCount;
+                    simpleShape.supCount++;
                     sup.nodeInd = nodeInd;
                     uniqueSupports.Add(sup);
-                    simpleShape.supCount++;
                 }
                 
             }

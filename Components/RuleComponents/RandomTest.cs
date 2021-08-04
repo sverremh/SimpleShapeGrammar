@@ -13,7 +13,7 @@ namespace SimpleShapeGrammar.Components
         public RandomTest()
           : base("RandomTest", "Nickname",
               "Description",
-              "Category", "Subcategory")
+              "SimpleGrammar", "Subcategory")
         {
         }
 
