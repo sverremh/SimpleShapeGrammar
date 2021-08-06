@@ -52,18 +52,27 @@ namespace SimpleShapeGrammar.Classes
                     }
                 }
 
-                // calculate horizontal lengths
+                // calculate horizontal lengths. This should include y-coordinates as well. NOT IMPLEMENTED
+                // calculate lenghts
+                List<double> lengths = new List<double>();
+                foreach (var nId in adj_IDs)
+                {
+                    double length = Math.Sqrt( Math.Pow(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X, 2) + Math.Pow(ss.Nodes[(int)node.ID].Position.Y - ss.Nodes[nId].Position.Y, 2));
+                    lengths.Add(length);
+                    a_1[(int)node.ID, nId] = length;
+                }
+
                 List<double> x_lengths = new List<double>();
                 foreach (var nId in adj_IDs)
                 {
                     double x_length = Math.Abs(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X);
-                    a_1[(int)node.ID, nId] = x_length;
+                    //a_1[(int)node.ID, nId] = x_length;
                     x_lengths.Add(x_length);
                 }
                 // assign the final value from this node to the matrix
-                a_1[(int)node.ID, (int)node.ID] = 2 * (x_lengths[0] + x_lengths[1]);
+                a_1[(int)node.ID, (int)node.ID] = 2 * (lengths[0] + lengths[1]);
 
-                b_1[(int)node.ID] = -(ss.LineLoads[0].Load.Z / 4) * (Math.Pow(x_lengths[0], 3) + Math.Pow(x_lengths[1], 3)); // should make a better way of retrieving the load from the SH_SimpleShape...
+                b_1[(int)node.ID] = -(ss.LineLoads[0].Load.Z / 4) * (Math.Pow(lengths[0], 3) + Math.Pow(lengths[1], 3)); // should make a better way of retrieving the load from the SH_SimpleShape...
 
             }
 
@@ -133,13 +142,13 @@ namespace SimpleShapeGrammar.Classes
             return forces;
         }
 
-        public static double[] CalculateReactions(SH_SimpleShape ss, double[] forces)
+        public static double[] CalculateReactions(SH_SimpleShape ss, double[] forces, double h_thrust)
         {
 
             // find index of supports 
             List<int> supInd = ss.Supports.Select(n => n.nodeInd).ToList();
 
-            double r1 = 0.0;
+            double r2 = 0.0;
             double sum = 0.0;
             foreach (var node in ss.Nodes)
             {
@@ -148,18 +157,25 @@ namespace SimpleShapeGrammar.Classes
                 if (supInd.Contains(id)) continue; // No need to continue iteration if it is a support
 
                 double x_dist = Math.Abs(ss.Nodes[id].Position.X - ss.Nodes[supInd[0]].Position.X);
-                r1 += forces[id] * x_dist;
+                r2 += forces[id] * x_dist;
                 sum += forces[id];
             }
+            // add the horizontal thrust
+            double h1 = ss.Nodes[0].Position.Z;
+            double h2 = ss.Nodes[1].Position.Z;
+            double delta_h = h1 - h2;
+            double m_h = delta_h * h_thrust; // the moment from the horizontal thrust 
+            r2 -= m_h;
+
             double totalLength = Math.Abs(ss.Nodes[supInd[1]].Position.X - ss.Nodes[supInd[0]].Position.X);
-            r1 = r1 / totalLength;
-            double r2 = sum - r1;
+            r2 = r2 / totalLength;
+            double r1 = sum - r2;
 
             return new double[] { r1, r2 };
         }
-        public static Dictionary<string, List<Line> > DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces)
+        public static Dictionary<string, List<Line> > DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces, double h_thrust)
         {
-            double horizontal_thrust = 50;
+            
             //double horizontal_thrust = forces.Max() * 0.8; // this should be an optional input in later implementations as a part of Rule03
             Dictionary<string, List<Line>> reciprocal_diagram = new Dictionary<string, List<Line>>();
             List<int> supInd = ss.Supports.Select(s => s.nodeInd).ToList();
@@ -172,7 +188,7 @@ namespace SimpleShapeGrammar.Classes
 
             // draw lines for the external forces
             List<Line> external_forces = new List<Line>();
-            Point3d line_start = new Point3d(horizontal_thrust, -reactions[0], 0);
+            Point3d line_start = new Point3d(h_thrust, -reactions[0], 0);
             //Point3d line_start = new Point3d(ePt); // copy the ePt of the first line
 
             int count = 0;
@@ -202,6 +218,61 @@ namespace SimpleShapeGrammar.Classes
             internalForces.Add(new Line(o, external_forces[ external_forces.Count-1 ].To));
 
             reciprocal_diagram.Add("internal", internalForces);
+
+            // Create the funicular elements and new nodes below: 
+            List<double> heights = new List<double>();
+            var start_node = ordered_nodes[0]; // start node
+            var h0 = ordered_nodes[0].Position.Z; // height at beginning
+            for (int i = 0; i < ordered_indices.Count-1; i++)
+            {
+                var p1 = ordered_nodes[i].Position; // first node
+                var p2 = ordered_nodes[i + 1].Position; // second node
+                var f = reciprocal_diagram["internal"][i]; // force line from reciprocal
+                //var h_i = (f.Direction.Y / f.Direction.X) * ( p1.DistanceTo(p2)); // the difference in height between this and the previous element
+                var h_i = (f.Direction.Y / f.Direction.X) * (p2.X - p1.X);
+                heights.Add(h_i);
+
+                
+                if(i < ordered_indices.Count - 2)
+                {
+                    // deck nodes
+                    var s_node = ss.Nodes[ordered_indices[i]];
+                    var e_node = ss.Nodes[ordered_indices[i+1]];
+
+
+                    // add new node for the funicular
+                    h0 += h_i;
+                    var end_pos = new Point3d(e_node.Position.X, e_node.Position.Y, e_node.Position.Z + h0); //This is wrong. Now all the lines starts in the same point.
+                    SH_Node end_node = new SH_Node(end_pos, ss.nodeCount++);
+                    ss.Nodes.Add(end_node);
+
+                    // new element for funicular
+                    SH_Node[] nodes = new SH_Node[] {start_node , end_node};
+                    string name = "funicular";
+                    int id = ss.elementCount++;
+                    SH_Element funicular = new SH_Element(nodes, id, name);
+                    ss.Elements.Add(funicular);
+
+                    // new element for verticals
+                    string name_vert = "verticals";
+                    int id_v = ss.elementCount++;
+                    SH_Node[] nodes_v = new SH_Node[] { e_node, end_node };
+                    SH_Element ve = new SH_Element(nodes_v, id_v, name_vert);
+                    start_node = end_node;
+                    ss.Elements.Add(ve);
+                }
+                if(i == ordered_indices.Count - 2)
+                {
+                    
+                    // only adding the element
+                    SH_Node[] nodes = new SH_Node[] { start_node, ss.Nodes[1] };
+                    string name = "funicular";
+                    int id = ss.elementCount++;
+                    SH_Element funicular = new SH_Element(nodes, id, name);
+                    ss.Elements.Add(funicular);
+                }
+            }
+
             return reciprocal_diagram;
         }
 
