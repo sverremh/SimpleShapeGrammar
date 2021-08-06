@@ -30,8 +30,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("moments", "moments", "List of moments over \"Supports\".", GH_ParamAccess.list); // 0
-            pManager.AddGenericParameter("forces", "forces", "List of forces over \"Supports\".", GH_ParamAccess.list); // 0
+            pManager.AddGenericParameter("reactions", "moments", "List of moments over \"Supports\".", GH_ParamAccess.list); // 0
+            pManager.AddGenericParameter("reciprocal", "reciprocal", "Reciprocal diagram", GH_ParamAccess.list); // 0
         }
 
         /// <summary>
@@ -52,15 +52,16 @@ namespace SimpleShapeGrammar.Components
             // calculate moments over the supports
             double[] moments = SH_Evaluation.CalculateMoments(a, b);
             double[] forces = SH_Evaluation.CalculateForces(ss, moments);
-            double[] reactions = SH_Evaluation.CalculateReactions(ss, forces);
+            double thrust = 50; // make this a user specified input later.
+            double[] reactions = SH_Evaluation.CalculateReactions(ss, forces, thrust);
 
 
             // draw reciprocal diagram
-            Dictionary<string , List<Line>> reciprocal_diagram = SH_Evaluation.DrawReciprocal(ss, reactions, forces);
+            Dictionary<string , List<Line>> reciprocal_diagram = SH_Evaluation.DrawReciprocal(ss, reactions, forces, thrust);
 
 
             // --- output ---
-            DA.SetDataList(0, moments);
+            DA.SetDataList(0, reactions);
             DA.SetDataList(1, reciprocal_diagram["internal"]);
         }
 
