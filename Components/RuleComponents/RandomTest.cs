@@ -12,8 +12,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public RandomTest()
           : base("RandomTest", "Nickname",
-              "Description",
-              "SimpleGrammar", "Subcategory")
+              "Creates a list of randomly selected rules.",
+              "SimpleGrammar", "Rules")
         {
         }
 
@@ -22,7 +22,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Lenght", "len", "The length of the list of rules to be generated.", GH_ParamAccess.item, 5); // 0
+            pManager.AddIntegerParameter("Length", "len", "The length of the list of rules to be generated.", GH_ParamAccess.item, 5); // 0
             
             // not implemented
             // - weights as list
@@ -56,9 +56,15 @@ namespace SimpleShapeGrammar.Components
             Random random = new Random(Guid.NewGuid().GetHashCode()); // create a guid and use the HashCode as seed for the random instance
             List<object> rules = new List<object>() { "r1", "r2", "rA" };
             List<double> weights = new List<double>() {0.1, 0.8, 0.1 };
-            // loop to generate the rules
+
+            // add the first rule
+            rulesList.Add(NewRule01(random));
+
+            // loop to generate the list of second rules
             for (int i = 0; i < length; i++)
             {
+                rulesList.Add(NewRule02(random, ref numLines));
+                /*
                 // pick a rule randomly
                 SH_UtilityClass.TakeRandomItem(rules, weights, random, out object rule);
 
@@ -72,11 +78,15 @@ namespace SimpleShapeGrammar.Components
                 }
                 else if (rule == rules[2])
                 {
-                    rulesList.Add(NewRuleA());
+                    
                     break; // no rules are added after this state changer. 
                 }
+                */
             }
 
+            // add final rule
+            rulesList.Add(NewRuleA());
+            
             // --- output ---
             DA.SetDataList(0, rulesList);
         }
@@ -91,7 +101,7 @@ namespace SimpleShapeGrammar.Components
         {
             int ind = rnd.Next(0, numLines);
              // double check if this will include the final item in the list. 
-            double param = SH_UtilityClass.RandomExtensions.NextDouble(rnd, 0.1, 0.9);
+            double param = SH_UtilityClass.RandomExtensions.NextDouble(rnd, 0.3, 0.7);
             var r2 = new SH_Rule02(ind, param);
             numLines += 1;
             return r2;

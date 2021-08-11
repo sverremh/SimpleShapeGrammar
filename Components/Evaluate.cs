@@ -57,12 +57,23 @@ namespace SimpleShapeGrammar.Components
 
 
             // draw reciprocal diagram
-            Dictionary<string , List<Line>> reciprocal_diagram = SH_Evaluation.DrawReciprocal(ss, reactions, forces, thrust);
+            Dictionary<string, List<Line>> reciprocal_diagram = new Dictionary<string, List<Line>>();
+            try
+            {
+                reciprocal_diagram = SH_Evaluation.DrawReciprocal(ss, reactions, forces, thrust);
+                // --- output ---
+                DA.SetDataList(0, reactions);
+                DA.SetDataList(1, reciprocal_diagram["internal"]);
+            }
+            catch (Exception)
+            {
+
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not enough elements to draw reciprocal. Minimum number is 2.");
+            }
+            
 
 
-            // --- output ---
-            DA.SetDataList(0, reactions);
-            DA.SetDataList(1, reciprocal_diagram["internal"]);
+            
         }
 
         /// <summary>
