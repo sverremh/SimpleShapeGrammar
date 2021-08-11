@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
 using Accord.Math;
 
 
@@ -140,6 +141,7 @@ namespace SimpleShapeGrammar.Classes
 
             }
             return forces;
+
         }
 
         public static double[] CalculateReactions(SH_SimpleShape ss, double[] forces, double h_thrust)
@@ -175,10 +177,19 @@ namespace SimpleShapeGrammar.Classes
         }
         public static Dictionary<string, List<Line> > DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces, double h_thrust)
         {
+
+
             
-            //double horizontal_thrust = forces.Max() * 0.8; // this should be an optional input in later implementations as a part of Rule03
+            
+
             Dictionary<string, List<Line>> reciprocal_diagram = new Dictionary<string, List<Line>>();
             List<int> supInd = ss.Supports.Select(s => s.nodeInd).ToList();
+
+            // test if reciprocal can be drawn
+            if (ss.Elements.Count < 2)
+            {
+                throw new Exception("Not enough elements to draw funiculars. Minimum ");
+            }
 
 
             // order the nodes correctly. 

@@ -39,7 +39,14 @@ namespace SimpleShapeGrammar.Classes
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
             SH_Element line = _ss.Elements[LineIndex];
-
+            double line_length = line.Nodes[0].Position.DistanceTo(line.Nodes[1].Position);
+            double segment1 = line_length * Param;
+            double segment2 = line_length * (1 - Param);
+            // test if the line original length or the splitted segments are smaller than 1 meter. If true the rule cannot be applied. 
+            if ((line_length < 1.0) || (segment1 < 1.0) || (segment2 < 1.0))
+            {
+                return; 
+            }
 
             int elInd = _ss.Elements.IndexOf(line);
             // add the intermediate node
