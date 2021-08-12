@@ -3,17 +3,18 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+
+namespace SimpleShapeGrammar.Components.RuleComponents
 {
-    public class GrammarInterpreter : GH_Component
+    public class Rule03 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GrammarInterpreter class.
+        /// Initializes a new instance of the Rule03 class.
         /// </summary>
-        public GrammarInterpreter()
-          : base("GrammarInterpreter", "interpreter",
-              "Description",
-              "SimpleGrammar", "Interpreter")
+        public Rule03()
+          : base("Rule03", "r3",
+              "Rule3 adds a funicular to the simple bridge. This is the last rule to be used",
+              "SimpleGrammar", "Rules")
         {
         }
 
@@ -22,8 +23,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape", "sShape", "Simple Shape to be modified with the rules", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Rules", "rls", "Rules to apply to the Interpreter", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Horizontal Thrust", "thrust", "Horizontal force in the bridge as a factor of the vertical force", GH_ParamAccess.item, 0.7); // 0
+            pManager.AddBooleanParameter("Compression", "c", "True if the funicular shall be in compression; false for tension.", GH_ParamAccess.item, true); // 1
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Modified Shape", "mShape", "Shape Class after Grammar derivation", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SH_Rule03", "rule3", "", GH_ParamAccess.item); //
         }
 
         /// <summary>
@@ -41,27 +42,18 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
-            List<SH_Rule> rules = new List<SH_Rule>();
+            double h = 0.0;
+            bool c = true;
 
-            // --- input --- 
-            if (!DA.GetData(0, ref simpleShape)) return;
-            if (!DA.GetDataList(1, rules)) return;
-
-            //Create a deep copy of the simple Shape before performing rule operations
-            SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(simpleShape);
+            // --- input ---
+            DA.GetData(0, ref h);
+            DA.GetData(1, ref c);
 
             // --- solve ---
-
-            
-            foreach (SH_Rule rule in rules)
-            {
-                rule.RuleOperation(copyShape);
-            }
-            
+            SH_Rule03 rule3 = new SH_Rule03(h, c);
 
             // --- output ---
-            DA.SetData(0, copyShape);
+            DA.SetData(0, rule3);
         }
 
         /// <summary>
@@ -73,7 +65,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Sol_LS;
+                return null;
             }
         }
 
@@ -82,7 +74,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6f3252a6-31bb-4d33-9123-447465a8185b"); }
+            get { return new Guid("e9cbf9fe-9c49-4e27-9fcd-071000a1ff3b"); }
         }
     }
 }
