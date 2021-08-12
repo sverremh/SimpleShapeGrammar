@@ -14,6 +14,7 @@ namespace SimpleShapeGrammar.Classes
         public State RuleState = State.beta;
         public int LineIndex { get; set; }
         public double Param { get; set; }
+        
 
         // --- constructors ---
         public SH_Rule02()
@@ -38,7 +39,21 @@ namespace SimpleShapeGrammar.Classes
 
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
-            SH_Element line = _ss.Elements[LineIndex];
+            SH_Element line = new SH_Element();
+            
+            try
+            {
+                line = _ss.Elements[LineIndex];
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
+                {
+                   line = _ss.Elements[_ss.elementCount-1]; // if out of range, take the last item
+                }
+                
+            }
+             
             double line_length = line.Nodes[0].Position.DistanceTo(line.Nodes[1].Position);
             double segment1 = line_length * Param;
             double segment2 = line_length * (1 - Param);
@@ -58,7 +73,7 @@ namespace SimpleShapeGrammar.Classes
             List<SH_Node> nodes = new List<SH_Node>();
            
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, LineIndex, line.elementName); // add the element name here too.
+            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
             SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
             _ss.elementCount++;

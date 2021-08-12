@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
-    public enum State { alpha = 0, beta = 1, gamma = 2 };
+    public enum State { alpha = 0, beta = 1, gamma = 2 , end = 3};
     [Serializable]
     public class SH_SimpleShape
     {

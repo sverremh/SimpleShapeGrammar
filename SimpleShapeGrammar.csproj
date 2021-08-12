@@ -88,6 +88,7 @@
     <Compile Include="Classes\Rules\SH_Rule01.cs" />
     <Compile Include="Classes\Rules\SH_Rule02.cs" />
     <Compile Include="Classes\Rules\SH_RuleA.cs" />
+    <Compile Include="Classes\SH_Rule03.cs" />
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Components\RuleComponents\RandomRules.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />
     <Compile Include="Components\RuleComponents\Rule02.cs" />
+    <Compile Include="Components\RuleComponents\Rule03.cs" />
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
