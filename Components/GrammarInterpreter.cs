@@ -56,7 +56,17 @@ namespace SimpleShapeGrammar.Components
             
             foreach (SH_Rule rule in rules)
             {
-                rule.RuleOperation(copyShape);
+                try
+                {
+                    string message = rule.RuleOperation(copyShape);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
+                }
+                catch (Exception ex)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
+                    return;
+                }
+                
             }
             
 

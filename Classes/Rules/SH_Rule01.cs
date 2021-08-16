@@ -30,12 +30,12 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public override void RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(SH_SimpleShape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
-                return;
+                return "The State is not compatible with Rule01.";
             }
 
             // take the 1st element
@@ -64,6 +64,7 @@ namespace SimpleShapeGrammar.Classes
             #endregion
             // change the state
             _ss.SimpleShapeState = State.beta;
+            return "Rule01 successfully applied.";
 
         }
 

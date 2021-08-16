@@ -84,8 +84,9 @@ namespace SimpleShapeGrammar.Components
                 */
             }
 
-            // add final rule
+            // add final rules
             rulesList.Add(NewRuleA());
+            rulesList.Add(NewRule03(random));
             
             // --- output ---
             DA.SetDataList(0, rulesList);
@@ -105,6 +106,18 @@ namespace SimpleShapeGrammar.Components
             var r2 = new SH_Rule02(ind, param);
             numLines += 1;
             return r2;
+        }
+        private SH_Rule03 NewRule03(Random rnd)
+        {
+            double thrust = rnd.NextDouble() + 0.001;
+            bool compression = true;
+            if (rnd.NextDouble() < 0.5)
+            {
+                compression = false;
+            }
+            SH_Rule03 r3 = new SH_Rule03(thrust, compression);
+
+            return r3;
         }
         private SH_RuleA NewRuleA()
         {

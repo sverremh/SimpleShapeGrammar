@@ -19,17 +19,17 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public override void RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(SH_SimpleShape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
-                return;
+                return "RuleA is not applicable with the current state.";
             }
 
             // change the state
             _ss.SimpleShapeState = State.gamma;
-
+            return "RuleA applied!";
         }
     }
 }

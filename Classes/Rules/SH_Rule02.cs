@@ -29,12 +29,12 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public override void RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(SH_SimpleShape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
-                return;
+                return "The current state is not compatible with Rule02.";
             }
 
             // choose the line to split
@@ -60,7 +60,7 @@ namespace SimpleShapeGrammar.Classes
             // test if the line original length or the splitted segments are smaller than 1 meter. If true the rule cannot be applied. 
             if ((line_length < 1.0) || (segment1 < 1.0) || (segment2 < 1.0))
             {
-                return; 
+                return "The line segment are too short for the rule to be applied on this element"; 
             }
 
             int elInd = _ss.Elements.IndexOf(line);
@@ -89,6 +89,8 @@ namespace SimpleShapeGrammar.Classes
 
             // no change in the state (remains in beta state)
             // _ss.SimpleShapeState = State.beta; 
+
+            return "Rule02 successfully applied!";
 
         }
 
