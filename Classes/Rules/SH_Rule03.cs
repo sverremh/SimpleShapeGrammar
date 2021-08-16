@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rhino.Geometry;
+using System.Linq;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -8,7 +9,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Rule03 : SH_Rule
     {
         // --- properties ---
-        public double HorizontalThrust { get; set; }
+        public double HorizontalThrustParameter { get; set; }
         public bool Compression { get; set; }
 
         public State RuleState = State.gamma;
@@ -20,20 +21,31 @@ namespace SimpleShapeGrammar.Classes
         }
         public SH_Rule03(double _thrust, bool _compression)
         {
-            HorizontalThrust = _thrust;
+            HorizontalThrustParameter = _thrust;
             Compression = _compression;
         }
 
         // --- methods ---
-        public override void RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(SH_SimpleShape _ss)
         {
+            // test for correct state
+            if (_ss.SimpleShapeState != State.gamma)
+            {
+                return "The current state is not compatible with Rule03.";
+            }
             // --- solve ---
             SH_Evaluation.ConstructMatrices(_ss, out double[,] a, out double[] b);
+
+            
 
             // calculate moments over the supports
             double[] moments = SH_Evaluation.CalculateMoments(a, b);
             double[] forces = SH_Evaluation.CalculateForces(_ss, moments);
-            double thrust = 50; // make this a user specified input later.
+
+            // calculate an estimated thrust
+            double thrust = Math.Abs(forces.Sum() / 2) * HorizontalThrustParameter;
+
+            //double thrust = 50; // make this a user specified input later.
             double[] reactions = SH_Evaluation.CalculateReactions(_ss, forces, thrust);
 
             // draw reciprocal diagram
@@ -42,16 +54,18 @@ namespace SimpleShapeGrammar.Classes
             {
                 reciprocal_diagram = SH_Evaluation.DrawReciprocal(_ss, reactions, forces, thrust);
                 
+                
             }
             catch (Exception ex)
             {
-                
+                throw new Exception("The number of elements are not sufficient to create the funicular. There must be at least two lines.");
                 //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not enough elements to draw reciprocal. Minimum number is 2.");
             }
 
 
             // change state til "end" 
             _ss.SimpleShapeState = State.end;
+            return "Rule03 successfully applied!";
         }
     }
 }

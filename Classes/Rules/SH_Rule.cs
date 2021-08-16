@@ -14,7 +14,7 @@ namespace SimpleShapeGrammar.Classes
         { 
             
         }
-        public abstract void RuleOperation(SH_SimpleShape _ss);
+        public abstract string RuleOperation(SH_SimpleShape _ss);
         
         
     }

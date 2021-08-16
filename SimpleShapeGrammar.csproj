@@ -88,7 +88,7 @@
     <Compile Include="Classes\Rules\SH_Rule01.cs" />
     <Compile Include="Classes\Rules\SH_Rule02.cs" />
     <Compile Include="Classes\Rules\SH_RuleA.cs" />
-    <Compile Include="Classes\SH_Rule03.cs" />
+    <Compile Include="Classes\Rules\SH_Rule03.cs" />
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\SH_UtilityClass.cs" />
