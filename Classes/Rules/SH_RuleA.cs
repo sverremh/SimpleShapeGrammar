@@ -10,12 +10,13 @@ namespace SimpleShapeGrammar.Classes
     public class SH_RuleA : SH_Rule
     {
         // --- properties ---
-        public State RuleState = State.beta;
+        //public State RuleState = State.beta;
 
         // --- constructors --
         public SH_RuleA()
         {
             // empty
+            RuleState = State.beta;
         }
 
         // --- methods ---

@@ -72,7 +72,6 @@ namespace SimpleShapeGrammar.Classes
 
         public static class RandomExtensions
         {
-
             public static double NextDouble(Random random, double min, double max)
             {
                 return random.NextDouble() * (max - min) + min;

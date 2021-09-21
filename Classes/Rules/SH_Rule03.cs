@@ -12,15 +12,17 @@ namespace SimpleShapeGrammar.Classes
         public double HorizontalThrustParameter { get; set; }
         public bool Compression { get; set; }
 
-        public State RuleState = State.gamma;
+        //public State RuleState = State.gamma;
 
         // --- constructors ---
         public SH_Rule03()
         {
             // empty
+            RuleState = State.gamma;
         }
         public SH_Rule03(double _thrust, bool _compression)
         {
+            RuleState = State.gamma;
             HorizontalThrustParameter = _thrust;
             Compression = _compression;
         }

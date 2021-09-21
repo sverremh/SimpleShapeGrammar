@@ -7,25 +7,31 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Classes
 {
+    /// <summary>
+    /// Rule splitting the line at the input parameter
+    /// </summary>
     [Serializable]
     public class SH_Rule02 : SH_Rule
     {
         // --- properties ---
-        public State RuleState = State.beta;
+        //public State RuleState = State.beta;
+        
         public int LineIndex { get; set; }
         public double Param { get; set; }
-        
+        private double[] bounds  = { 0.2, 0.8 };
+
 
         // --- constructors ---
         public SH_Rule02()
         {
-            
+            RuleState = State.beta;
         }
 
         public SH_Rule02(int _line_index, double _param)
         {
             LineIndex = _line_index;
             Param = _param;
+            RuleState = State.beta;            
         }
 
         // --- methods ---
@@ -93,7 +99,13 @@ namespace SimpleShapeGrammar.Classes
             return "Rule02 successfully applied!";
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_line"> The line to operate on</param>
+        /// <param name="_t"> Splitting parameter</param>
+        /// <param name="_id">ID of the line</param>
+        /// <returns></returns>
         private SH_Node AddNode(SH_Element _line, double _t, int _id)
         {
             double mx = (1 - _t) * _line.Nodes[0].Position.X + _t * _line.Nodes[1].Position.X;
@@ -104,7 +116,37 @@ namespace SimpleShapeGrammar.Classes
 
             return newNode;
         }
-
-
+        /// <summary>
+        /// Set the lower bound of the split parameter
+        /// </summary>
+        /// <param name="lower"></param>
+        public void SetLowerBound(double lower)
+        {
+            bounds[0] = lower;
+        }
+        /// <summary>
+        /// Gets the lower bound of the split parameter
+        /// </summary>
+        /// <returns> lower bound </returns>
+        public double GetLowerBound()
+        {
+            return bounds[0];
+        }
+        /// <summary>
+        /// Set the upper bound of the split parameter
+        /// </summary>
+        /// <param name="upper"></param>
+        public void SetUpperBound(double upper)
+        {
+            bounds[1] = upper;
+        }
+        /// <summary>
+        /// Gets the upper bound of the split parameter
+        /// </summary>
+        /// <returns>Upper bound</returns>
+        public double GetUpperBound()
+        {
+            return bounds[1];
+        }
     }
 }

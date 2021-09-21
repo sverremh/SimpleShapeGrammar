@@ -9,7 +9,7 @@ namespace SimpleShapeGrammar.Classes
     [Serializable]
     public abstract class SH_Rule
     {
-
+        public State RuleState;
         public SH_Rule()
         { 
             

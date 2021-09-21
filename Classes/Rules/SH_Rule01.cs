@@ -14,19 +14,25 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
         public Vector3d TranslateStart { get; private set; }
         public Vector3d TranslateEnd { get; private set; }
-        
-        public State RuleState = State.alpha;
+
+        private double[] xBounds = { -1.0, 1.0 }; // lower and upper bounds for translation of of support in x direction
+        private double[] yBounds = { -1.0, 1.0 }; // lower and upper bounds for translation of of support in y direction
+        private double[] zBounds = { -3.0, 3.0 }; // lower and upper bounds for translation of of support in z direction
+
+        //public State RuleState = State.alpha;
 
         // --- constructors ---
         public SH_Rule01()
         {
             // empty constructor
+            RuleState = State.alpha;
         }
         public SH_Rule01(Vector3d _translate_start, Vector3d _translate_end)
         {
             TranslateStart = _translate_start;
             TranslateEnd = _translate_end;
-            
+            RuleState = State.alpha;
+
         }
 
         // --- methods ---
@@ -68,5 +74,29 @@ namespace SimpleShapeGrammar.Classes
 
         }
 
+        /// <summary>
+        /// Set the lower bounds of translation vectors
+        /// </summary>
+        /// <param name="xLow"></param>
+        /// <param name="yLow"></param>
+        /// <param name="zLow"></param>
+        public void SetLowerBounds(double xLow, double yLow, double zLow)
+        {
+            xBounds[0] = xLow;
+            yBounds[0] = yLow;
+            zBounds[0] = zLow;
+        }
+        /// <summary>
+        /// Set the upper bounds of the translation vectors
+        /// </summary>
+        /// <param name="xHigh"></param>
+        /// <param name="yHigh"></param>
+        /// <param name="zHigh"></param>
+        public void SetUpperBounds(double xHigh, double yHigh, double zHigh)
+        {
+            xBounds[1] = xHigh;
+            yBounds[1] = yHigh;
+            zBounds[1] = zHigh;
+        }
     }
 }
