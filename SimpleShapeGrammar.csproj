@@ -52,6 +52,9 @@
       <HintPath>..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="JMetalCSharp">
+      <HintPath>Libraries\JMetalCSharp.dll</HintPath>
+    </Reference>
     <Reference Include="karamba.gha">
       <HintPath>Libraries\karamba.gha.dll</HintPath>
       <Private>False</Private>
@@ -75,6 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
+    <Compile Include="Classes\KarambaUtility.cs" />
+    <Compile Include="Classes\MOO\ObjectiveComparer.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\SH_Element.cs" />
@@ -104,6 +109,7 @@
     <Compile Include="Components\CreateGeometry.cs" />
     <Compile Include="Components\GrammarInterpreter.cs" />
     <Compile Include="Components\Load Components\PointLoads.cs" />
+    <Compile Include="Components\MOOComponents\FirstGrammarMOO.cs" />
     <Compile Include="Components\RuleComponents\RandomTest.cs" />
     <Compile Include="Components\RuleComponents\RandomRules.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />
