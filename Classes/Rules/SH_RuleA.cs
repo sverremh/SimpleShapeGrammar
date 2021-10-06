@@ -16,7 +16,12 @@ namespace SimpleShapeGrammar.Classes
         public SH_RuleA()
         {
             // empty
-            RuleState = State.beta;
+            RuleState = State.gamma;
+        }
+
+        public override void NewRuleParameters(Random random)
+        {
+            
         }
 
         // --- methods ---

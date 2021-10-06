@@ -79,7 +79,20 @@
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
+    <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
+    <Compile Include="Classes\MOO\MOO_Utility.cs" />
+    <Compile Include="Classes\MOO\SH_Crossover.cs" />
+    <Compile Include="Classes\MOO\SH_CrossoverFactory.cs" />
+    <Compile Include="Classes\MOO\SH_Mutation.cs" />
+    <Compile Include="Classes\MOO\SH_MutationFactory.cs" />
+    <Compile Include="Classes\MOO\SH_NSGAII.cs" />
+    <Compile Include="Classes\MOO\SH_NSGAIIProblem.cs" />
     <Compile Include="Classes\MOO\ObjectiveComparer.cs" />
+    <Compile Include="Classes\MOO\SH_NSGAIIRunner.cs" />
+    <Compile Include="Classes\MOO\SH_Solution.cs" />
+    <Compile Include="Classes\MOO\SH_SolutionType.cs" />
+    <Compile Include="Classes\MOO\SH_Variable.cs" />
+    <Compile Include="Classes\Rules\ISH_Rule.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\SH_Element.cs" />

@@ -3,6 +3,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using Grasshopper.Kernel.Special;
 
 
 
@@ -21,9 +22,16 @@ namespace SimpleShapeGrammar
             ObjectiveValues = new List<List<double>>();
             ObjectiveVariables = new List<SH_Rule>();
             MyRand = new Random();
-            comparer = new ObjectiveComparer();            
+            comparer = new ObjectiveComparer();
+            GrammarRules = new List<object>();
+            GrammarWeights = new List<double>(); 
         }
 
+        // create new component attribute
+        public override void CreateAttributes()
+        {
+            base.m_attributes = new MOOComponentAttributes(this);
+        }
 
 
         // -- properties --
@@ -31,6 +39,9 @@ namespace SimpleShapeGrammar
         public List<List<double>> ObjectiveValues;
         public List<SH_Rule> ObjectiveVariables;
         public List<double> objectives;
+        public List<object> GrammarRules;
+        public List<double> GrammarWeights; 
+        public List<GH_NumberSlider> slidersList = new List<GH_NumberSlider>();
         public Random MyRand;
         public int Seed;
         public string log = null;
@@ -61,6 +72,7 @@ namespace SimpleShapeGrammar
         {
             pManager.AddGenericParameter("Grammar derivation", "lst", "The rules applicable for the grammar derivation", GH_ParamAccess.tree); // 0
             pManager.AddGenericParameter("Objectives", "obj", "Objective values from each generation", GH_ParamAccess.tree); // 1
+            pManager.AddGenericParameter("Test output", "test", "", GH_ParamAccess.list); // 2
         }
 
         /// <summary>
@@ -94,23 +106,49 @@ namespace SimpleShapeGrammar
             {
                 //mooDone = true;
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
+                ObjectiveVariables = new List<SH_Rule>(); // reset list of variables
+                ObjectiveValues = new List<List<double>>(); // reses list of values
             }
 
             if (!run && !mooDone) // Make sure to include the "mooDone" here to avoid a complete rerun if the user refresh the solution
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set boolean to \"True\" to run the component.");
-                return;
             }
 
             if (Seed != 0) { MyRand = new Random(Seed); } // reset Random to give same result each time
 
             // --- solve ---
 
-            // initiate solver
+            if (run)
+            {
+                // initiate solver
+                GrammarRules = new List<object>() { "SH_Rule01", "SH_Rule02", "SH_Rule03", "SH_RuleA" };
+                GrammarWeights = new List<double>() { 0.1, 0.5, 0.3, 0.1 };
+                Random rnd = MyRand; // instantiate a random instance
+                List<SH_Rule> ruleList = MOO_Utility.NewGenome(GrammarRules, GrammarWeights, rnd);
 
-            // --- output ---
+                ObjectiveVariables = ruleList;
+                mooDone = true; 
+            }
+            
+
+            DA.SetDataList(2, ObjectiveVariables);
+            
 
         }
+
+        #region Methods
+        public List<GH_NumberSlider> ReadSlidersList()
+        {
+            slidersList.Clear(); // clear the values from the list
+            foreach (IGH_Param param in Params.Input[0].Sources) // iterate through the input sources of the first input, i.e. variables
+            {
+                GH_NumberSlider slider = param as GH_NumberSlider;
+                slidersList.Add(slider);
+            }
+            return slidersList;
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for the component.

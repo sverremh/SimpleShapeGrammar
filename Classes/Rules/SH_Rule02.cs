@@ -148,5 +148,13 @@ namespace SimpleShapeGrammar.Classes
         {
             return bounds[1];
         }
+
+        public override void NewRuleParameters(Random random)
+        {
+            // the parameter to use for the rule
+            Param = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
+            
+            LineIndex = 0; // This needs to be changed later. Somehow I need to know the total number of elements in the simple shape class. Maybe a public property which can be accessed inside the rule
+        }
     }
 }
