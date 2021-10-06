@@ -11,18 +11,18 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
         public double HorizontalThrustParameter { get; set; }
         public bool Compression { get; set; }
-
+        private double[] bounds = {0.1, 0.9};
         //public State RuleState = State.gamma;
 
         // --- constructors ---
         public SH_Rule03()
         {
             // empty
-            RuleState = State.gamma;
+            RuleState = State.end;
         }
         public SH_Rule03(double _thrust, bool _compression)
         {
-            RuleState = State.gamma;
+            RuleState = State.end;
             HorizontalThrustParameter = _thrust;
             Compression = _compression;
         }
@@ -68,6 +68,20 @@ namespace SimpleShapeGrammar.Classes
             // change state til "end" 
             _ss.SimpleShapeState = State.end;
             return "Rule03 successfully applied!";
+        }
+
+        public void SetLowerBound(double lowerBound)
+        {
+            this.bounds[0] = lowerBound;
+        }
+        public void SetUpperBound(double upperBound)
+        {
+            this.bounds[1] = upperBound;
+        }
+        
+        public override void NewRuleParameters(Random random)
+        {
+            HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
     }
 }
