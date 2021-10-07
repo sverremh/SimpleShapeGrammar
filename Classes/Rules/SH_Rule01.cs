@@ -100,7 +100,7 @@ namespace SimpleShapeGrammar.Classes
             zBounds[1] = zHigh;
         }
 
-        public override void NewRuleParameters(Random random)
+        public override void NewRuleParameters(Random random, int numLines)
         {
             // create a random parameter
             double x0 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
@@ -113,6 +113,11 @@ namespace SimpleShapeGrammar.Classes
             // set the vectors
             TranslateStart = new Vector3d(x0, y0, z0);
             TranslateEnd = new Vector3d(x1, y1, z1);
+        }
+
+        public override State GetNextState()
+        {
+            return State.beta;
         }
     }
 }

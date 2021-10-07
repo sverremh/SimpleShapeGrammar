@@ -92,6 +92,7 @@
     <Compile Include="Classes\MOO\SH_Solution.cs" />
     <Compile Include="Classes\MOO\SH_SolutionType.cs" />
     <Compile Include="Classes\MOO\SH_Variable.cs" />
+    <Compile Include="Classes\MOO\SH_XReal.cs" />
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />

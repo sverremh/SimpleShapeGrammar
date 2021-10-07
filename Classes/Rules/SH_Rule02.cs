@@ -46,7 +46,7 @@ namespace SimpleShapeGrammar.Classes
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
             SH_Element line = new SH_Element();
-            
+            // to do: evaluate if this is the best method for avoiding an index out of range error. 
             try
             {
                 line = _ss.Elements[LineIndex];
@@ -149,12 +149,17 @@ namespace SimpleShapeGrammar.Classes
             return bounds[1];
         }
 
-        public override void NewRuleParameters(Random random)
+        public override void NewRuleParameters(Random random, int numLines)
         {
             // the parameter to use for the rule
             Param = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
+            LineIndex = random.Next(0, numLines-1);
             
-            LineIndex = 0; // This needs to be changed later. Somehow I need to know the total number of elements in the simple shape class. Maybe a public property which can be accessed inside the rule
+        }
+
+        public override State GetNextState()
+        {
+            return State.beta;
         }
     }
 }

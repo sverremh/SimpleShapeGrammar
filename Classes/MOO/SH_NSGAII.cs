@@ -67,12 +67,22 @@ namespace SimpleShapeGrammar.Classes
             Solution newSolution;
             for (int i = 0; i < populationSize; i++)
             {
-                newSolution = new Solution(Problem);
-                Problem.Evaluate(newSolution);
+                //newSolution = new SH_Solution(Problem);
+                newSolution = new Solution((SH_NSGAIIProblem)Problem);
+                Problem.Evaluate(newSolution);                
                 Problem.EvaluateConstraints(newSolution);
                 evaluations++;
                 population.Add(newSolution);
             }
+
+            List<double> objectives1 = new List<double>();
+            List<double> objectives2 = new List<double>();
+            foreach (Solution solution in population.SolutionsList)
+            {
+                objectives1.Add(solution.Objective[0]);
+                objectives2.Add(solution.Objective[1]);
+            }
+
 
             // iterate through the generations
             while (evaluations < maxEvaluations)

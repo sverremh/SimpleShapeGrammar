@@ -69,5 +69,24 @@ namespace SimpleShapeGrammar.Classes
             
 
         }
+
+        public SH_SimpleShape DeepCopy()
+        {
+            SH_SimpleShape simpleShapeCopy = new SH_SimpleShape();
+            simpleShapeCopy.nodeCount = this.nodeCount;
+            simpleShapeCopy.elementCount = this.elementCount;
+            simpleShapeCopy.supCount = this.supCount;
+
+            simpleShapeCopy.Elements = this.Elements;
+            simpleShapeCopy.Nodes = this.Nodes;
+            simpleShapeCopy.Supports = this.Supports;
+            simpleShapeCopy.LineLoads = this.LineLoads;
+            simpleShapeCopy.PointLoads = this.PointLoads;
+            simpleShapeCopy.SimpleShapeState = this.SimpleShapeState;
+
+            return simpleShapeCopy;
+        }
+        
+
     }
 }

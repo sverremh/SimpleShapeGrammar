@@ -16,10 +16,10 @@ namespace SimpleShapeGrammar.Classes
         public SH_RuleA()
         {
             // empty
-            RuleState = State.gamma;
+            RuleState = State.beta;
         }
 
-        public override void NewRuleParameters(Random random)
+        public override void NewRuleParameters(Random random, int numLines)
         {
             
         }
@@ -36,6 +36,10 @@ namespace SimpleShapeGrammar.Classes
             // change the state
             _ss.SimpleShapeState = State.gamma;
             return "RuleA applied!";
+        }
+        public override State GetNextState()
+        {
+            return State.gamma;
         }
     }
 }
