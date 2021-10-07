@@ -104,7 +104,7 @@ namespace SimpleShapeGrammar.Components
             List<double> out_comp;
             string message;
             model = k3d.Algorithms.AnalyzeThI(model, out max_disp, out out_g, out out_comp, out message);
-
+            
             // --- output ---
 
             DA.SetData(0, new Karamba.GHopper.Models.GH_Model(model));

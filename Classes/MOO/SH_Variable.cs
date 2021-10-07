@@ -21,7 +21,7 @@ namespace SimpleShapeGrammar.Classes
         /// <summary>
         /// Stores a list of SH_Rule class which forms the basis of the genome.
         /// </summary>
-        public List<SH_Rule> List { get; set; }
+        public List<SH_Rule> RuleList { get; set; }
         /// <summary>
         /// Stores the length of the list
         /// </summary>
@@ -30,24 +30,25 @@ namespace SimpleShapeGrammar.Classes
         // -- constructors -- 
         public SH_Variable()
         {
-            List = null;
+            RuleList = null;
             Size = 0;
             problem = null; 
         }
         public SH_Variable(List<SH_Rule> ruleList)
         {
             Size = ruleList.Count;
-            List = ruleList; 
+            RuleList = ruleList; 
         }
         public SH_Variable(SH_NSGAIIProblem _problem)
         {
             problem = _problem;
-            List = MOO_Utility.NewGenome(problem.availableRules, problem.weights, problem.MyComponent.MyRand);
+            RuleList = MOO_Utility.NewGenome(problem.availableRules, problem.weights, problem.MyComponent.MyRand);
+            Size = RuleList.Count;
         }
 
         private SH_Variable(SH_Variable shapeGrammarVariable)
         {
-            List = shapeGrammarVariable.List;
+            RuleList = shapeGrammarVariable.RuleList;
             problem = shapeGrammarVariable.problem;
         }
 

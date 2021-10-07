@@ -10,7 +10,7 @@ using JMetalCSharp.Operators.Mutation;
 using JMetalCSharp.Operators.Selection;
 using JMetalCSharp.QualityIndicator;
 
-namespace SimpleShapeGrammar.Classes.MOO
+namespace SimpleShapeGrammar.Classes
 {
     
     class SH_NSGAIIRunner
@@ -53,7 +53,8 @@ namespace SimpleShapeGrammar.Classes.MOO
             parameters = new Dictionary<string, object>();
             parameters.Add("probability", 0.9);
             parameters.Add("distributionIndex", 20.0);
-            mutation = MutationFactory.GetMutationOperator(); // Create a mutation for SH_Grammar
+            mutation = SH_MutationFactory.GetMutationOperator("SH_Mutation", parameters);
+            // mutation = MutationFactory.GetMutationOperator(); // Create a mutation for SH_Grammar // if everything works this can be deleted. 
 
             parameters = null;
             selection = SelectionFactory.GetSelectionOperator("BinaryTournament2", parameters); // Maybe I can use this in the beginning. 
@@ -68,6 +69,8 @@ namespace SimpleShapeGrammar.Classes.MOO
             long initTime = Environment.TickCount;
             SolutionSet population = algorithm.Execute();
             long estimatedTime = Environment.TickCount - initTime; 
+
+            // to do: log info about the solver
 
                 
         }

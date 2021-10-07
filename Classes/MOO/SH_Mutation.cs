@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using JMetalCSharp.Operators.Mutation;
+using JMetalCSharp.Core;
 using JMetalCSharp.Utils;
 
-namespace SimpleShapeGrammar.Classes.MOO
+namespace SimpleShapeGrammar.Classes
 {
     class SH_Mutation : Mutation
     {
@@ -24,7 +25,7 @@ namespace SimpleShapeGrammar.Classes.MOO
         }
         // -- methods --
 
-        private void DoMutation(double probability, SH_Solution solution)
+        private void DoMutation(double probability, Solution solution)
         {
             // to do: implement this. 
         }
@@ -32,10 +33,18 @@ namespace SimpleShapeGrammar.Classes.MOO
 
         public override object Execute(object obj)
         {
-            SH_Solution solution = (SH_Solution)obj; // cast the object into a SH_Solution
+            Solution solution = (Solution)obj; // cast the object into a SH_Solution
+            mutationProbability = 0.0; // to do: remove when implementing a mutation;
 
             // control that the type is valid for this mutation type
-            throw new NotImplementedException();
+            if (!VALID_TYPES.Contains(solution.Type.GetType()))
+            {
+                // to do: log error message
+                throw new Exception("The input Solution is not of the correct solutionType");
+            }
+
+            DoMutation(mutationProbability.Value, solution);
+            return solution;
         }
     }
 }
