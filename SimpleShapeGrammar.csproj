@@ -169,6 +169,7 @@
     <None Include="Resources\icons_I_DrawCS.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Misc\SimpleShapeGrammar.drawio.png" />
     <Content Include="Misc\SimpleShapeGrammar.drawio.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
