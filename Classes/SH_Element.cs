@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleShapeGrammar.Classes
 {
-    [Serializable]
+    [Serializable] 
     public class SH_Element //: SH_CrossSection_Beam
     {
         // --- properties ---

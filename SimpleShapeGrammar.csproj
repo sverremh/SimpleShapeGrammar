@@ -52,7 +52,8 @@
       <HintPath>..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JMetalCSharp">
+    <Reference Include="JMetalCSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\JMetalCSharp.dll</HintPath>
     </Reference>
     <Reference Include="karamba.gha">
@@ -182,8 +183,10 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
+Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
 
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
+Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""
 
 Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
@@ -205,4 +208,8 @@ Erase "$(TargetPath)"</PostBuildEvent>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Accord.3.8.0\build\Accord.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Accord.3.8.0\build\Accord.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
