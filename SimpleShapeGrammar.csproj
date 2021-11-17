@@ -65,13 +65,18 @@
       <HintPath>Libraries\karambaCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="log4net, Version=2.0.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.13\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="RhinoCommon">
       <HintPath>..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -148,6 +153,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Resources\icons_C_Sup.png" />
   </ItemGroup>
@@ -184,6 +190,7 @@
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
 Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
+Copy "$(SolutionDir)\packages\log4net.2.0.13\lib\net45\log4net.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\log4net.dll""
 
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""

@@ -39,7 +39,7 @@ namespace SimpleShapeGrammar
 
         // -- properties --
         public SH_SimpleShape SimpleShape { get; private set;  }
-        public bool mooDone;
+        public bool mooDone = false;
         public List<List<double>> ObjectiveValues;
         public List<List<SH_Rule>> ObjectiveVariables;
         public List<object> GrammarRules;
@@ -66,7 +66,7 @@ namespace SimpleShapeGrammar
             pManager.AddIntegerParameter("Population", "pop", "Number of individuals in a generation", GH_ParamAccess.item, 10); // 2
             pManager.AddIntegerParameter("Generations", "gen", "Number of generations", GH_ParamAccess.item, 5); // 3
             pManager.AddIntegerParameter("Seed", "sd", "Seed for Random", GH_ParamAccess.item, 0); // 4
-            pManager.AddBooleanParameter("Run optimisation", "run", "Set input to true for the component to run", GH_ParamAccess.item, false); //5
+            pManager.AddBooleanParameter("Run optimization", "run", "Set input to true for the component to run", GH_ParamAccess.item, false); //5
             pManager.AddBooleanParameter("Reset Solver", "reset", "Press the button to clear the results and reset the solver", GH_ParamAccess.item); // 6
 
         }
@@ -121,7 +121,9 @@ namespace SimpleShapeGrammar
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
                 ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
                 ObjectiveValues = new List<List<double>>(); // reses list of values
-                run = false;
+                var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
+                if (runBool != null) { runBool.Value = false; }
+                //run = false;
                 mooDone = false;
             }
 
@@ -149,6 +151,10 @@ namespace SimpleShapeGrammar
                 var paretoSolutions = allSolutions.GetRange(allSolutions.Count - 1 - populationSize, populationSize);
 
                 GetDataTreesFromResults(paretoSolutions, out genomeTree, out objValTree); 
+                
+                // set the "Run optimisation" boolean input to False for user safety. 
+                var runBool = (GH_BooleanToggle) this.Params.Input[5].Sources[0];
+                if (runBool != null) { runBool.Value = false;}
 
                 mooDone = true; 
             }
