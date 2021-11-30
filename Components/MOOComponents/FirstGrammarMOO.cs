@@ -66,7 +66,7 @@ namespace SimpleShapeGrammar
             pManager.AddIntegerParameter("Population", "pop", "Number of individuals in a generation", GH_ParamAccess.item, 10); // 2
             pManager.AddIntegerParameter("Generations", "gen", "Number of generations", GH_ParamAccess.item, 5); // 3
             pManager.AddIntegerParameter("Seed", "sd", "Seed for Random", GH_ParamAccess.item, 0); // 4
-            pManager.AddBooleanParameter("Run optimization", "run", "Set input to true for the component to run", GH_ParamAccess.item, false); //5
+            pManager.AddBooleanParameter("Run optimization", "run", "Set input to true for the component to run", GH_ParamAccess.item); //5
             pManager.AddBooleanParameter("Reset Solver", "reset", "Press the button to clear the results and reset the solver", GH_ParamAccess.item); // 6
 
         }
@@ -99,10 +99,22 @@ namespace SimpleShapeGrammar
             DA.GetData(2, ref populationSize); // 2
             DA.GetData(3, ref generations); // 3
             DA.GetData(4, ref Seed); // 4
-            DA.GetData(5, ref run); // 5
+            if (!DA.GetData(5, ref run)) return; // 5
             DA.GetData(6, ref reset); // 6
 
             maxEvals = populationSize * generations; // total number of evaluations
+
+            if (reset)
+            {
+                //mooDone = true;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
+                ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
+                ObjectiveValues = new List<List<double>>(); // reses list of values
+                var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
+                if (runBool != null) { runBool.Value = false; }
+                run = false;
+                mooDone = false;
+            }
 
             //Create a deep copy of the simple Shape before performing rule operations
             SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(ss);
@@ -115,17 +127,6 @@ namespace SimpleShapeGrammar
                 return;
             }
             
-            if (reset)
-            {
-                //mooDone = true;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
-                ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
-                ObjectiveValues = new List<List<double>>(); // reses list of values
-                var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
-                if (runBool != null) { runBool.Value = false; }
-                //run = false;
-                mooDone = false;
-            }
 
             if (!run && !mooDone) // Make sure to include the "mooDone" here to avoid a complete rerun if the user refresh the solution
             {
