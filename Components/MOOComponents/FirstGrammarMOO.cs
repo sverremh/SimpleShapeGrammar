@@ -121,6 +121,8 @@ namespace SimpleShapeGrammar
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
                 ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
                 ObjectiveValues = new List<List<double>>(); // reses list of values
+                
+                //Instances.ActiveCanvas.Document.NewSolution(true);
                 var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
                 if (runBool != null) { runBool.Value = false; }
                 //run = false;
@@ -150,7 +152,7 @@ namespace SimpleShapeGrammar
                 var allSolutions = problem.allSolutions;
                 var paretoSolutions = allSolutions.GetRange(allSolutions.Count - 1 - populationSize, populationSize);
 
-                GetDataTreesFromResults(paretoSolutions, out genomeTree, out objValTree); 
+                GetDataTreesFromResults(allSolutions, out genomeTree, out objValTree); 
                 
                 // set the "Run optimisation" boolean input to False for user safety. 
                 var runBool = (GH_BooleanToggle) this.Params.Input[5].Sources[0];
