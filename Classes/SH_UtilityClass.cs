@@ -109,7 +109,7 @@ namespace SimpleShapeGrammar.Classes
             foreach (var sup in simpleShape.Supports)
             {
                 // karamba point
-                Point3 loc = GeometryExtensions.Convert(sup.Position);
+                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
 
                 // conditions
                 List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
@@ -129,7 +129,7 @@ namespace SimpleShapeGrammar.Classes
 
             var loads = new List<Load>();
             // gravity load
-            var gLoad = new GravityLoad(new Vector3(0, 0, -1), 0);
+            var gLoad = new GravityLoad(new Vector3(0, 0, -1), "0");
             loads.Add(gLoad);
 
             // line loads
@@ -138,10 +138,12 @@ namespace SimpleShapeGrammar.Classes
             {
                 //var ids = l.ElementIds;
                 var ids = l.ElementId;
-                var k_vec = GeometryExtensions.Convert(l.Load);
+                var k_vec = new Vector3(l.Load.X, l.Load.Y, l.Load.Z);
                 var orient = LoadOrientation.global;
                 int lc = l.LoadCase;
-                var k_lineLoad = new UniformlyDistLoad(ids, k_vec, orient, lc);
+
+                var k_lineLoad = k3d.Load.ConstantForceLoad(k_vec.Unitized, k_vec.Length, 0.0, 1.0, orient, lc.ToString(), ids); // new Karamba version
+                //var k_lineLoad = new UniformlyDistLoad(ids, k_vec, orient, lc);
 
                 lineLoads.Add(k_lineLoad);
             }
@@ -250,8 +252,8 @@ namespace SimpleShapeGrammar.Classes
                 Point3d sPt = el.Nodes[0].Position;
                 Point3d ePt = el.Nodes[1].Position;
                 // convert to karamba's Point3
-                Point3 k_sPt = GeometryExtensions.Convert(sPt);
-                Point3 k_ePt = GeometryExtensions.Convert(ePt);
+                Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
+                Point3 k_ePt = new Point3(ePt.X, ePt.Y, ePt.Z);
 
                 // create Line3
                 Line3 k_line = new Line3(k_sPt, k_ePt);

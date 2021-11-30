@@ -11,6 +11,7 @@ using Karamba.GHopper.Geometry;
 using Karamba.CrossSections;
 using Karamba.Supports;
 using Karamba.Loads;
+using Karamba.Factories;
 using SimpleShapeGrammar.Classes;
 
 
@@ -81,7 +82,8 @@ namespace SimpleShapeGrammar.Components
             foreach (var sup in ss.Supports)
             {
                 // karamba point
-                Point3 loc = GeometryExtensions.Convert(sup.Position);
+                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
+                
 
                 // conditions
                 List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
@@ -103,7 +105,7 @@ namespace SimpleShapeGrammar.Components
 
             var loads = new List<Load>();
             // gravity load
-            var gLoad = new GravityLoad(new Vector3(0, 0, -1), 0);
+            var gLoad = new GravityLoad(new Vector3(0, 0, -1), "1");
             loads.Add(gLoad);
 
             // line loads
@@ -112,11 +114,13 @@ namespace SimpleShapeGrammar.Components
             {
                 //var ids = l.ElementIds;
                 var ids = l.ElementId; 
-                var k_vec = GeometryExtensions.Convert(l.Load);
+                var k_vec = new Vector3(l.Load.X, l.Load.Y, l.Load.Z);
                 var orient = LoadOrientation.global;
                 int lc = l.LoadCase;
-                var k_lineLoad = new UniformlyDistLoad(ids, k_vec, orient, lc);
-                
+                var k_lineLoad = k3d.Load.ConstantForceLoad(k_vec.Unitized, k_vec.Length, 0.0, 1.0, orient, lc.ToString(), ids);
+                // need to make a new beam load...
+                //var k_lineLoad = new UniformlyDistLoad(ids, k_vec, orient, lc.ToString());
+                // var k_lineLoad = new Karamba.Loads.Beam.DistributedForce()
                 lineLoads.Add(k_lineLoad);
             }
 
@@ -138,11 +142,10 @@ namespace SimpleShapeGrammar.Components
 
 
             // create GH_Model wrapper to enable pipelining of the model
-            var out_model = new GH_Model(model);
+            var out_model = new Karamba.GHopper.Models.GH_Model(model);
 
             // --- output ---
             DA.SetData(0, out_model);
-
         }
 
         /// <summary>
@@ -164,8 +167,10 @@ namespace SimpleShapeGrammar.Components
                 Point3d sPt = el.Nodes[0].Position;
                 Point3d ePt = el.Nodes[1].Position;
                 // convert to karamba's Point3
-                Point3 k_sPt = GeometryExtensions.Convert(sPt);
-                Point3 k_ePt = GeometryExtensions.Convert(ePt);
+
+                Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
+                Point3 k_ePt = new Point3(ePt.X, ePt.Y, ePt.Z);
+                
 
                 // create Line3
                 Line3 k_line = new Line3(k_sPt, k_ePt);

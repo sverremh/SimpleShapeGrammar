@@ -56,14 +56,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\JMetalCSharp.dll</HintPath>
     </Reference>
-    <Reference Include="karamba.gha">
+    <Reference Include="karamba.gha, Version=1.15.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\karamba.gha.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="karambaCommon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="karambaCommon, Version=2.2.0.8, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\karambaCommon.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="log4net, Version=2.0.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.13\lib\net45\log4net.dll</HintPath>
@@ -191,6 +190,8 @@
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
 Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
 Copy "$(SolutionDir)\packages\log4net.2.0.13\lib\net45\log4net.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\log4net.dll""
+Copy "$(SolutionDir)\Libraries\karamba.gha.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\karamba.gha.dll""
+
 
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""
