@@ -40,8 +40,8 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Model(), "Model_out", "Model_out",
-                        "Model after eliminating all tension elements");
+            pManager.AddGenericParameter("Model_out" ,"mod", "Model of simple beam", GH_ParamAccess.item);
+            //pManager.RegisterParam(new Param_Model(), "Model_out", "Model_out",  "Model after eliminating all tension elements");
         }
 
         /// <summary>
@@ -104,10 +104,10 @@ namespace SimpleShapeGrammar.Components
             List<double> out_comp;
             string message;
             model = k3d.Algorithms.AnalyzeThI(model, out max_disp, out out_g, out out_comp, out message);
-            
+            var out_model = new Karamba.GHopper.Models.GH_Model(model);
             // --- output ---
-
-            DA.SetData(0, new Karamba.GHopper.Models.GH_Model(model));
+            //DA.SetData(0, max_disp[0]);
+            DA.SetData(0, out_model);
         }
 
         /// <summary>
