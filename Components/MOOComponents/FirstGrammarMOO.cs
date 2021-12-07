@@ -28,6 +28,7 @@ namespace SimpleShapeGrammar
             comparer = new ObjectiveComparer();
             GrammarRules = new List<object>();
             GrammarWeights = new List<double>(); 
+            
         }
 
         // create new component attribute
@@ -52,9 +53,11 @@ namespace SimpleShapeGrammar
         private ObjectiveComparer comparer;
         public int solutionsCounter = 0;
         public int populationSize = 0, generations = 0, maxEvals = 0;
+
         
-
-
+        // create data tree of solutions as global variables
+        public DataTree<double> outObjectiveTree;
+        public DataTree<SH_Rule> outRules;
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -104,18 +107,6 @@ namespace SimpleShapeGrammar
 
             maxEvals = populationSize * generations; // total number of evaluations
 
-            if (reset)
-            {
-                //mooDone = true;
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
-                ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
-                ObjectiveValues = new List<List<double>>(); // reses list of values
-                var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
-                if (runBool != null) { runBool.Value = false; }
-                run = false;
-                mooDone = false;
-            }
-
             //Create a deep copy of the simple Shape before performing rule operations
             SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(ss);
             SimpleShape = copyShape; // assign the SH_SimpleShape instance to the component's propery
@@ -126,23 +117,37 @@ namespace SimpleShapeGrammar
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The population size must be an even number.");
                 return;
             }
-            
+
+            // make the run boolean toggle a global parameter
+            var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
+            if (runBool == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The \"Run Optimisation\" input have to be a Boolean Toggle");
+                return;
+            }
+
+            // access the Active GH Document
+            var doc = OnPingDocument();
+            if (doc == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Something is wrong when calling the document.");
+                return;
+            }
 
             if (reset)
             {
-                //mooDone = true;
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Solution is reset.");
-                ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
-                ObjectiveValues = new List<List<double>>(); // reses list of values
-                
-                //Instances.ActiveCanvas.Document.NewSolution(true);
-                var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
-                if (runBool != null) { runBool.Value = false; }
-                //run = false;
+                //ObjectiveVariables = new List<List<SH_Rule>>(); // reset list of variables
+                //ObjectiveValues = new List<List<double>>(); // reses list of values
+                runBool.Value = false;
                 mooDone = false;
+                outRules = new DataTree<SH_Rule>();
+                outObjectiveTree = new DataTree<double>();
+                runBool.ExpireSolution(true);
+
             }
 
-
+            // Is this clause necessary?
             if (!run && !mooDone) // Make sure to include the "mooDone" here to avoid a complete rerun if the user refresh the solution
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set boolean to \"True\" to run the component.");
@@ -151,10 +156,9 @@ namespace SimpleShapeGrammar
             if (Seed != 0) { MyRand = new Random(Seed); } // reset Random to give same result each time
 
             // --- solve ---
-
             DataTree<SH_Rule> genomeTree = new DataTree<SH_Rule>();
             DataTree<double> objValTree = new DataTree<double>(); 
-            if (run)
+            if (run & !mooDone)
             {
                 // instantiate the solver
                 GrammarRules = new List<object>() { "SH_Rule01", "SH_Rule02", "SH_Rule03", "SH_RuleA" }; // select the available rules for the interpreter
@@ -166,23 +170,35 @@ namespace SimpleShapeGrammar
                 var allSolutions = problem.allSolutions;
                 var paretoSolutions = allSolutions.GetRange(allSolutions.Count - 1 - populationSize, populationSize);
 
-                GetDataTreesFromResults(allSolutions, out genomeTree, out objValTree); 
+                
                 
                 // set the "Run optimisation" boolean input to False for user safety. 
-                var runBool = (GH_BooleanToggle) this.Params.Input[5].Sources[0];
+                //var runBool = (GH_BooleanToggle) this.Params.Input[5].Sources[0];
                 if (runBool != null) { runBool.Value = false;}
 
-                mooDone = true; 
+                mooDone = true;
+
+                var callbackDelegate = new GH_Document.GH_ScheduleDelegate(Callback);
+                doc.ScheduleSolution(5, callbackDelegate);
+                GetDataTreesFromResults(allSolutions, out outRules, out outObjectiveTree);
             }
             
 
-            DA.SetDataTree(2, genomeTree);
-            DA.SetDataTree(3, objValTree);
+            DA.SetDataTree(2, outRules);
+            DA.SetDataTree(3, outObjectiveTree);
             
 
         }
 
         #region Methods
+        private void Callback(GH_Document doc)
+        {
+            this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Something has changed");
+            var runBool = this.Params.Input[5].Sources[0] as GH_BooleanToggle;
+            runBool.ExpireSolution(true);
+            //this.Params.Input[2].RemoveAllSources();
+        }
+
         public List<GH_NumberSlider> ReadSlidersList()
         {
             slidersList.Clear(); // clear the values from the list
