@@ -33,7 +33,7 @@ namespace SimpleShapeGrammar.Classes
             TranslateStart = _translate_start;
             TranslateEnd = _translate_end;
             RuleState = State.alpha;
-
+            throw new NotImplementedException();
         }
 
         // --- methods ---

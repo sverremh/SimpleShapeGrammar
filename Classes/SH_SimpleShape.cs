@@ -14,6 +14,7 @@ namespace SimpleShapeGrammar.Classes
         public int nodeCount = 0;
         public int elementCount = 0;
         public int supCount = 0;
+        public List<NurbsCurve> NurbsCurves { get; set; }
         public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
         public List<SH_Node> Nodes { get; set; }
         public List<SH_Support> Supports { get; set; }

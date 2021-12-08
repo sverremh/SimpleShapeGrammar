@@ -18,7 +18,7 @@ namespace SimpleShapeGrammar.Classes
         public abstract void NewRuleParameters(Random random, int numLines);
 
         public abstract string RuleOperation(SH_SimpleShape _ss);
-
+        
         public abstract State GetNextState();
     }
 
