@@ -73,10 +73,11 @@ namespace SimpleShapeGrammar.Components
             elems = SH_UtilityClass.DeepCopy(elems);
             sups = SH_UtilityClass.DeepCopy(sups);
             loads = SH_UtilityClass.DeepCopy(loads);
+            var curves = new List<NurbsCurve>();
             SH_SimpleShape simpleShape = new SH_SimpleShape();
 
             // --- solve ---
-
+            simpleShape.NurbsCurves = curves;
             
             // renumbering Element Ids
             simpleShape.elementCount = 0;
