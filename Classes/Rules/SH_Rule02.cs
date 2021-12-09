@@ -149,9 +149,10 @@ namespace SimpleShapeGrammar.Classes
             return bounds[1];
         }
 
-        public override void NewRuleParameters(Random random, int numLines)
+        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
             // the parameter to use for the rule
+            int numLines = ss.elementCount;
             Param = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
             LineIndex = random.Next(0, numLines-1);
             

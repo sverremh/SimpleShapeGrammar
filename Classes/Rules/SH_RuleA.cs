@@ -19,7 +19,7 @@ namespace SimpleShapeGrammar.Classes
             RuleState = State.beta;
         }
 
-        public override void NewRuleParameters(Random random, int numLines)
+        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
             
         }

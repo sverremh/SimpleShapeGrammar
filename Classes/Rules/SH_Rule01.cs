@@ -33,7 +33,7 @@ namespace SimpleShapeGrammar.Classes
             TranslateStart = _translate_start;
             TranslateEnd = _translate_end;
             RuleState = State.alpha;
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         // --- methods ---
@@ -100,7 +100,7 @@ namespace SimpleShapeGrammar.Classes
             zBounds[1] = zHigh;
         }
 
-        public override void NewRuleParameters(Random random, int numLines)
+        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
             // create a random parameter
             double x0 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
