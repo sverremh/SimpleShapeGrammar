@@ -15,7 +15,7 @@ namespace SimpleShapeGrammar.Classes
             
         }
 
-        public abstract void NewRuleParameters(Random random, int numLines);
+        public abstract void NewRuleParameters(Random random, SH_SimpleShape ss);
 
         public abstract string RuleOperation(SH_SimpleShape _ss);
         

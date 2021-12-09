@@ -42,7 +42,7 @@ namespace SimpleShapeGrammar.Classes
         public SH_Variable(SH_NSGAIIProblem _problem)
         {
             problem = _problem;
-            RuleList = MOO_Utility.NewGenome(problem.availableRules, problem.weights, problem.MyComponent.MyRand);
+            RuleList = MOO_Utility.NewGenome(problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
             Size = RuleList.Count;
         }
 

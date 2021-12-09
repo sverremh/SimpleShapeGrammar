@@ -79,7 +79,7 @@ namespace SimpleShapeGrammar.Classes
             this.bounds[1] = upperBound;
         }
         
-        public override void NewRuleParameters(Random random, int numLines)
+        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
             HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
