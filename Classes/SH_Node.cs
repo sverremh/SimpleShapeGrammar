@@ -12,7 +12,7 @@ namespace SimpleShapeGrammar.Classes
         public int? ID { get; set;}
         public Point3d Position { get; set; }
         public SH_Support Support { get; set; } // Do the node need this information? It does not in Karamba3D
-
+        public List<SH_Element> Elements { get; set; }
 
         // --- constructors --- 
         public SH_Node()
