@@ -15,6 +15,10 @@ namespace SimpleShapeGrammar.Classes.Kristiane
         {
 
         }
+        public Test(string _name)
+        {
+            Name = _name;
+        }
     }
 }
 
