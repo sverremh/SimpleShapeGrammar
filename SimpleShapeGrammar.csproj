@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
+    <Compile Include="Classes\Kristiane\Test.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
     <Compile Include="Classes\MOO\SH_Crossover.cs" />
