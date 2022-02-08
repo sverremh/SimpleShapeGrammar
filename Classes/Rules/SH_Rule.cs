@@ -10,6 +10,7 @@ namespace SimpleShapeGrammar.Classes
     public abstract class SH_Rule : ISH_Rule
     {
         public State RuleState;
+        public string Name;
         public SH_Rule()
         { 
             

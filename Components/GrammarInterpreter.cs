@@ -74,6 +74,8 @@ namespace SimpleShapeGrammar.Components
             DA.SetData(0, copyShape);
         }
 
+
+
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>

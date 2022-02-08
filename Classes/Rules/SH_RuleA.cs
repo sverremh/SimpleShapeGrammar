@@ -17,6 +17,7 @@ namespace SimpleShapeGrammar.Classes
         {
             // empty
             RuleState = State.beta;
+            Name = "SH_RuleA";
         }
 
         public override void NewRuleParameters(Random random, SH_SimpleShape ss)

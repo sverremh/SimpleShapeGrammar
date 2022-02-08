@@ -27,6 +27,8 @@ namespace SimpleShapeGrammar.Classes
         /// </summary>
         public int Size { get; set; }
 
+        public SH_SimpleShape SimpleShape { get; set; }
+
         // -- constructors -- 
         public SH_Variable()
         {
@@ -42,7 +44,8 @@ namespace SimpleShapeGrammar.Classes
         public SH_Variable(SH_NSGAIIProblem _problem)
         {
             problem = _problem;
-            RuleList = MOO_Utility.NewGenome(problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
+            // this method should return both the rule list and the corresponding simpleshape.
+            RuleList = MOO_Utility.NewGenome(this  ,problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
             Size = RuleList.Count;
         }
 
@@ -50,6 +53,7 @@ namespace SimpleShapeGrammar.Classes
         {
             RuleList = shapeGrammarVariable.RuleList;
             problem = shapeGrammarVariable.problem;
+            Size = RuleList.Count;
         }
 
         
