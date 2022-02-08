@@ -45,7 +45,7 @@ namespace SimpleShapeGrammar.Classes
         {
             problem = _problem;
             // this method should return both the rule list and the corresponding simpleshape.
-            RuleList = MOO_Utility.NewGenome(this  ,problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
+            RuleList = MOO_Utility.NewGenome( this  ,problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
             Size = RuleList.Count;
         }
 

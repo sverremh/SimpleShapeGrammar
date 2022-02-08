@@ -11,12 +11,14 @@ namespace SimpleShapeGrammar.Classes
     {
         public State RuleState;
         public string Name;
+
         public SH_Rule()
         { 
             
         }
 
         public abstract void NewRuleParameters(Random random, SH_SimpleShape ss);
+        public abstract SH_Rule CopyRule(SH_Rule rule);
 
         public abstract string RuleOperation(SH_SimpleShape _ss);
         
