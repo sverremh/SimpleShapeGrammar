@@ -19,9 +19,11 @@ namespace SimpleShapeGrammar.Classes
         {
             // empty
             RuleState = State.gamma;
+            Name = "SH_Rule03";
         }
         public SH_Rule03(double _thrust, bool _compression)
         {
+            Name = "SH_Rule03";
             RuleState = State.gamma;
             HorizontalThrustParameter = _thrust;
             Compression = _compression;

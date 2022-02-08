@@ -25,10 +25,12 @@ namespace SimpleShapeGrammar.Classes
         public SH_Rule02()
         {
             RuleState = State.beta;
+            Name = "SH_Rule02";
         }
 
         public SH_Rule02(int _line_index, double _param)
         {
+            Name = "SH_Rule02";
             LineIndex = _line_index;
             Param = _param;
             RuleState = State.beta;            

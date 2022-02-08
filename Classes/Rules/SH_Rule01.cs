@@ -27,13 +27,14 @@ namespace SimpleShapeGrammar.Classes
         {
             // empty constructor
             RuleState = State.alpha;
+            Name = "SH_Rule01";
         }
         public SH_Rule01(Vector3d _translate_start, Vector3d _translate_end)
         {
             TranslateStart = _translate_start;
             TranslateEnd = _translate_end;
             RuleState = State.alpha;
-            //throw new NotImplementedException();
+            Name = "SH_Rule01";
         }
 
         // --- methods ---

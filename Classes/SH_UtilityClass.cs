@@ -83,7 +83,7 @@ namespace SimpleShapeGrammar.Classes
         /// <summary>
         /// Builds a Karamba3d model from the components simple shape
         /// </summary>
-        /// <param name="comp"></param>
+        /// <param name="ss">Simple shape model to create Karamba model from.</param>
         /// <returns></returns>
         public static Model Karamba3DModelFromSimpleShape(SH_SimpleShape ss)
         {

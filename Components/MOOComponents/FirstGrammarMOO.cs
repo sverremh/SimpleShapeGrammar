@@ -66,11 +66,12 @@ namespace SimpleShapeGrammar
         {
             pManager.AddGenericParameter("SimpleShape", "ss", "The basis shape to be used in the optimisation", GH_ParamAccess.item); // 0
             pManager.AddGenericParameter("Rules", "rules", "List of rules applicable for the grammar", GH_ParamAccess.list); // 1
-            pManager.AddIntegerParameter("Population", "pop", "Number of individuals in a generation", GH_ParamAccess.item, 10); // 2
-            pManager.AddIntegerParameter("Generations", "gen", "Number of generations", GH_ParamAccess.item, 5); // 3
-            pManager.AddIntegerParameter("Seed", "sd", "Seed for Random", GH_ParamAccess.item, 0); // 4
-            pManager.AddBooleanParameter("Run optimization", "run", "Set input to true for the component to run", GH_ParamAccess.item); //5
-            pManager.AddBooleanParameter("Reset Solver", "reset", "Press the button to clear the results and reset the solver", GH_ParamAccess.item); // 6
+            pManager.AddNumberParameter("Weights", "weights", "List of probabilities for the random selection of each rule", GH_ParamAccess.list); // 2
+            pManager.AddIntegerParameter("Population", "pop", "Number of individuals in a generation", GH_ParamAccess.item, 10); // 3
+            pManager.AddIntegerParameter("Generations", "gen", "Number of generations", GH_ParamAccess.item, 5); // 4
+            pManager.AddIntegerParameter("Seed", "sd", "Seed for Random", GH_ParamAccess.item, 0); // 5
+            pManager.AddBooleanParameter("Run optimization", "run", "Set input to true for the component to run", GH_ParamAccess.item); //6
+            pManager.AddBooleanParameter("Reset Solver", "reset", "Press the button to clear the results and reset the solver", GH_ParamAccess.item); // 7
 
         }
 
@@ -94,22 +95,24 @@ namespace SimpleShapeGrammar
             // --- variables ---
             SH_SimpleShape ss = new SH_SimpleShape(); // 0
             List<SH_Rule> rulesList = new List<SH_Rule>(); // 1
+            List<double> weights = new List<double>();
             bool run = false;
             bool reset = false;
             // --- input ---
             if (!DA.GetData(0, ref ss)) return; // 0
             if (!DA.GetDataList(1, rulesList)) return;  // 1
-            DA.GetData(2, ref populationSize); // 2
-            DA.GetData(3, ref generations); // 3
-            DA.GetData(4, ref Seed); // 4
-            if (!DA.GetData(5, ref run)) return; // 5
-            DA.GetData(6, ref reset); // 6
+            DA.GetDataList(2, weights); // 2
+            DA.GetData(3, ref populationSize); // 3
+            DA.GetData(4, ref generations); // 4
+            DA.GetData(5, ref Seed); // 5
+            if (!DA.GetData(6, ref run)) return; // 6
+            DA.GetData(7, ref reset); // 7
 
             maxEvals = populationSize * generations; // total number of evaluations
 
             //Create a deep copy of the simple Shape before performing rule operations
             SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(ss);
-            SimpleShape = copyShape; // assign the SH_SimpleShape instance to the component's propery
+            SimpleShape = copyShape; // assign the SH_SimpleShape instance to the component's property
 
             // Control the input
             if (populationSize % 2 == 1)
@@ -119,7 +122,7 @@ namespace SimpleShapeGrammar
             }
 
             // make the run boolean toggle a global parameter
-            var runBool = (GH_BooleanToggle)this.Params.Input[5].Sources[0];
+            var runBool = (GH_BooleanToggle)this.Params.Input[6].Sources[0];
             if (runBool == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The \"Run Optimisation\" input have to be a Boolean Toggle");
@@ -141,6 +144,7 @@ namespace SimpleShapeGrammar
                 //ObjectiveValues = new List<List<double>>(); // reses list of values
                 runBool.Value = false;
                 mooDone = false;
+                GrammarWeights = new List<double>();
                 outRules = new DataTree<SH_Rule>();
                 outObjectiveTree = new DataTree<double>();
                 runBool.ExpireSolution(true);
@@ -151,6 +155,8 @@ namespace SimpleShapeGrammar
             if (!run && !mooDone) // Make sure to include the "mooDone" here to avoid a complete rerun if the user refresh the solution
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set boolean to \"True\" to run the component.");
+                outRules = new DataTree<SH_Rule>();
+                outObjectiveTree = new DataTree<double>();
             }
 
             if (Seed != 0) { MyRand = new Random(Seed); } // reset Random to give same result each time
@@ -161,8 +167,17 @@ namespace SimpleShapeGrammar
             if (run & !mooDone)
             {
                 // instantiate the solver
-                GrammarRules = new List<object>() { "SH_Rule01", "SH_Rule02", "SH_Rule03", "SH_RuleA" }; // select the available rules for the interpreter
-                GrammarWeights = new List<double>() { 0.1, 0.6, 0.15, 0.15 }; // the list of probabilities for each rule to be selected
+
+                // Select rules
+                //GrammarRules = new List<object>() { "SH_Rule01", "SH_Rule02", "SH_Rule03", "SH_RuleA" }; // select the available rules for the interpreter
+                //GrammarRules = RuleNamesList(rulesList);
+                GrammarRules = new List<object>(rulesList);
+                // Assign weights to the rules. 
+                // Make weights based on the list length. Should be optional input after a while. 
+                GrammarWeights = CreateWeights(GrammarRules, weights);
+                //GrammarWeights = new List<double>() { 0.1, 0.6, 0.15, 0.15 }; // the list of probabilities for each rule to be selected
+                
+                // Select optimisation objectives
                 GrammarObjectives = new List<string>() { "max displacement", "total mass" };
 
                 SH_NSGAIIProblem problem = new SH_NSGAIIProblem("SH_Solution", this, solutionsCounter);
@@ -179,7 +194,7 @@ namespace SimpleShapeGrammar
                 mooDone = true;
 
                 var callbackDelegate = new GH_Document.GH_ScheduleDelegate(Callback);
-                doc.ScheduleSolution(5, callbackDelegate);
+                doc.ScheduleSolution(6, callbackDelegate);
                 GetDataTreesFromResults(allSolutions, out outRules, out outObjectiveTree);
             }
             
@@ -191,10 +206,50 @@ namespace SimpleShapeGrammar
         }
 
         #region Methods
+
+        /// <methods>
+        /// Methods used in the main solve instance
+        /// </methods>
+        private List<object> RuleNamesList(List<SH_Rule> rules)
+        {
+
+            List<object> names = new List<object>();
+
+            foreach (SH_Rule rule in rules)
+            {
+                names.Add(rule.Name);
+            }
+
+            return names;
+        }
+
+        private List<double> CreateWeights(List<object> rules, List<double> weightsList)
+        {
+            int count = rules.Count;
+
+            if (weightsList.Count != count)
+            {
+                double step = 1.0 / (double)count;
+
+                List<double> weights = new List<double>();
+                for (int i = 0; i < count; i++)
+                {
+                    weights.Add(step);
+                }
+
+                return weights;
+            }
+            else
+            {
+                return weightsList;
+            }
+            
+        }
+
         private void Callback(GH_Document doc)
         {
             this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Something has changed");
-            var runBool = this.Params.Input[5].Sources[0] as GH_BooleanToggle;
+            var runBool = this.Params.Input[6].Sources[0] as GH_BooleanToggle;
             runBool.ExpireSolution(true);
             //this.Params.Input[2].RemoveAllSources();
         }
