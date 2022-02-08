@@ -25,6 +25,11 @@ namespace SimpleShapeGrammar.Classes
             
         }
 
+        public override SH_Rule CopyRule(SH_Rule rule)
+        {
+            throw new NotImplementedException();
+        }
+
         // --- methods ---
         public override string RuleOperation(SH_SimpleShape _ss)
         {
