@@ -33,7 +33,6 @@ namespace SimpleShapeGrammar.Components
             pManager[1].Optional = true;
             pManager[2].Optional = true;
 
-
         }
 
         /// <summary>
@@ -114,15 +113,14 @@ namespace SimpleShapeGrammar.Components
             }
             simpleShape.Elements = numberedElems;
 
-            // add supports to the simple shape
-            List<SH_Support> uniqueSupports = new List<SH_Support>();
+            
+            /*
             foreach (var sup in sups)
             {
-                if (uniqueSupports.Any(s => s.Position.DistanceToSquared(sup.Position) < 0.001))
-                {
-                    // if there is already a support at this position it is not added
-                    continue;
-                }
+                
+
+                // there are only two supports in this grammar. Append the supports to end points of initial line
+
 
                 // find the index of the node where the support applies
                 int nodeInd = nodes.FindIndex( n => n.Position.DistanceToSquared(sup.Position) < 0.001 );
@@ -135,16 +133,38 @@ namespace SimpleShapeGrammar.Components
                 }
                 
             }
-
+            */
             // add the loads to the simple shape            
             SortLoads(loads, out List<SH_LineLoad> l_loads, out List<SH_PointLoad> p_loads);
 
-            simpleShape.LineLoads = l_loads;
-            simpleShape.PointLoads = p_loads;
+            
 
 
 
             simpleShape.Nodes = nodes;
+
+
+            // add supports to the simple shape
+            List<SH_Support> uniqueSupports = new List<SH_Support>();
+            foreach (SH_Node node in simpleShape.Nodes)
+            {
+                if (uniqueSupports.Any(s => s.Position.DistanceToSquared(node.Position) < 0.001))
+                {
+                    // if there is already a support at this position it is not added
+                    continue;
+                }
+
+                // find the support at the node. 
+                var nodeSup = sups.Find(s => s.Position.DistanceToSquared(node.Position) < 0.01);
+                nodeSup.ID = simpleShape.supCount;
+                simpleShape.supCount++;
+                nodeSup.nodeInd = (int)node.ID;
+
+                uniqueSupports.Add(nodeSup);
+            }
+
+            simpleShape.LineLoads = l_loads;
+            simpleShape.PointLoads = p_loads;
             simpleShape.Supports = uniqueSupports;
             simpleShape.SimpleShapeState = State.alpha;
 
