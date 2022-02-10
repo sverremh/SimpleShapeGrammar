@@ -64,7 +64,7 @@ namespace SimpleShapeGrammar.Classes
         /// <param name="ss"></param>
         public static SH_SimpleShape ApplyRulesToSimpleShape(List<SH_Rule> rules, SH_SimpleShape ss)
         {
-            SH_SimpleShape ssCopy = ss ; 
+            SH_SimpleShape ssCopy = ss.DeepCopy() ; 
             foreach (SH_Rule rule in rules)
             {
                 try

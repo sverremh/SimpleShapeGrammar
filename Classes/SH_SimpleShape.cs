@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
@@ -15,6 +16,9 @@ namespace SimpleShapeGrammar.Classes
         public int elementCount = 0;
         public int supCount = 0;
         public List<NurbsCurve> NurbsCurves { get; set; }
+        public List<Brep> Breps { get; set; } // edit for Kristiane
+
+        public List<Surface> Surfaces { get; set; } // edit for Kristiane
         public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
         public List<SH_Node> Nodes { get; set; }
         public List<SH_Support> Supports { get; set; }
