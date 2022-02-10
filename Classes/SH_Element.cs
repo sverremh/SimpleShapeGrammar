@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes
 {
@@ -16,6 +17,10 @@ namespace SimpleShapeGrammar.Classes
         public SH_Node[] Nodes { get; }
 
         public NurbsCurve NurbsCurve { get; set; }
+
+        // Maybe we need an abstract element class with line elements and surface elements as inheriting classes?
+        //public List<Surface> Surfaces { get; set; } 
+        
 
         public SH_CrossSection_Beam CrossSection { get; set; }
         
