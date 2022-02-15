@@ -3,6 +3,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Elements;
 
 namespace SimpleShapeGrammar.Components
 {
@@ -66,13 +67,14 @@ namespace SimpleShapeGrammar.Components
             nodes[0] = new SH_Node(line.From, null);
             nodes[1] = new SH_Node(line.To, null);
                    
-            SH_Element sH_Element = new SH_Element(nodes, null);
-            sH_Element.CrossSection = crossSection;
-            sH_Element.elementName = name;
+            //SH_Element sH_Element = new SH_Element(nodes, null);
+            SH_Line sh_Line = new SH_Line(nodes, null);
+            sh_Line.CrossSection = crossSection;
+            sh_Line.elementName = name;
             
           
             // --- output ---
-            DA.SetData(0, sH_Element);
+            DA.SetData(0, sh_Line);
 
         }
 
