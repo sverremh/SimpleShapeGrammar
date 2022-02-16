@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using SimpleShapeGrammar.Classes.Elements;
+
 namespace SimpleShapeGrammar.Classes
 {
     public enum State { alpha, beta, gamma, delta, epsilon, zeta, eta, theta , end}; // add more if needed. 
@@ -19,7 +21,8 @@ namespace SimpleShapeGrammar.Classes
         public List<Brep> Breps { get; set; } // edit for Kristiane
 
         public List<Surface> Surfaces { get; set; } // edit for Kristiane
-        public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
+        //public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
+        public Dictionary<string, List<SH_Element>> Elements { get; set; }
         public List<SH_Node> Nodes { get; set; }
         public List<SH_Support> Supports { get; set; }
         public List<SH_LineLoad> LineLoads { get; set; }
@@ -30,12 +33,13 @@ namespace SimpleShapeGrammar.Classes
         public SH_SimpleShape()
         {
             // empty constructor
+            
         }
 
         // --- methods ---
         public void AddLine(SH_Element _line)
         {
-            Elements.Add(_line);
+            Elements["Line"].Add(_line);
         }
         public List<Line> GetLinesFromShape()
         {
@@ -43,7 +47,8 @@ namespace SimpleShapeGrammar.Classes
             List<Line> lines = new List<Line>();
 
             //Get Line from each element
-            foreach (SH_Element sh_line in Elements)
+            var elLines = Elements["Line"];
+            foreach (SH_Line sh_line in elLines)
             {
                 // Create Start point
                 Point3d sPt = sh_line.Nodes[0].Position;

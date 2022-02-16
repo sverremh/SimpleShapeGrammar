@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
+using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Classes
+namespace SimpleShapeGrammar.Classes.Rules
 {
     /// <summary>
     /// Rule splitting the line at the input parameter
@@ -52,17 +54,17 @@ namespace SimpleShapeGrammar.Classes
 
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
-            SH_Element line = new SH_Element();
+            SH_Line line = new SH_Line();
             // to do: evaluate if this is the best method for avoiding an index out of range error. 
             try
             {
-                line = _ss.Elements[LineIndex];
+                line = (SH_Line)_ss.Elements["Line"][LineIndex];
             }
             catch (Exception ex)
             {
                 if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
                 {
-                   line = _ss.Elements[_ss.elementCount-1]; // if out of range, take the last item
+                   line = (SH_Line)_ss.Elements["Line"][_ss.elementCount-1]; // if out of range, take the last item
                 }
                 
             }
@@ -76,7 +78,7 @@ namespace SimpleShapeGrammar.Classes
                 return "The line segment are too short for the rule to be applied on this element"; 
             }
 
-            int elInd = _ss.Elements.IndexOf(line);
+            int elInd = _ss.Elements["Line"].IndexOf(line);
             // add the intermediate node
             SH_Node newNode = AddNode(line, Param, _ss.nodeCount);
             _ss.Nodes.Add(newNode);
@@ -86,19 +88,19 @@ namespace SimpleShapeGrammar.Classes
             List<SH_Node> nodes = new List<SH_Node>();
            
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
-            SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
+            SH_Line newLine0 = new SH_Line(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
-            SH_Element newLine1 = new SH_Element(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
+            SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
             _ss.elementCount++;
 
             
             
             // remove the line which has been split
-            _ss.Elements.RemoveAt(elInd);
-            _ss.Elements.Insert(elInd, newLine1);
+            _ss.Elements["Line"].RemoveAt(elInd);
+            _ss.Elements["Line"].Insert(elInd, newLine1);
 
             // insert the new lines in its position
-            _ss.Elements.Insert(elInd, newLine0);
+            _ss.Elements["Line"].Insert(elInd, newLine0);
 
             // no change in the state (remains in beta state)
             // _ss.SimpleShapeState = State.beta; 
