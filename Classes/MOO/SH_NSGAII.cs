@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Accord.IO;
 using JMetalCSharp.Core;
 using JMetalCSharp.QualityIndicator;
 using JMetalCSharp.Utils;
@@ -16,11 +16,12 @@ namespace SimpleShapeGrammar.Classes
         // -- properties --
         FirstGrammarMOO MyComponent;
 
+        private SH_NSGAIIProblem SH_Problem;
         // -- constructors --
         public SH_NSGAII(SH_NSGAIIProblem problem, FirstGrammarMOO comp) : base(problem)
         {
             MyComponent = comp;
-            Problem = problem; 
+            SH_Problem = problem; 
         }
 
         // -- methods --
@@ -64,20 +65,21 @@ namespace SimpleShapeGrammar.Classes
 
 
             // create the initial solution set
-            Solution newSolution;
+            //Solution newSolution;
             for (int i = 0; i < populationSize; i++)
             {
                 //newSolution = new SH_Solution(Problem);
-                newSolution = new Solution((SH_NSGAIIProblem)Problem);
-                Problem.Evaluate(newSolution);                
-                Problem.EvaluateConstraints(newSolution);
+                var newSolution = new SH_Solution((SH_NSGAIIProblem)Problem); // there is some dependencies here which writes over previous solutions
+                SH_Problem.SH_Evaluate(newSolution);
+                SH_Problem.EvaluateConstraints(newSolution);
                 evaluations++;
-                population.Add(newSolution);
+                population.Add(newSolution); // try to add a copy
+                
             }
 
             List<double> objectives1 = new List<double>();
             List<double> objectives2 = new List<double>();
-            foreach (Solution solution in population.SolutionsList)
+            foreach (SH_Solution solution in population.SolutionsList)
             {
                 objectives1.Add(solution.Objective[0]);
                 objectives2.Add(solution.Objective[1]);
@@ -89,26 +91,26 @@ namespace SimpleShapeGrammar.Classes
             {
                 // create the offspring solutionSet
                 offspringPopulation = new SolutionSet(populationSize);
-                Solution[] parents = new Solution[2];
+                SH_Solution[] parents = new SH_Solution[2];
                 for (int i = 0; i < populationSize/2; i++)
                 {
                     if (evaluations < maxEvaluations)
                     {
                         // obtain parents
-                        parents[0] = (Solution)selectionOperator.Execute(population);
-                        parents[1] = (Solution)selectionOperator.Execute(population);
+                        parents[0] = (SH_Solution)selectionOperator.Execute(population);
+                        parents[1] = (SH_Solution)selectionOperator.Execute(population);
 
                         // do crossover
-                        Solution[] offspring = (Solution[])crossoverOperator.Execute(parents);
+                        SH_Solution[] offspring = (SH_Solution[])crossoverOperator.Execute(parents);
 
                         mutationOperator.Execute(offspring[0]);
                         mutationOperator.Execute(offspring[1]);
 
                         //evaluate the offspring
-                        Problem.Evaluate(offspring[0]);
-                        Problem.EvaluateConstraints(offspring[0]);
-                        Problem.Evaluate(offspring[1]);
-                        Problem.EvaluateConstraints(offspring[1]);
+                        SH_Problem.SH_Evaluate(offspring[0]);
+                        SH_Problem.EvaluateConstraints(offspring[0]);
+                        SH_Problem.SH_Evaluate(offspring[1]);
+                        SH_Problem.EvaluateConstraints(offspring[1]);
 
                         // add offspring to to new offspring population
                         offspringPopulation.Add(offspring[0]);
