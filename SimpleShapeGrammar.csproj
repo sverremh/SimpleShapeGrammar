@@ -137,6 +137,12 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
+    <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
+    <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -178,6 +184,7 @@
     <Content Include="Misc\SimpleShapeGrammar.drawio.png" />
     <Content Include="Misc\SimpleShapeGrammar.drawio.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -191,7 +198,10 @@
 Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
 Copy "$(SolutionDir)\packages\log4net.2.0.13\lib\net45\log4net.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\log4net.dll""
 Copy "$(SolutionDir)\Libraries\karamba.gha.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\karamba.gha.dll""
-
+Copy "$(SolutionDir)\packages\Accord.3.8.0\lib\net462\Accord.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.dll""
+Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.dll""
+Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Cor.
+'dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.Core.dll""
 
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""
