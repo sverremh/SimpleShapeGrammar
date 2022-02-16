@@ -13,7 +13,9 @@ namespace SimpleShapeGrammar.Classes
         // test if this class is unnecessary
 
         // -- properties --
-        new public SH_NSGAIIProblem problem { get; private set; }
+        public SH_NSGAIIProblem sh_problem { get; private set; }
+
+        public SH_Variable[] SH_Variable { get; set; }
 
         private int numberOfObjectives;
         
@@ -54,7 +56,7 @@ namespace SimpleShapeGrammar.Classes
         
         public SH_Solution(SH_NSGAIIProblem _problem)
         {
-            problem = _problem;
+            sh_problem = _problem;
             Type = _problem.SolutionType;
             numberOfObjectives = _problem.NumberOfObjectives;
             Objective = new double[numberOfObjectives];
@@ -63,13 +65,13 @@ namespace SimpleShapeGrammar.Classes
             KDistance = 0.0;
             CrowdingDistance = 0.0;
             DistanceToSolutionSet = double.PositiveInfinity;
-            Variable = new Variable[] { new SH_Variable(_problem) };
+            SH_Variable = new SH_Variable[] { new SH_Variable(_problem) };
             // Need to create the variabel
 
         }
-        public SH_Solution(SH_Variable[] variables, Problem _problem)
+        public SH_Solution(Problem _problem, SH_Variable[] variables)
         {
-            problem = (SH_NSGAIIProblem)_problem;
+            sh_problem = (SH_NSGAIIProblem)_problem;
             Type = _problem.SolutionType;
             numberOfObjectives = _problem.NumberOfObjectives;
             Objective = new double[numberOfObjectives];
@@ -78,7 +80,7 @@ namespace SimpleShapeGrammar.Classes
             KDistance = 0.0;
             CrowdingDistance = 0.0;
             DistanceToSolutionSet = double.PositiveInfinity;
-            Variable = variables;
+            SH_Variable = variables;
         }
         // -- methods
         

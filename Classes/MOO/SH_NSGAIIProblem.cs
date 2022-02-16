@@ -91,9 +91,9 @@ namespace SimpleShapeGrammar.Classes
             // to do: add log message
         }
         // -- methods --
-        public override void Evaluate(Solution solution)
+        public void SH_Evaluate(SH_Solution solution)
         {
-            SH_Solution shSolution = solution as SH_Solution;
+            //SH_Solution shSolution = solution as SH_Solution;
             // the current solution to evaluate
             (List<SH_Rule> ruleList, List<double> objectiveValues) currentSolution; // the current solution to evaluate
 
@@ -103,12 +103,12 @@ namespace SimpleShapeGrammar.Classes
 
             // modify the initial simple shape by the list of rules
             //SH_SimpleShape simpleShape = MyComponent.SimpleShape;
-            SH_SimpleShape ssCopy = SH_UtilityClass.DeepCopy(MyComponent.SimpleShape);
-            SH_SimpleShape grammarShape = SH_UtilityClass.ApplyRulesToSimpleShape(ruleList, ssCopy);
+            //SH_SimpleShape ssCopy = SH_UtilityClass.DeepCopy(MyComponent.SimpleShape);
+            //SH_SimpleShape grammarShape = SH_UtilityClass.ApplyRulesToSimpleShape(ruleList, ssCopy);
 
             // create a karamba model from the SH_SimpleShape
-            Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(grammarShape);
-
+            //Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(grammarShape);
+            Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
             // analyse the karamba model and return the objective functions
             List<double> objectives = SH_UtilityClass.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
 
@@ -126,6 +126,11 @@ namespace SimpleShapeGrammar.Classes
             allSolutions.Add(currentSolution);
 
             
+        }
+
+        public override void Evaluate(Solution solution)
+        {
+            throw new NotImplementedException();
         }
     }
 }
