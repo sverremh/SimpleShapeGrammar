@@ -49,7 +49,7 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
             List<Line> lines = simpleShape.GetLinesFromShape();
             List<int?> ids = new List<int?>();
-            foreach (var item in simpleShape.Elements)
+            foreach (var item in simpleShape.Elements["Line"])
             {
                 ids.Add(item.ID);
             }

@@ -3,6 +3,8 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Elements;
+
 namespace SimpleShapeGrammar.Components
 {
     public class DisassembleSimpleShape : GH_Component
@@ -56,7 +58,7 @@ namespace SimpleShapeGrammar.Components
 
             // list of elements
             List<SH_Element> elems = new List<SH_Element>();
-            elems.AddRange(ss.Elements);
+            elems.AddRange(ss.Elements["Line"]);
 
             // list of supports
             List<SH_Support> sups = new List<SH_Support>();

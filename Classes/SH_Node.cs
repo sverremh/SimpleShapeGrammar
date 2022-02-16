@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
+using SimpleShapeGrammar.Classes.Elements;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]

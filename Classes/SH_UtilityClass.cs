@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using SimpleShapeGrammar.Classes.Elements;
 
 using Karamba.Models;
 using Karamba.Utilities;
@@ -90,10 +91,10 @@ namespace SimpleShapeGrammar.Classes
             var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
-            SH_SimpleShape simpleShape = ss;
+            SH_SimpleShape simpleShape = ss.DeepCopy();
             // create karamba Line3 elements
             List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elements, k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elements["Line"], k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,

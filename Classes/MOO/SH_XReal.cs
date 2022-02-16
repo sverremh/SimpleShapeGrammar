@@ -9,16 +9,16 @@ namespace SimpleShapeGrammar.Classes
 {
     public class SH_XReal : XReal
     {
-        private Solution solution;
+        private SH_Solution SH_solution;
         private SolutionType type;
 
         public SH_XReal()
         {
             // empty
         }
-        public SH_XReal(Solution solution)
+        public SH_XReal(SH_Solution solution)
         {
-            this.solution = solution;
+            this.SH_solution = solution;
             type = solution.Type;
         }
         /// <summary>
@@ -31,7 +31,7 @@ namespace SimpleShapeGrammar.Classes
             Type type = this.type.GetType();
             if (type == typeof(SH_SolutionType))
             {
-                SH_Variable variable = (SH_Variable)solution.Variable[0];
+                SH_Variable variable = (SH_Variable)SH_solution.SH_Variable[0];
                 results = variable.RuleList;
             }
             else
@@ -42,7 +42,25 @@ namespace SimpleShapeGrammar.Classes
             return results;
         }
 
-        
+        public SH_SimpleShape GetSimpleShape()
+        {
+            SH_SimpleShape ss;
+            Type type = this.type.GetType();
+            if (type == typeof(SH_SolutionType))
+            {
+                SH_Variable variable = (SH_Variable)SH_solution.SH_Variable[0];
+                ss = variable.SimpleShape;
+            }
+
+            else
+            {
+                ss = null;
+            }
+
+            return ss;
+        }
+
+
         /// <summary>
         /// Sets the list of rules used by the genome
         /// </summary>
@@ -54,7 +72,7 @@ namespace SimpleShapeGrammar.Classes
 
             if (type == typeof(SH_SolutionType))
             {
-                ((SH_Variable)solution.Variable[0]).RuleList = ruleList; 
+                ((SH_Variable)SH_solution.SH_Variable[0]).RuleList = ruleList; 
             }
             else
             {
@@ -67,7 +85,7 @@ namespace SimpleShapeGrammar.Classes
         /// <returns></returns>
         public int GetLengthOfRules()
         {
-            return ((SH_Variable)solution.Variable[0]).RuleList.Count;
+            return ((SH_Variable)SH_solution.SH_Variable[0]).RuleList.Count;
         }
     }
 }

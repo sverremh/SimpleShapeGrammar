@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
+
+
 namespace SimpleShapeGrammar.Classes.Elements
 {
+    [Serializable]
     public class SH_Line : SH_Element
     {
         // -- properties

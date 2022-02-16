@@ -5,9 +5,12 @@ using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
 
 using System.Linq;
+using SimpleShapeGrammar.Classes.Elements;
 
 namespace SimpleShapeGrammar.Components
 {
+    // This assembly component is not yet compatibel with other geometries than lines as for the simple bridge and truss roof grammar. 
+    [Serializable]
     public class Assembly : GH_Component
     {
         /// <summary>
@@ -69,7 +72,7 @@ namespace SimpleShapeGrammar.Components
             }
 
             // deep copy the input
-            elems = SH_UtilityClass.DeepCopy(elems);
+            elems = SH_UtilityClass.DeepCopy(elems); // How to get this into the form of Dictionary? Multiple input? 
             sups = SH_UtilityClass.DeepCopy(sups);
             loads = SH_UtilityClass.DeepCopy(loads);
             var curves = new List<NurbsCurve>();
@@ -111,7 +114,7 @@ namespace SimpleShapeGrammar.Components
 
                 }
             }
-            simpleShape.Elements = numberedElems;
+            simpleShape.Elements["Line"] = numberedElems;
 
             
             /*
