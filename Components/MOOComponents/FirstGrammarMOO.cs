@@ -54,7 +54,9 @@ namespace SimpleShapeGrammar
         public int solutionsCounter = 0;
         public int populationSize = 0, generations = 0, maxEvals = 0;
 
-        
+        public static readonly log4net.ILog logger = log4net.LogManager.GetLogger(
+            System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         // create data tree of solutions as global variables
         public DataTree<double> outObjectiveTree;
         public DataTree<SH_Rule> outRules;
@@ -107,6 +109,8 @@ namespace SimpleShapeGrammar
             DA.GetData(5, ref Seed); // 5
             if (!DA.GetData(6, ref run)) return; // 6
             DA.GetData(7, ref reset); // 7
+
+            logger.Info("The component has started its run");
 
             maxEvals = populationSize * generations; // total number of evaluations
 
@@ -282,6 +286,7 @@ namespace SimpleShapeGrammar
             objFitnessValues = tree2;
         }
         
+
         #endregion
 
         /// <summary>
