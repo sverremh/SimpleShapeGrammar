@@ -3,6 +3,7 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Rules;
 namespace SimpleShapeGrammar.Components
 {
     public class RandomTest : GH_Component

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
+using SimpleShapeGrammar.Classes.Elements;
+
 using Accord.Math;
 
 
@@ -31,12 +33,12 @@ namespace SimpleShapeGrammar.Classes
                 }
 
                 // find adjacent elements
-                List<SH_Element> els = new List<SH_Element>();
-                foreach (var el in ss.Elements)
+                List<SH_Line> els = new List<SH_Line>();
+                foreach (var el in ss.Elements["Line"])
                 {
                     if (el.Nodes.Contains(node)) // true if the node is connected to the element
                     {
-                        els.Add(el);
+                        els.Add((SH_Line)el);
                     }
                 }
 
@@ -104,7 +106,7 @@ namespace SimpleShapeGrammar.Classes
             {
                 // find adjacent elements
                 List<SH_Element> els = new List<SH_Element>();
-                foreach (var el in _ss.Elements)
+                foreach (var el in _ss.Elements["Line"])
                 {
                     if (el.Nodes.Contains(_ss.Nodes[i])) // true if the node is connected to the element
                     {
@@ -261,16 +263,16 @@ namespace SimpleShapeGrammar.Classes
                     SH_Node[] nodes = new SH_Node[] {start_node , end_node};
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Element funicular = new SH_Element(nodes, id, name);
-                    ss.Elements.Add(funicular);
+                    SH_Line funicular = new SH_Line(nodes, id, name);
+                    ss.Elements["Line"].Add(funicular);
 
                     // new element for verticals
                     string name_vert = "verticals";
                     int id_v = ss.elementCount++;
                     SH_Node[] nodes_v = new SH_Node[] { e_node, end_node };
-                    SH_Element ve = new SH_Element(nodes_v, id_v, name_vert);
+                    SH_Line ve = new SH_Line(nodes_v, id_v, name_vert);
                     start_node = end_node;
-                    ss.Elements.Add(ve);
+                    ss.Elements["Line"].Add(ve);
                 }
                 if(i == ordered_indices.Count - 2)
                 {
@@ -279,8 +281,8 @@ namespace SimpleShapeGrammar.Classes
                     SH_Node[] nodes = new SH_Node[] { start_node, ss.Nodes[1] };
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Element funicular = new SH_Element(nodes, id, name);
-                    ss.Elements.Add(funicular);
+                    SH_Line funicular = new SH_Line(nodes, id, name);
+                    ss.Elements["Line"].Add(funicular);
                 }
             }
 
@@ -303,7 +305,7 @@ namespace SimpleShapeGrammar.Classes
         public static void SortNodes(SH_SimpleShape ss, SH_Node node, ref List<SH_Node> nodes, ref List<int> sort_ind)
         {
             
-            List<SH_Element> els = ss.Elements.Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
+            List<SH_Element> els = ss.Elements["Line"].Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
             SH_Node new_node = new SH_Node();
             if(els.Count == 1)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleShapeGrammar.Classes.Elements;
 using Rhino.Geometry;
 
 
@@ -52,7 +53,7 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // take the 1st element
-            SH_Element sh_elem = _ss.Elements[0];
+            SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
 
             // apply the change
             #region NewMethod
