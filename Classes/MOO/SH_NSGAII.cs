@@ -8,19 +8,18 @@ using JMetalCSharp.Core;
 using JMetalCSharp.QualityIndicator;
 using JMetalCSharp.Utils;
 using JMetalCSharp.Utils.Comparators;
+using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes
 {
     class SH_NSGAII: Algorithm
     {
         // -- properties --
-        FirstGrammarMOO MyComponent;
 
         private SH_NSGAIIProblem SH_Problem;
         // -- constructors --
-        public SH_NSGAII(SH_NSGAIIProblem problem, FirstGrammarMOO comp) : base(problem)
+        public SH_NSGAII(SH_NSGAIIProblem problem) : base(problem)
         {
-            MyComponent = comp;
             SH_Problem = problem; 
         }
 
@@ -61,7 +60,7 @@ namespace SimpleShapeGrammar.Classes
             selectionOperator = Operators["selection"];
 
             // create the first population
-            JMetalRandom.SetRandom(MyComponent.MyRand);
+            JMetalRandom.SetRandom(SH_Problem.MyComponent.MyRand);
 
 
             // create the initial solution set
