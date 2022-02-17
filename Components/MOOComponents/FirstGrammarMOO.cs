@@ -1,16 +1,12 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using Grasshopper.Kernel.Special;
-using Grasshopper.Kernel.Data;
 using Grasshopper;
-using Karamba.Models;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Special;
+using SimpleShapeGrammar.Classes;
 
-
-
-namespace SimpleShapeGrammar
+namespace SimpleShapeGrammar.Components.MOOComponents
 {
     public class FirstGrammarMOO : GH_Component
     {

@@ -18,11 +18,11 @@ namespace SimpleShapeGrammar.Classes
         public int elementCount = 0;
         public int supCount = 0;
         public List<NurbsCurve> NurbsCurves { get; set; }
-        public List<Brep> Breps { get; set; } // edit for Kristiane
-
-        public List<Surface> Surfaces { get; set; } // edit for Kristiane
-        //public List<SH_Element> Elements { get; set; } //= new List<SH_Element>(); // Is the final initiation really necessary?
-        public Dictionary<string, List<SH_Element>> Elements { get; set; }
+        
+        /// <summary>
+        /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
+        /// </summary>
+        public Dictionary<string, List<SH_Element>> Elements { get; set; } = new Dictionary<string, List<SH_Element>>();
         public List<SH_Node> Nodes { get; set; }
         public List<SH_Support> Supports { get; set; }
         public List<SH_LineLoad> LineLoads { get; set; }

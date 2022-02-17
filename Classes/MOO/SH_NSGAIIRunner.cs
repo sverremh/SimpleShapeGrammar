@@ -9,6 +9,7 @@ using JMetalCSharp.Operators.Crossover;
 using JMetalCSharp.Operators.Mutation;
 using JMetalCSharp.Operators.Selection;
 using JMetalCSharp.QualityIndicator;
+using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -28,18 +29,18 @@ namespace SimpleShapeGrammar.Classes
             Operator crossover;
             Operator selection;
             Operator mutation;
-            MyComponent = component;
+            //MyComponent = component;
 
             Dictionary<string, object> parameters; // operator parameters
 
             QualityIndicator indicators;
             indicators = null;
 
-            algorithm = new SH_NSGAII(problem, MyComponent);
+            algorithm = new SH_NSGAII(problem);
 
             // set algorithm parameters
-            algorithm.SetInputParameter("populationSize", MyComponent.populationSize);
-            algorithm.SetInputParameter("maxEvaluations", MyComponent.maxEvals);
+            algorithm.SetInputParameter("populationSize", problem.MyComponent.populationSize);
+            algorithm.SetInputParameter("maxEvaluations", problem.MyComponent.maxEvals);
             // to do: log the messages
 
             // set mutation and crossover for SH_Grammar 

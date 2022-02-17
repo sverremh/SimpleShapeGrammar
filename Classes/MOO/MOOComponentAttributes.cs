@@ -8,6 +8,7 @@ using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel;
 using System.Windows.Forms;
 using Rhino.Geometry;
+using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes
 {
