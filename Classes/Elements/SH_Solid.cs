@@ -32,6 +32,11 @@ namespace SimpleShapeGrammar.Classes.Elements
             ID = _id;
             Brep = _brep;
         }
+        public SH_Solid(string _name, Brep _brep)
+        {
+            elementName = _name;
+            Brep = _brep;
+        }
 
 
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleShapeGrammar.Classes;
 using Rhino.Geometry;
-
+using SimpleShapeGrammar.Classes.Elements;
 
 
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
@@ -14,10 +14,10 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
     public  class BrepToSurfaceRule : SH_Rule
     {
         // --- properties ---
-        public List<Surface> srfLst = new List<Surface>();
-        public List<string> nameLst = new List<string>();
-        public Brep geo;
-        public List<Vector3d> vecs = new List<Vector3d>();
+        //public List<Surface> srfLst = new List<Surface>();
+        //public List<string> nameLst = new List<string>();
+        //public Brep geo;
+        
 
         // --- constructors ---
         public BrepToSurfaceRule()
@@ -54,45 +54,89 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             }
 
             // Brep
-            Brep sh_brep = _ss.Breps[0];
+            //ss.Elements["Solid"] = new List<SH_Element>();
+            var sh_solid = (SH_Solid)_ss.Elements["Solid"][0];
 
-            // transform a brep into six surfaces
-            //BrepToSurfaceRule geo = new BrepToSurfaceRule();
-            var faceLst = sh_brep.Faces;
-            //List<Surface> srfLst = new List<Surface>();
+
+            // transform a brep into surfaces
+            var faceLst = sh_solid.Brep.Faces;
+            _ss.Elements["Surface"] = new List<SH_Element>(); //empty list
+            List<Surface> walls = new List<Surface>(); // empyt wall list
+            //List<Surface> sortedWalls = new List<Surface>();
+            //List<double> areas = new List<double>();
             foreach (BrepFace face in faceLst)
             {
-                srfLst.Add(face.ToNurbsSurface());
-            }
+                var srf = face.ToNurbsSurface();
+                srf.SetDomain(0, new Interval(0, 1));
+                srf.SetDomain(1, new Interval(0, 1));
 
-            //vector of each surface
-            //List<Vector3d> vecs = new List<Vector3d>();
-            foreach (Surface s in srfLst)
-            {
-                Vector3d vec = s.NormalAt(0.5, 0.5);
-                vecs.Add(vec);
-            }
+                Vector3d v = srf.NormalAt(0.5, 0.5);
+                // check if normal vector points outwards from brep
+                Point3d midpt = srf.PointAt(0.5, 0.5);
+                Point3d checkpt = Point3d.Add(midpt, v);
 
-            //name each surface
-            //List<string> srfName = new List<string>();
-            foreach (Vector3d v in vecs)
-            {
+                if (sh_solid.Brep.IsPointInside(checkpt, 0, true))
+                {
+                    v.Reverse(); //flips the normal vector if the point is inside of the brep
+                }
+                
+
                 if (v.Z > 0)
                 {
-                    nameLst.Add("Top");
+                    SH_Surface sh_srf = new SH_Surface(srf, "Top");
+                    _ss.Elements["Surface"].Add(sh_srf);
                 }
                 else if (v.Z < 0)
                 {
-                    nameLst.Add("Bottom");
+                    SH_Surface sh_srf = new SH_Surface(srf, "Bottom");
+                    _ss.Elements["Surface"].Add(sh_srf);
                 }
                 else if (v.Z == 0)
                 {
-                    nameLst.Add("Wall");
+                    walls.Add(srf);
+                    //double area = AreaMassProperties.Compute(srf).Area;
+                    //areas.Add(area);   
                 }
-
+                
             }
-            _ss.Surfaces = srfLst;
 
+            // Sort wall into transversal wall = smallest wall, and logintudinal wall = longest wall
+            var sortedWalls = walls.OrderBy(w => AreaMassProperties.Compute(w).Area);
+            for (int i = 0;  i < sortedWalls.Count() + 1; i++)
+            {
+                if (i == 0 || i == 1)
+                {
+                    Surface s = sortedWalls.ElementAt(i);
+                    SH_Surface sh_srf = new SH_Surface(s, "Shortest Wall");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+                else if (i == 2 || i == 3)
+                {
+                    Surface s = sortedWalls.ElementAt(i);
+                    SH_Surface sh_srf = new SH_Surface(s, "Longest Wall");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+            }
+
+
+            /*
+            foreach (Surface s in walls)
+            {
+                double max = areas.Max();
+
+                if (AreaMassProperties.Compute(s).Area >= max)
+                {
+                    SH_Surface sh_srf = new SH_Surface(s, "Longest Wall");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+                else if (AreaMassProperties.Compute(s).Area < max)
+                {
+                    SH_Surface sh_srf = new SH_Surface(s, "Shortest Wall");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+            }
+            */
+           
 
             // change the state
             _ss.SimpleShapeState = State.beta;

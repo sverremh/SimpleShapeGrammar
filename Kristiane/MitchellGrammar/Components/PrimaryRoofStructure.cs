@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class SubStructure : GH_Component
+    public class PrimaryRoofStructure : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the SubStructure class.
+        /// Initializes a new instance of the PrimaryRoofStructure class.
         /// </summary>
-        public SubStructure()
-          : base("SubStructure", "Nickname",
-              "Defining substructures",
+        public PrimaryRoofStructure()
+          : base("PrimaryRoofStructure", "Nickname",
+              "Description",
               "SimpleGrammar", "Kristiane")
         {
         }
@@ -23,9 +23,6 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Number of substructure","nrSub","Gives the number of the substructures",GH_ParamAccess.item) ;
-            pManager.AddNumberParameter("Height", "h", "Height for pitched and bowed roof", GH_ParamAccess.item,0);
-            pManager.AddNumberParameter("Count", "c", "Count to divide arhc, bowed roof", GH_ParamAccess.item,0);
         }
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Mitchell Rule Class 2", "MRule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 3", "MRule3", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,21 +40,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // variables
-            double nrSub = 0; //number of subsection
-            double h = 0; // height
-            double count = 0; //count, divide arch for bowed roof
-
+            //double nrSub = 0; //number of subsection
+            //double h = 0; // height
             //input
-            if (!DA.GetData(0, ref nrSub)) return;
-            if (!DA.GetData(1, ref h)) return;
-            if (!DA.GetData(1, ref count)) return;
+            //if (!DA.GetData(0, ref nrSub)) return;
+            //if (!DA.GetData(1, ref h)) return;
 
             // solve
-            SubStructureRule MRule2 = new SubStructureRule(nrSub, h, count);
+            PrimaryRoofStructureRule MRule3 = new PrimaryRoofStructureRule();
 
             // output
-            DA.SetData(0, MRule2);
-
+            DA.SetData(0, MRule3);
         }
 
         /// <summary>
@@ -78,7 +71,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("06690E33-B184-48F2-87A7-541A5E0BAF9F"); }
+            get { return new Guid("CCFB04D1-E269-42FA-96C4-875F218EE865"); }
         }
     }
 }

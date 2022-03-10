@@ -51,7 +51,11 @@ namespace SimpleShapeGrammar.Kristiane.Components
             List<Surface> srfLst = new List<Surface>();
             foreach (BrepFace face in faceLst)
             {
-                srfLst.Add(face.ToNurbsSurface());
+                var srf = face.ToNurbsSurface();
+                srf.SetDomain(0, new Interval(0, 1));
+                srf.SetDomain(1, new Interval(0, 1));
+                srfLst.Add(srf);
+
             }
        
 

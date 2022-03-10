@@ -143,8 +143,10 @@
     <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
     <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

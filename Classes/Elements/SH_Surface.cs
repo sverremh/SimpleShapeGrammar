@@ -12,16 +12,23 @@ namespace SimpleShapeGrammar.Classes.Elements
     public class SH_Surface : SH_Element
     {
         // -- properties -- 
-        private Surface elementSurface { get; set; }
+        public Surface elementSurface { get; set; }
 
         // -- constructors --
         public SH_Surface()
         {
             // empty constructor
         }
+
         public SH_Surface(Surface elementSurface)
         {
             this.elementSurface = elementSurface;
+        }
+
+        public SH_Surface(Surface elementSurface, string _name)
+        {
+            this.elementSurface = elementSurface;
+            elementName = _name;
         }
 
         public SH_Surface(string _name, int _id, Surface _surface)
