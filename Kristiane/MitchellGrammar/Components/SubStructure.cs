@@ -1,21 +1,20 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Rules;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Components
+namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class Rule02 : GH_Component
+    public class SubStructure : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Rule02 class.
+        /// Initializes a new instance of the SubStructure class.
         /// </summary>
-        public Rule02()
-          : base("Rule02", "rule2",
-              "Rule 2 which splits a line at its given parameter",
-              "SimpleGrammar", "Rules")
+        public SubStructure()
+          : base("SubStructure", "Nickname",
+              "Defining substructures",
+              "SimpleGrammar", "Kristiane")
         {
         }
 
@@ -24,8 +23,9 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("ElementID", "ID", "The ID of the element to operate on", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Split parameter", "splitParam", "The parameter to split the line", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Number of substructure","nrSub","Gives the number of the substructures",GH_ParamAccess.item) ;
+            pManager.AddNumberParameter("Height", "h", "Height for pitched and bowed roof", GH_ParamAccess.item,0);
+            pManager.AddNumberParameter("Count", "c", "Count to divide arhc, bowed roof", GH_ParamAccess.item,0);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Rule Class 2", "rule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 2", "MRule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,19 +42,22 @@ namespace SimpleShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // --- variables ---
-            int elId = 0;
-            double t = 0.0;
+            // variables
+            double nrSub = 0; //number of subsection
+            double h = 0; // height
+            double count = 0; //count, divide arch for bowed roof
 
-            // --- input --- 
-            if (!DA.GetData(0, ref elId)) return;
-            if (!DA.GetData(1, ref t)) return;
+            //input
+            if (!DA.GetData(0, ref nrSub)) return;
+            if (!DA.GetData(1, ref h)) return;
+            if (!DA.GetData(1, ref count)) return;
 
-            // --- solve ---
-            SH_Rule02 rule2 = new SH_Rule02(elId, t);
+            // solve
+            SubStructureRule MRule2 = new SubStructureRule(nrSub, h, count);
 
-            // --- output ---
-            DA.SetData(0, rule2);
+            // output
+            DA.SetData(0, MRule2);
+
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5a267320-425c-4502-8516-25b8cb828d0b"); }
+            get { return new Guid("06690E33-B184-48F2-87A7-541A5E0BAF9F"); }
         }
     }
 }

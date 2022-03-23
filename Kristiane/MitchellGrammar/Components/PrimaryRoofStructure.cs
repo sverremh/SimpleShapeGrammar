@@ -1,21 +1,20 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Rules;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Components
+namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class Rule02 : GH_Component
+    public class PrimaryRoofStructure : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Rule02 class.
+        /// Initializes a new instance of the PrimaryRoofStructure class.
         /// </summary>
-        public Rule02()
-          : base("Rule02", "rule2",
-              "Rule 2 which splits a line at its given parameter",
-              "SimpleGrammar", "Rules")
+        public PrimaryRoofStructure()
+          : base("PrimaryRoofStructure", "Nickname",
+              "Description",
+              "SimpleGrammar", "Kristiane")
         {
         }
 
@@ -24,8 +23,6 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("ElementID", "ID", "The ID of the element to operate on", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Split parameter", "splitParam", "The parameter to split the line", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Rule Class 2", "rule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 3", "MRule3", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,19 +39,18 @@ namespace SimpleShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // --- variables ---
-            int elId = 0;
-            double t = 0.0;
+            // variables
+            //double nrSub = 0; //number of subsection
+            //double h = 0; // height
+            //input
+            //if (!DA.GetData(0, ref nrSub)) return;
+            //if (!DA.GetData(1, ref h)) return;
 
-            // --- input --- 
-            if (!DA.GetData(0, ref elId)) return;
-            if (!DA.GetData(1, ref t)) return;
+            // solve
+            PrimaryRoofStructureRule MRule3 = new PrimaryRoofStructureRule();
 
-            // --- solve ---
-            SH_Rule02 rule2 = new SH_Rule02(elId, t);
-
-            // --- output ---
-            DA.SetData(0, rule2);
+            // output
+            DA.SetData(0, MRule3);
         }
 
         /// <summary>
@@ -75,7 +71,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5a267320-425c-4502-8516-25b8cb828d0b"); }
+            get { return new Guid("CCFB04D1-E269-42FA-96C4-875F218EE865"); }
         }
     }
 }

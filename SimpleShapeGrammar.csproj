@@ -62,8 +62,8 @@
     <Reference Include="karambaCommon">
       <HintPath>Libraries\karambaCommon.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.2.0.13\lib\net45\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
       <HintPath>..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
@@ -81,6 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
+    <Compile Include="Classes\Elements\SH_Line.cs" />
+    <Compile Include="Classes\Elements\SH_Solid.cs" />
+    <Compile Include="Classes\Elements\SH_Surface.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
     <Compile Include="Classes\Kristiane\Test.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
@@ -100,7 +103,7 @@
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
-    <Compile Include="Classes\SH_Element.cs" />
+    <Compile Include="Classes\Elements\SH_Element.cs" />
     <Compile Include="Classes\Loads\SH_Load.cs" />
     <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
@@ -137,6 +140,14 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
+    <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
+    <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -153,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Resources\icons_C_Sup.png" />
   </ItemGroup>
@@ -178,6 +192,7 @@
     <Content Include="Misc\SimpleShapeGrammar.drawio.png" />
     <Content Include="Misc\SimpleShapeGrammar.drawio.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -191,7 +206,10 @@
 Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
 Copy "$(SolutionDir)\packages\log4net.2.0.13\lib\net45\log4net.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\log4net.dll""
 Copy "$(SolutionDir)\Libraries\karamba.gha.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\karamba.gha.dll""
-
+Copy "$(SolutionDir)\packages\Accord.3.8.0\lib\net462\Accord.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.dll""
+Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.dll""
+Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Cor.
+'dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.Core.dll""
 
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
 Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""

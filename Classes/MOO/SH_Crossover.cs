@@ -25,15 +25,15 @@ namespace SimpleShapeGrammar.Classes
 
         // -- methods -- 
 
-        private Solution[] DoCrossover(Solution parent1, Solution parent2)
+        private SH_Solution[] DoCrossover(SH_Solution parent1, SH_Solution parent2)
         {
-            SH_NSGAIIProblem problem = (SH_NSGAIIProblem)parent1.problem;
-
-            Solution[] offspring = new Solution[2];
+            SH_NSGAIIProblem problem = (SH_NSGAIIProblem)parent1.sh_problem;
+            
+            SH_Solution[] offspring = new SH_Solution[2];
            
             // get the list of SH_Rule to use for identification of splicePoints
-            List<SH_Rule> p1Genome = ((SH_Variable)parent1.Variable[0]).RuleList;
-            List<SH_Rule> p2Genome = ((SH_Variable)parent2.Variable[0]).RuleList;
+            List<SH_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
+            List<SH_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
 
             // empty list for possible splice points 
             List<int[]> splicePoints = new List<int[]>();
@@ -70,10 +70,18 @@ namespace SimpleShapeGrammar.Classes
 
             // create the offspring
             SH_Variable[] o1Var = new SH_Variable[1] {new SH_Variable(o1Genome) }; // create a variable of the first offspring
-            var o2Var = new SH_Variable[1] { new SH_Variable(o2Genome) }; // create a variable of the second offspring
+            SH_Variable[] o2Var = new SH_Variable[1] { new SH_Variable(o2Genome) }; // create a variable of the second offspring
 
-            offspring[0] = new Solution(problem, o1Var);
-            offspring[1] = new Solution(problem, o2Var);
+            offspring[0] = new SH_Solution(problem, o1Var);
+            offspring[1] = new SH_Solution(problem, o2Var);
+
+            SH_SimpleShape ss01 =
+                SH_UtilityClass.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
+            offspring[0].SH_Variable[0].SimpleShape = ss01;
+            SH_SimpleShape ss02 =
+                SH_UtilityClass.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
+            offspring[1].SH_Variable[0].SimpleShape = ss02;
+
             //offspring[1] = new SH_Solution(o2Var); // the constructor should take the list of SH_Rule as input
 
             return offspring;
@@ -81,7 +89,7 @@ namespace SimpleShapeGrammar.Classes
 
         public override object Execute(object obj)
         {
-            Solution[] parents = (Solution[])obj; // cast the input to the correct type
+            SH_Solution[] parents = (SH_Solution[])obj; // cast the input to the correct type
 
             if(parents.Length != 2)
             {
@@ -96,7 +104,7 @@ namespace SimpleShapeGrammar.Classes
                 throw new Exception("Exception in " + this.GetType().FullName + ".Excecute():" + " The input SolutionType is not correct.");
             }
             
-            Solution[] offspring;
+            SH_Solution[] offspring;
             offspring = DoCrossover(parents[0], parents[1]);
 
             return offspring;

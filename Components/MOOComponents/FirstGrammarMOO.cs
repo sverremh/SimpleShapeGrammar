@@ -1,16 +1,12 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using Grasshopper.Kernel.Special;
-using Grasshopper.Kernel.Data;
 using Grasshopper;
-using Karamba.Models;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Special;
+using SimpleShapeGrammar.Classes;
 
-
-
-namespace SimpleShapeGrammar
+namespace SimpleShapeGrammar.Components.MOOComponents
 {
     public class FirstGrammarMOO : GH_Component
     {
@@ -53,8 +49,8 @@ namespace SimpleShapeGrammar
         private ObjectiveComparer comparer;
         public int solutionsCounter = 0;
         public int populationSize = 0, generations = 0, maxEvals = 0;
-
         
+
         // create data tree of solutions as global variables
         public DataTree<double> outObjectiveTree;
         public DataTree<SH_Rule> outRules;
@@ -107,6 +103,7 @@ namespace SimpleShapeGrammar
             DA.GetData(5, ref Seed); // 5
             if (!DA.GetData(6, ref run)) return; // 6
             DA.GetData(7, ref reset); // 7
+            
 
             maxEvals = populationSize * generations; // total number of evaluations
 
@@ -282,6 +279,7 @@ namespace SimpleShapeGrammar
             objFitnessValues = tree2;
         }
         
+
         #endregion
 
         /// <summary>
