@@ -39,7 +39,21 @@ namespace SimpleShapeGrammar.Classes
         // --- methods ---
         public void AddLine(SH_Element _line)
         {
+            if (!Elements.ContainsKey("Line"))
+            {
+                Elements["Line"] = new List<SH_Element>();
+            }
             Elements["Line"].Add(_line);
+        }
+
+        public void AddSurface(SH_Element _surface)
+        {
+            if (!Elements.ContainsKey("Surface"))
+            {
+                Elements["Surface"] = new List<SH_Element>();
+            }
+            
+            Elements["Surface"].Add(_surface);
         }
         public List<Line> GetLinesFromShape()
         {
