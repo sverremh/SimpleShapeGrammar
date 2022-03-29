@@ -14,23 +14,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
     public  class BrepToSurfaceRule : SH_Rule
     {
         // --- properties ---
-        //public List<Surface> srfLst = new List<Surface>();
-        //public List<string> nameLst = new List<string>();
-        //public Brep geo;
-        
-
+       
         // --- constructors ---
         public BrepToSurfaceRule()
         {
             Name = "BrepSurfaceClass";
             RuleState = State.alpha;
-        }
-
-        public BrepToSurfaceRule(Brep _Geo)
-        {
-            Name = "BrepSurfaceClass";
-            RuleState = State.alpha;
-            //geo = _Geo;
         }
 
         // --- methods ---
@@ -54,11 +43,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             }
 
             // Brep
-            //ss.Elements["Solid"] = new List<SH_Element>();
             var sh_solid = (SH_Solid)_ss.Elements["Solid"][0];
 
-
-            // transform a brep into surfaces
+            // Transform a brep into surfaces
             var faceLst = sh_solid.Brep.Faces;
             _ss.Elements["Surface"] = new List<SH_Element>(); //empty list
             List<Surface> walls = new List<Surface>(); // empyt wall list
@@ -71,15 +58,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 srf.SetDomain(1, new Interval(0, 1));
 
                 Vector3d v = srf.NormalAt(0.5, 0.5);
-                // check if normal vector points outwards from brep
+                // Check if normal vector points outwards from brep
                 Point3d midpt = srf.PointAt(0.5, 0.5);
                 Point3d checkpt = Point3d.Add(midpt, v);
 
                 if (sh_solid.Brep.IsPointInside(checkpt, 0, true))
                 {
-                    v.Reverse(); //flips the normal vector if the point is inside of the brep
-                }
-                
+                    v.Reverse(); // Flips the normal vector if the point is inside of the brep
+                }       
 
                 if (v.Z > 0)
                 {
@@ -118,7 +104,6 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
             }
 
-
             /*
             foreach (Surface s in walls)
             {
@@ -136,7 +121,6 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
             }
             */
-           
 
             // change the state
             _ss.SimpleShapeState = State.beta;

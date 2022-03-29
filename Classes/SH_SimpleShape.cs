@@ -17,6 +17,7 @@ namespace SimpleShapeGrammar.Classes
         public int nodeCount = 0;
         public int elementCount = 0;
         public int supCount = 0;
+        public string name = ""; 
         public List<NurbsCurve> NurbsCurves { get; set; }
         
         /// <summary>

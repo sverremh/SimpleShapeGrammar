@@ -13,10 +13,10 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
     public class SubStructureRule : SH_Rule
     {
         // --- properties ---
-        public List<string> nameSubLSt = new List<string>();
-        public double nrSub; //number of substructure
-        public double h; // height for pitched and bowed roof
-        public double count; //counts to divide arch (bowed roof)
+        //public List<string> nameSubLSt = new List<string>();
+        public double NrSub; //number of substructure
+        public double H; // height for pitched and bowed roof
+        public double Count; //counts to divide arch (bowed roof)
 
 
         // --- constructor --- 
@@ -28,9 +28,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
         public SubStructureRule(double _nrSub, double _h, double _count)
         {
-            nrSub = _nrSub;
-            h = _h;
-            count = _count;
+            NrSub = _nrSub;
+            H = _h;
+            Count = _count;
             Name = "SubStructureClass";
             RuleState = State.beta;
         }
@@ -51,13 +51,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
-                return "The State is not compatible with BrepToSurface.";
+                return "The State is not compatible with SubStructureRule.";
             }
 
-
+            _ss.name = "Mitchell";
             // ---------------------- SUBSTRUCTURE 0 --------------------
-            if (nrSub == 0)
+            if (NrSub == 0)
             {
+                _ss.name += "_0";
+
                 List<Curve> col = new List<Curve>(); //store columns before giving id
                 List<SH_Node> nodes = new List<SH_Node>(); //list for nodes
                 _ss.Elements["Line"] = new List<SH_Element>(); //empty list
@@ -71,8 +73,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     if (n == "Top")
                     {
                         Surface s = sh_srf.elementSurface;
-                        //find which side is the longest, trim curve, and offsets the surface
-                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength())
+                        //find which side is the longest, and if they are equal
+                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength() || s.IsoCurve(0, 0).GetLength() == s.IsoCurve(1, 1).GetLength())
                         {
 
                             Curve longBeam1 = s.IsoCurve(0, 0); //longitudinal beam = longest edge of surface
@@ -94,7 +96,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 //SH_Line
                                 SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 1
                                 _ss.Elements["Line"].Add(sh_longBeam1);
-                                SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
+                                SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
                                 _ss.Elements["Line"].Add(sh_longBeam2);
                                 SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub0"); //transversal beam 1
                                 _ss.Elements["Line"].Add(sh_transBeam1);
@@ -136,7 +138,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             //SH_Line
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub0"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -151,7 +153,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         }
                     }
 
-                    else if (n == "Shortest wall")
+                    else if (n == "Shortest Wall")
                     {
                         Surface s = sh_srf.elementSurface;
 
@@ -181,7 +183,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
                 }
                 //columns and nodes
-                for (int j = 0; j < col.Count + 1; j++)
+                for (int j = 0; j < col.Count; j++)
                 {
                     Curve c = col[j];
                         if (c.PointAtStart.Z > c.PointAtEnd.Z) //wants the node with the lowest Z value
@@ -208,14 +210,16 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             _ss.Elements["Line"].Add(sh_col);
                         }
                 }
-                //Add nodes to SH_Element
+                //Add nodes to Simple Shape
+                _ss.Nodes= new List<SH_Node>();
                 _ss.Nodes.AddRange(nodes);
             }
 
-
+        
             // -------------------- SUBSTRUCTOR nr 1 --------------------
-            if (nrSub == 1)
+            if (NrSub == 1)
             {
+                _ss.name += "_1";
                 List<Curve> col = new List<Curve>(); //store columns before giving id
                 List<SH_Node> nodes = new List<SH_Node>(); //list for nodes
                 _ss.Elements["Line"] = new List<SH_Element>(); //empty list
@@ -231,7 +235,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     {
                         Surface s = sh_srf.elementSurface;
                         //find which side is the longest
-                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength())
+                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength() || s.IsoCurve(0, 0).GetLength() == s.IsoCurve(1, 1).GetLength())
                         {
                             Curve longBeam1 = s.IsoCurve(0, 0); //longitudinal beam = longest edge of surface
                             Curve longBeam2 = s.IsoCurve(0, 1);
@@ -252,7 +256,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             //SH_Line
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub1"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -287,7 +291,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             //SH_Line
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub1"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -302,7 +306,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         }
                     }
 
-                    else if (n == "Shortest wall")
+                    else if (n == "Shortest Wall")
                     {
                         Surface s = sh_srf.elementSurface;
 
@@ -328,12 +332,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             col.Add(c2);
                         }
                     }
-                }
+                    }
                 //columns and nodes
-                for (int j = 0; j < col.Count + 1; j++)
+                for (int j = 0; j < col.Count; j++)
                 {
                     Curve c = col[j];
-                    if (c.PointAtStart.Z > c.PointAtEnd.Z) //wans the node with the lowest Z value (bottom node)
+                    if (c.PointAtStart.Z > c.PointAtEnd.Z) //want the node with the lowest Z value (bottom node)
                     {
                         SH_Node[] cnodes = new SH_Node[2];
                         cnodes[0] = new SH_Node(c.PointAtStart, null);
@@ -357,13 +361,16 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_col);
                     }
                 }
-                //Add all nodes to SH_Element
+
+                //Add all nodes to Simple Shape
+                _ss.Nodes = new List<SH_Node>(); 
                 _ss.Nodes.AddRange(nodes);
             }
-
+            
             // ---------------------- SUBSTRUCTOR nr 2 ------------------- (pitched roof)
-            if (nrSub == 2)
+            if (NrSub == 2)
             {
+                _ss.name += "_2";
                 List<Curve> col = new List<Curve>(); //store columns before giving id
                 List<SH_Node> nodes = new List<SH_Node>(); //list for nodes
                 _ss.Elements["Line"] = new List<SH_Element>(); //empty list
@@ -378,7 +385,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     {
                         Surface s = sh_srf.elementSurface;
                         //find which side is the longest, trim curve, and offsets the surface
-                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength())
+                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength() || s.IsoCurve(0, 0).GetLength() == s.IsoCurve(1, 1).GetLength())
                         {
                             Curve longBeam1 = s.IsoCurve(0, 0);
                             Curve longBeam2 = s.IsoCurve(0, 1);
@@ -398,7 +405,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub2"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -417,11 +424,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             List<Point3d> pts1 = new List<Point3d>();
                             Point3d sPt1 = transBeam1.PointAtStart;
                             pts1.Add(sPt1);
+                            Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
+                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H); //move midpoint in z-dir with a distance h
+                            pts1.Add(transMidPt1);
                             Point3d ePt1 = transBeam1.PointAtEnd;
                             pts1.Add(ePt1);
-                            Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + h); //move midpoint in z-dir with a distance h
-                            pts1.Add(transMidPt1);
 
                             for (int i = 0; i < pts1.Count - 1; i++)
                             {
@@ -437,12 +444,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve transBeam2 = s.IsoCurve(1, 1);
                             List<Point3d> pts2 = new List<Point3d>();
                             Point3d sPt2 = transBeam2.PointAtStart;
-                            pts1.Add(sPt2);
-                            Point3d ePt2 = transBeam2.PointAtEnd;
-                            pts1.Add(ePt2);
+                            pts2.Add(sPt2);                         
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + h); //move midpoint in z-dir with a distance h
-                            pts1.Add(transMidPt2);
+                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H); //move midpoint in z-dir with a distance h
+                            pts2.Add(transMidPt2);
+                            Point3d ePt2 = transBeam2.PointAtEnd;
+                            pts2.Add(ePt2);
 
                             for (int j = 0; j < pts2.Count - 1; j++)
                             {
@@ -481,7 +488,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             //SH_Line
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub2"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -498,12 +505,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve transBeam1 = s.IsoCurve(0, 0);
                             List<Point3d> pts1 = new List<Point3d>();
                             Point3d sPt1 = transBeam1.PointAtStart;
-                            pts1.Add(sPt1);
+                            pts1.Add(sPt1);                          
+                            Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
+                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H); //move midpoint in z-dir with a distance h
+                            pts1.Add(transMidPt1);
                             Point3d ePt1 = transBeam1.PointAtEnd;
                             pts1.Add(ePt1);
-                            Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + h); //move midpoint in z-dir with a distance h
-                            pts1.Add(transMidPt1);
 
                             for (int i = 0; i < pts1.Count - 1; i++)
                             {
@@ -520,12 +527,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve transBeam2 = s.IsoCurve(0, 1);
                             List<Point3d> pts2 = new List<Point3d>();
                             Point3d sPt2 = transBeam2.PointAtStart;
-                            pts1.Add(sPt2);
-                            Point3d ePt2 = transBeam2.PointAtEnd;
-                            pts1.Add(ePt2);
+                            pts2.Add(sPt2);                         
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + h); //move midpoint in z-dir with a distance h
-                            pts1.Add(transMidPt2);
+                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H); //move midpoint in z-dir with a distance h
+                            pts2.Add(transMidPt2);
+                            Point3d ePt2 = transBeam2.PointAtEnd;
+                            pts2.Add(ePt2);
 
                             for (int j = 0; j < pts2.Count - 1; j++)
                             {
@@ -545,7 +552,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
 
                     //Find Columns + nodes
-                    else if (n == "Shortest wall")
+                    else if (n == "Shortest Wall")
                     {
                         Surface s = sh_srf.elementSurface;
 
@@ -574,7 +581,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
                 }
                 // Give the nodes id and add the columns to the SH_Element
-                for (int j = 0; j < col.Count + 1; j++)
+                for (int j = 0; j < col.Count; j++)
                 {
                     Curve c = col[j];
                     if (c.PointAtStart.Z > c.PointAtEnd.Z) //wants the node with the lowest Z value (bottom node)
@@ -601,13 +608,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_col);
                     }
                 }
-                //Add nodes to SH_Elements
+                //Add nodes to Simple Shape
+                _ss.Nodes = new List<SH_Node>();
                 _ss.Nodes.AddRange(nodes);
             }
 
             // ---------------------- SUBSTRUCTOR nr 3 -------------------- (bowed roof)
-            if (nrSub == 3)
+            if (NrSub == 3)
             {
+                _ss.name += "_3";
                 List<Curve> col = new List<Curve>(); //list to store columns before giving id
                 List<SH_Node> nodes = new List<SH_Node>(); //empty list for nodes
                 _ss.Elements["Line"] = new List<SH_Element>(); //empty list
@@ -621,8 +630,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     if (n == "Top")
                     {
                         Surface s = sh_srf.elementSurface;
+
                         //find which side is the longest, store lines and nodes
-                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength())
+                        if (s.IsoCurve(0, 0).GetLength() > s.IsoCurve(1, 1).GetLength() || s.IsoCurve(0, 0).GetLength() == s.IsoCurve(1, 1).GetLength())
                         {
                             Curve longBeam1 = s.IsoCurve(0, 0); //longitudinal beam = longest line of the surface
                             Curve longBeam2 = s.IsoCurve(0, 1);
@@ -643,7 +653,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             //SH_Lines
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub3"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -660,15 +670,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             // Arch 1
                             Curve transBeam1 = s.IsoCurve(1, 0); //get correct line from surface, transversal
                             List<Point3d> bPts1 = new List<Point3d>();
-                            bPts1.Add(transBeam1.PointAtStart);
-                            bPts1.Add(transBeam1.PointAtEnd);
+                            bPts1.Add(transBeam1.PointAtStart);                         
                             Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + h);
+                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H);
                             bPts1.Add(transMidPt1);
+                            bPts1.Add(transBeam1.PointAtEnd);
 
                             Curve arch1 = Curve.CreateControlPointCurve(bPts1, 2); //create arch
                             Point3d[] bowedPts1; 
-                            arch1.DivideByCount(Convert.ToInt32(count), true, out bowedPts1); // Divide arch into segments, store points
+                            arch1.DivideByCount(Convert.ToInt32(Count), true, out bowedPts1); // Divide arch into segments, store points
 
                             for (int j = 0; j < bowedPts1.Length - 1; j++)
                             {
@@ -683,15 +693,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                            // Arch 2
                             Curve transBeam2 = s.IsoCurve(1, 1); //get correct line from surface, transversal
                             List<Point3d> bPts2 = new List<Point3d>();
-                            bPts2.Add(transBeam2.PointAtStart);
-                            bPts2.Add(transBeam2.PointAtEnd);
+                            bPts2.Add(transBeam2.PointAtStart);                         
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + h);
+                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H);
                             bPts2.Add(transMidPt2);
+                            bPts2.Add(transBeam2.PointAtEnd);
 
                             Curve arch2 = Curve.CreateControlPointCurve(bPts2, 2); //create arch
                             Point3d[] bowedPts2;
-                            arch2.DivideByCount(Convert.ToInt32(count), true, out bowedPts2); // Divide arch into segments, store points
+                            arch2.DivideByCount(Convert.ToInt32(Count), true, out bowedPts2); // Divide arch into segments, store points
 
                             for (int k = 0; k < bowedPts2.Length - 1; k++)
                             {
@@ -703,7 +713,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 _ss.Elements["Line"].Add(sh_bowedRoof);
                             }
 
-                            //store nodes from bowedPts1 and bowedPts1
+                            //store nodes from bowedPts1 and bowedPts2
                             for (int node1 = 0; node1 < bowedPts1.Length; node1++)
                             {
                                 SH_Node[] bnodes = new SH_Node[1];
@@ -731,16 +741,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             lnodes2[0] = new SH_Node(longBeam2.PointAtStart, null);
                             lnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
                             SH_Node[] tnodes1 = new SH_Node[2];
-                            tnodes1[0] = new SH_Node(longBeam1.PointAtStart, null);
-                            tnodes1[1] = new SH_Node(longBeam2.PointAtStart, null);
+                            tnodes1[0] = new SH_Node(longBeam1.PointAtEnd, null);
+                            tnodes1[1] = new SH_Node(longBeam2.PointAtEnd, null);
                             SH_Node[] tnodes2 = new SH_Node[2];
-                            tnodes2[0] = new SH_Node(longBeam1.PointAtEnd, null);
-                            tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
+                            tnodes2[0] = new SH_Node(longBeam1.PointAtStart, null);
+                            tnodes2[1] = new SH_Node(longBeam2.PointAtStart, null);
+                            
 
                             //SH_Line
                             SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 1
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
                             _ss.Elements["Line"].Add(sh_longBeam2);
                             SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub3"); //transversal beam 1
                             _ss.Elements["Line"].Add(sh_transBeam1);
@@ -757,15 +768,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             // Arch 1
                             Curve transBeam1 = s.IsoCurve(0, 1); //get correct line from surface, transversal
                             List<Point3d> bPts1 = new List<Point3d>();
-                            bPts1.Add(transBeam1.PointAtStart);
-                            bPts1.Add(transBeam1.PointAtEnd);
+                            bPts1.Add(transBeam1.PointAtStart);                         
                             Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + h);
+                            Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H);
                             bPts1.Add(transMidPt1);
+                            bPts1.Add(transBeam1.PointAtEnd);
 
                             Curve arch1 = Curve.CreateControlPointCurve(bPts1, 2); //create arch
                             Point3d[] bowedPts1;
-                            arch1.DivideByCount(Convert.ToInt32(count), true, out bowedPts1); // Divide arch into segments, store points
+                            arch1.DivideByCount(Convert.ToInt32(Count), true, out bowedPts1); // Divide arch into segments, store points
 
                             for (int j = 0; j < bowedPts1.Length - 1; j++)
                             {
@@ -780,15 +791,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             // Arch 2
                             Curve transBeam2 = s.IsoCurve(0, 0); //get correct line from surface, transversal
                             List<Point3d> bPts2 = new List<Point3d>();
-                            bPts2.Add(transBeam2.PointAtStart);
-                            bPts2.Add(transBeam2.PointAtEnd);
+                            bPts2.Add(transBeam2.PointAtStart);                         
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
-                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + h);
+                            Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H);
                             bPts2.Add(transMidPt2);
+                            bPts2.Add(transBeam2.PointAtEnd);
 
                             Curve arch2 = Curve.CreateControlPointCurve(bPts2, 2); //create arch
                             Point3d[] bowedPts2;
-                            arch2.DivideByCount(Convert.ToInt32(count), true, out bowedPts2); // Divide arch into segments, store points
+                            arch2.DivideByCount(Convert.ToInt32(Count), true, out bowedPts2); // Divide arch into segments, store points
 
                             for (int k = 0; k < bowedPts2.Length - 1; k++)
                             {
@@ -817,7 +828,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
 
                     // Find columns and bottom nodes
-                    else if (n == "Shortest wall")
+                    else if (n == "Shortest Wall")
                     {
                         Surface s = sh_srf.elementSurface;
 
@@ -846,7 +857,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
                 }
                 //Columns and nodes
-                for (int j = 0; j < col.Count + 1; j++)
+                for (int j = 0; j < col.Count; j++)
                 {
                     Curve c = col[j];
                     if (c.PointAtStart.Z > c.PointAtEnd.Z) //wants the node with the lowest Z value (bottom node)
@@ -874,12 +885,13 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
                 }
                 //Add all nodes to SH_Elements
+                _ss.Nodes = new List<SH_Node>();
                 _ss.Nodes.AddRange(nodes);
             }
 
             // change the state
             _ss.SimpleShapeState = State.gamma;
-                    return "BrepToSurface successfully applied.";
+                    return "SubStructureRule successfully applied.";
         }
       
 

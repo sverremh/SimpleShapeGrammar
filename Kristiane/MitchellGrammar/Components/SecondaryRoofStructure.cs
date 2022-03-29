@@ -6,15 +6,15 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class SubStructure : GH_Component
+    public class SecondaryRoofStructure : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the SubStructure class.
+        /// Initializes a new instance of the SecondaryRoofStructure class.
         /// </summary>
-        public SubStructure()
-          : base("Rule_SubStructure", "Nickname",
-              "Defining substructures",
-              "SimpleGrammar", "Kristiane")
+        public SecondaryRoofStructure()
+         : base("Rule_SecondaryRoofStructure", "Nickname",
+             "Generates secondary roof structure",
+             "SimpleGrammar", "Kristiane")
         {
         }
 
@@ -23,17 +23,19 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Number of substructure","nrSub","Gives the number of the substructures",GH_ParamAccess.item,0) ;
-            pManager.AddNumberParameter("Height", "h", "Height for pitched and bowed roof", GH_ParamAccess.item,1);
-            pManager.AddNumberParameter("Count", "c", "Count to divide arhc, bowed roof", GH_ParamAccess.item,6);
+            pManager.AddIntegerParameter("Number of Secondary Roof Structure", " nrSecondaryRS", "Number to select type of Secondary Roof Structure", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Height", " h", "Height for the bowed and pitched secondary roof structure", GH_ParamAccess.item, 1);
+            pManager.AddIntegerParameter("Count", " cnt", "Number of segments for secondary roof structure", GH_ParamAccess.item, 6);
+            pManager.AddIntegerParameter("Amount of Secondary Roof Structure", " numberSecondaryRS", "How many Secondary Roof Structures", GH_ParamAccess.item, 2);
         }
+
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Mitchell Rule Class 2", "MRule2", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 4", "MRule4", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,21 +45,23 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // variables
-            double nrSub = 0; //number of subsection
-            double h = 0; // height
-            double count = 0; //count, divide arch for bowed roof
+            int nrSecondaryRS = 0; //number of secondary roof strcuture for substructure 0 and 1
+            double h = 0; //height for pitched and bowed secondary roof structure
+            int count = 0; //number of segments for secondary roof structure
+            int numberSecondaryRS = 0; //Amount of secondary roof structure elements
+
 
             //input
-            if (!DA.GetData(0, ref nrSub)) return;
+            if (!DA.GetData(0, ref nrSecondaryRS)) return;
             if (!DA.GetData(1, ref h)) return;
             if (!DA.GetData(2, ref count)) return;
+            if (!DA.GetData(3, ref numberSecondaryRS)) return;
 
             // solve
-            SubStructureRule MRule2 = new SubStructureRule(nrSub, h, count);
+            SecondaryRoofStructureRule MRule4 = new SecondaryRoofStructureRule(nrSecondaryRS, h, count, numberSecondaryRS);
 
             // output
-            DA.SetData(0, MRule2);
-
+            DA.SetData(0, MRule4);
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("06690E33-B184-48F2-87A7-541A5E0BAF9F"); }
+            get { return new Guid("B3687A93-FC8C-4259-BE2B-138B9208F2EC"); }
         }
     }
 }

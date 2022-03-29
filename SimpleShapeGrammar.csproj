@@ -85,7 +85,6 @@
     <Compile Include="Classes\Elements\SH_Solid.cs" />
     <Compile Include="Classes\Elements\SH_Surface.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
-    <Compile Include="Classes\Kristiane\Test.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
     <Compile Include="Classes\MOO\SH_Crossover.cs" />
@@ -140,13 +139,15 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
-    <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
-    <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\LateralStabilityRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\SecondaryRoofStructureRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\LateralStability.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\SecondaryRoofStructure.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
