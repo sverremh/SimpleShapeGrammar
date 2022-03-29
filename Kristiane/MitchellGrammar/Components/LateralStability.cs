@@ -6,14 +6,14 @@ using Rhino.Geometry;
 
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class BrepToSurface : GH_Component
+    public class LateralStability : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the BrepToSurface class.
+        /// Initializes a new instance of the LateralStability class.
         /// </summary>
-        public BrepToSurface()
-          : base("Rule_BrepToSurface", "Nickname",
-              "Deconstruct brep into surfaces",
+        public LateralStability()
+          : base("Rule_LateralStability", "Nickname",
+              "Adds lateral stability",
               "SimpleGrammar", "Kristiane")
         {
         }
@@ -23,7 +23,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //pManager.AddBrepParameter("Brep", "B", "Input geometry is a Brep", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Number of Lateral Stability", "nrLatStability", "Number to select type of bracing.", GH_ParamAccess.item,0);
+            pManager.AddIntegerParameter("Wall", "nrWall", "Number to select wall to brace.", GH_ParamAccess.item,0);
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Mitchell Rule Class 1", "MRule1", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 5", "MRule5", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,14 +42,18 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // variables
+            int nrLateralStability = 0; //number of lateral stability
+            int nrWall = 0; // number of wall to brace
 
-            // inputs
+            //input
+            if (!DA.GetData(0, ref nrLateralStability)) return;
+            if (!DA.GetData(1, ref nrWall)) return;
 
             // solve
-            BrepToSurfaceRule MRule1 = new BrepToSurfaceRule();
+            LateralStabilityRule MRule5 = new LateralStabilityRule(nrLateralStability, nrWall);
 
             // output
-            DA.SetData(0, MRule1);
+            DA.SetData(0, MRule5);
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("74EECE0E-63E4-46C5-8C92-45B62D80857E"); }
+            get { return new Guid("28EF03E3-6935-494E-B863-E8553BC2BF40"); }
         }
     }
 }

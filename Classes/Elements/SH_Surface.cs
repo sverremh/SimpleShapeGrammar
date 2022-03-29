@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
 
-using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes.Elements
 {
     [Serializable]
