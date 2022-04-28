@@ -10,7 +10,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_CrossSection_Beam
     {
         // --- properties ---
-        public string Tag { get; set;  }
+        public string Tag { get; set; }
         public string Name { get; set; }
         public SH_Material Material { get; set; }
 
@@ -21,6 +21,12 @@ namespace SimpleShapeGrammar.Classes
         public SH_CrossSection_Beam()
         {
 
+        }
+
+        public SH_CrossSection_Beam(string _Name, SH_Material _Material)
+        {
+            Name = _Name;
+            Material = _Material;
         }
         // --- methods ---
     }

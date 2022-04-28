@@ -9,7 +9,7 @@ using SimpleShapeGrammar.Classes.Elements;
 
 namespace SimpleShapeGrammar.Classes
 {
-    public enum State { alpha, beta, gamma, delta, epsilon, zeta, eta, theta , end}; // add more if needed. 
+    public enum State { alpha, beta, gamma, delta, epsilon, zeta, eta, theta, end }; // add more if needed. 
     [Serializable]
     public class SH_SimpleShape
     {
@@ -17,9 +17,9 @@ namespace SimpleShapeGrammar.Classes
         public int nodeCount = 0;
         public int elementCount = 0;
         public int supCount = 0;
-        public string name = ""; 
+        public string name = "";
         public List<NurbsCurve> NurbsCurves { get; set; }
-        
+
         /// <summary>
         /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
         /// </summary>
@@ -34,7 +34,7 @@ namespace SimpleShapeGrammar.Classes
         public SH_SimpleShape()
         {
             // empty constructor
-            
+
         }
 
         // --- methods ---
@@ -54,30 +54,64 @@ namespace SimpleShapeGrammar.Classes
                 // Create Start point
                 Point3d sPt = sh_line.Nodes[0].Position;
                 // Create End point
-                Point3d ePt = sh_line.Nodes[1].Position;             
+                Point3d ePt = sh_line.Nodes[1].Position;
 
                 lines.Add(new Line(sPt, ePt));
 
             }
 
-            return lines; 
+            return lines;
+        }
+
+
+        public List<Surface> GetSurfacesFromShape()
+        {
+            //Variable
+            List<Surface> surfaces = new List<Surface>();
+
+            //Get Surface from each element
+            var elSurfaces = Elements["Surface"];
+            foreach (SH_Surface sh_surface in elSurfaces)
+            {
+                surfaces.Add(sh_surface.elementSurface);
+            }
+
+            return surfaces;
+        }
+
+        public List<Point3d> GetSupportsFromShape()
+        {
+            //Variable
+            List<Point3d> supports = new List<Point3d>();
+
+            //Get Line from each element
+            var elNodes = Nodes;
+            foreach (SH_Node sh_node in elNodes)
+            {
+                if (sh_node.Position.Z == 0)
+                {
+                    supports.Add(sh_node.Position);
+                }
+            }
+
+            return supports;
         }
 
         public void TranslateNode(Vector3d vec, int nodeInd)
         {
-            
+
             SH_Node node = Nodes[nodeInd];
             Point3d newPoint = node.Position + vec;
             // move the point
             Nodes[nodeInd].Position = newPoint;
             // find the correct support in the list
-            int supInd = Supports.IndexOf( Supports.Find(sup => sup.nodeInd == nodeInd) );
+            int supInd = Supports.IndexOf(Supports.Find(sup => sup.nodeInd == nodeInd));
             // move the support position if present
-            if(supInd != -1)
+            if (supInd != -1)
             {
                 Supports[supInd].Position = newPoint;
             }
-            
+
 
         }
 
@@ -97,7 +131,7 @@ namespace SimpleShapeGrammar.Classes
 
             return simpleShapeCopy;
         }
-        
+
 
     }
 }

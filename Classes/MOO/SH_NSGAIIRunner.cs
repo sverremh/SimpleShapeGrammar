@@ -13,7 +13,7 @@ using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes
 {
-    
+
     class SH_NSGAIIRunner
     {
         // - properties --
@@ -69,11 +69,11 @@ namespace SimpleShapeGrammar.Classes
             // excecute the algorithm
             long initTime = Environment.TickCount;
             SolutionSet population = algorithm.Execute();
-            long estimatedTime = Environment.TickCount - initTime; 
+            long estimatedTime = Environment.TickCount - initTime;
 
             // to do: log info about the solver
 
-                
+
         }
         // -- methods --
     }

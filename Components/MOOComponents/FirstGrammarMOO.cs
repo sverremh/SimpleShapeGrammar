@@ -23,8 +23,8 @@ namespace SimpleShapeGrammar.Components.MOOComponents
             MyRand = new Random();
             comparer = new ObjectiveComparer();
             GrammarRules = new List<object>();
-            GrammarWeights = new List<double>(); 
-            
+            GrammarWeights = new List<double>();
+
         }
 
         // create new component attribute
@@ -35,7 +35,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
 
 
         // -- properties --
-        public SH_SimpleShape SimpleShape { get; private set;  }
+        public SH_SimpleShape SimpleShape { get; private set; }
         public bool mooDone = false;
         public List<List<double>> ObjectiveValues;
         public List<List<SH_Rule>> ObjectiveVariables;
@@ -49,7 +49,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
         private ObjectiveComparer comparer;
         public int solutionsCounter = 0;
         public int populationSize = 0, generations = 0, maxEvals = 0;
-        
+
 
         // create data tree of solutions as global variables
         public DataTree<double> outObjectiveTree;
@@ -103,7 +103,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
             DA.GetData(5, ref Seed); // 5
             if (!DA.GetData(6, ref run)) return; // 6
             DA.GetData(7, ref reset); // 7
-            
+
 
             maxEvals = populationSize * generations; // total number of evaluations
 
@@ -160,7 +160,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
 
             // --- solve ---
             DataTree<SH_Rule> genomeTree = new DataTree<SH_Rule>();
-            DataTree<double> objValTree = new DataTree<double>(); 
+            DataTree<double> objValTree = new DataTree<double>();
             if (run & !mooDone)
             {
                 // instantiate the solver
@@ -173,7 +173,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
                 // Make weights based on the list length. Should be optional input after a while. 
                 GrammarWeights = CreateWeights(GrammarRules, weights);
                 //GrammarWeights = new List<double>() { 0.1, 0.6, 0.15, 0.15 }; // the list of probabilities for each rule to be selected
-                
+
                 // Select optimisation objectives
                 GrammarObjectives = new List<string>() { "max displacement", "total mass" };
 
@@ -182,11 +182,11 @@ namespace SimpleShapeGrammar.Components.MOOComponents
                 var allSolutions = problem.allSolutions;
                 var paretoSolutions = allSolutions.GetRange(allSolutions.Count - 1 - populationSize, populationSize);
 
-                
-                
+
+
                 // set the "Run optimisation" boolean input to False for user safety. 
                 //var runBool = (GH_BooleanToggle) this.Params.Input[5].Sources[0];
-                if (runBool != null) { runBool.Value = false;}
+                if (runBool != null) { runBool.Value = false; }
 
                 mooDone = true;
 
@@ -194,11 +194,11 @@ namespace SimpleShapeGrammar.Components.MOOComponents
                 doc.ScheduleSolution(6, callbackDelegate);
                 GetDataTreesFromResults(allSolutions, out outRules, out outObjectiveTree);
             }
-            
+
 
             DA.SetDataTree(2, outRules);
             DA.SetDataTree(3, outObjectiveTree);
-            
+
 
         }
 
@@ -240,7 +240,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
             {
                 return weightsList;
             }
-            
+
         }
 
         private void Callback(GH_Document doc)
@@ -278,7 +278,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
             genomes = tree1;
             objFitnessValues = tree2;
         }
-        
+
 
         #endregion
 

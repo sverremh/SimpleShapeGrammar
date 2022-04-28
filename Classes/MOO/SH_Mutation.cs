@@ -13,7 +13,7 @@ namespace SimpleShapeGrammar.Classes
     class SH_Mutation : Mutation
     {
         // -- parameters --
-        private static readonly List<Type> VALID_TYPES = new List<Type>() {typeof(SH_SolutionType) };
+        private static readonly List<Type> VALID_TYPES = new List<Type>() { typeof(SH_SolutionType) };
 
         private double? mutationProbability = null;
 
@@ -21,7 +21,7 @@ namespace SimpleShapeGrammar.Classes
         public SH_Mutation(Dictionary<string, object> parameters) : base(parameters)
         {
             //currently, no parameters are used
-            
+
         }
         // -- methods --
 

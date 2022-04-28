@@ -17,10 +17,10 @@ namespace SimpleShapeGrammar.Classes.Rules
     {
         // --- properties ---
         //public State RuleState = State.beta;
-        
+
         public int LineIndex { get; set; }
         public double Param { get; set; }
-        private double[] bounds  = { 0.2, 0.8 };
+        private double[] bounds = { 0.2, 0.8 };
 
 
         // --- constructors ---
@@ -35,7 +35,7 @@ namespace SimpleShapeGrammar.Classes.Rules
             Name = "SH_Rule02";
             LineIndex = _line_index;
             Param = _param;
-            RuleState = State.beta;            
+            RuleState = State.beta;
         }
 
         // --- methods ---
@@ -64,18 +64,18 @@ namespace SimpleShapeGrammar.Classes.Rules
             {
                 if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
                 {
-                   line = (SH_Line)_ss.Elements["Line"][_ss.elementCount-1]; // if out of range, take the last item
+                    line = (SH_Line)_ss.Elements["Line"][_ss.elementCount - 1]; // if out of range, take the last item
                 }
-                
+
             }
-             
+
             double line_length = line.Nodes[0].Position.DistanceTo(line.Nodes[1].Position);
             double segment1 = line_length * Param;
             double segment2 = line_length * (1 - Param);
             // test if the line original length or the splitted segments are smaller than 1 meter. If true the rule cannot be applied. 
             if ((line_length < 1.0) || (segment1 < 1.0) || (segment2 < 1.0))
             {
-                return "The line segment are too short for the rule to be applied on this element"; 
+                return "The line segment are too short for the rule to be applied on this element";
             }
 
             int elInd = _ss.Elements["Line"].IndexOf(line);
@@ -86,15 +86,15 @@ namespace SimpleShapeGrammar.Classes.Rules
 
             // create 2x lines 
             List<SH_Node> nodes = new List<SH_Node>();
-           
+
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
             SH_Line newLine0 = new SH_Line(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
             SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
             _ss.elementCount++;
 
-            
-            
+
+
             // remove the line which has been split
             _ss.Elements["Line"].RemoveAt(elInd);
             _ss.Elements["Line"].Insert(elInd, newLine1);
@@ -163,8 +163,8 @@ namespace SimpleShapeGrammar.Classes.Rules
             // the parameter to use for the rule
             int numLines = ss.elementCount;
             Param = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
-            LineIndex = random.Next(0, numLines-1);
-            
+            LineIndex = random.Next(0, numLines - 1);
+
         }
 
         public override State GetNextState()

@@ -73,20 +73,20 @@ namespace SimpleShapeGrammar.Classes
                             state = simpleShape.SimpleShapeState;
                             // Could log a message here. 
                         }
-                        
+
                         //var copyRule = ruleObject.CopyRule(ruleObject); // this is not working. Need to make it serializable// add the rule to the genome
-                         //  the latest rule object seem to override all the previously entered rules. 
+                        //  the latest rule object seem to override all the previously entered rules. 
 
                         // modify the copied shape with the latest rule
-                        
 
-                        
+
+
                     }
 
 
 
 
-                    
+
 
                     count++;
                 }
@@ -109,7 +109,7 @@ namespace SimpleShapeGrammar.Classes
 
                 variable.SimpleShape = simpleShape;
             }
-            
+
             return genome;
         }
 
@@ -139,6 +139,6 @@ namespace SimpleShapeGrammar.Classes
             }
             return null;
         }
-        
+
     }
 }

@@ -8,7 +8,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_LineLoad : SH_Load
     {
         // --- properties ---
-        public string ElementId{ get; set; }
+        public string ElementId { get; set; }
         public int LoadCase { get; set; }
         public Vector3d Load { get; set; }
 

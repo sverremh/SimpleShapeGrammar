@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SimpleShapeGrammar.Classes.Elements.SH_Element">
+    <Position X="2.75" Y="3.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Elements\SH_Element.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.Elements.SH_Line">
+    <Position X="5.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAgAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Elements\SH_Line.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.Elements.SH_Solid">
+    <Position X="5.5" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Elements\SH_Solid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.Elements.SH_Surface">
+    <Position X="5.5" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Classes\Elements\SH_Surface.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.SH_Node">
+    <Position X="2.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAgAAAQAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\SH_Node.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.SH_SimpleShape">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>GAggAAAAAAAAAAEAAAAQCAAABQAMAABABAAGAAAABIA=</HashCode>
+      <FileName>Classes\SH_SimpleShape.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimpleShapeGrammar.Classes.SH_Rule">
+    <Position X="8.5" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQQAAIAAAAAAAAAABBgAAAA=</HashCode>
+      <FileName>Classes\Rules\SH_Rule.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="SimpleShapeGrammar.Classes.ISH_Rule">
+    <Position X="8.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Classes\Rules\ISH_Rule.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="SimpleShapeGrammar.Classes.State">
+    <Position X="0.5" Y="5.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAACAAACAAAABAAABBAAAAAAAAAAAAgQAEAAAAA=</HashCode>
+      <FileName>Classes\SH_SimpleShape.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

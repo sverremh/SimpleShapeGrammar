@@ -24,8 +24,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("Number of Primary Roof Structure", " nrPrimaryRS", "Number to select type of Primary Roof Structure", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Height", " hBeam", "Beam height for for primary roof structure for substructure 0 and 1.", GH_ParamAccess.item,1);
-            pManager.AddNumberParameter("Count", " Divisions", "Divisions of truss beam for substructure 0 and 1.", GH_ParamAccess.item,4);
+            pManager.AddNumberParameter("Height", " hBeam", "Beam height for for primary roof structure for substructure 0 and 1.", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Count", " Divisions", "Divisions of truss beam for substructure 0 and 1.", GH_ParamAccess.item, 4);
         }
 
 

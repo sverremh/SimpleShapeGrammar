@@ -60,7 +60,7 @@ namespace SimpleShapeGrammar.Classes
                 List<double> lengths = new List<double>();
                 foreach (var nId in adj_IDs)
                 {
-                    double length = Math.Sqrt( Math.Pow(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X, 2) + Math.Pow(ss.Nodes[(int)node.ID].Position.Y - ss.Nodes[nId].Position.Y, 2));
+                    double length = Math.Sqrt(Math.Pow(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X, 2) + Math.Pow(ss.Nodes[(int)node.ID].Position.Y - ss.Nodes[nId].Position.Y, 2));
                     lengths.Add(length);
                     a_1[(int)node.ID, nId] = length;
                 }
@@ -177,12 +177,12 @@ namespace SimpleShapeGrammar.Classes
 
             return new double[] { r1, r2 };
         }
-        public static Dictionary<string, List<Line> > DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces, double h_thrust)
+        public static Dictionary<string, List<Line>> DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces, double h_thrust)
         {
 
 
-            
-            
+
+
 
             Dictionary<string, List<Line>> reciprocal_diagram = new Dictionary<string, List<Line>>();
             List<int> supInd = ss.Supports.Select(s => s.nodeInd).ToList();
@@ -195,9 +195,9 @@ namespace SimpleShapeGrammar.Classes
 
 
             // order the nodes correctly. 
-            List<SH_Node> ordered_nodes = new List<SH_Node> { ss.Nodes[ supInd[0] ] };
+            List<SH_Node> ordered_nodes = new List<SH_Node> { ss.Nodes[supInd[0]] };
             List<int> ordered_indices = new List<int> { 0 }; // list of the indices of the nodes after sorting            
-            SortNodes(ss, ss.Nodes[supInd[0]], ref ordered_nodes, ref ordered_indices); 
+            SortNodes(ss, ss.Nodes[supInd[0]], ref ordered_nodes, ref ordered_indices);
 
             // draw lines for the external forces
             List<Line> external_forces = new List<Line>();
@@ -218,7 +218,7 @@ namespace SimpleShapeGrammar.Classes
                 external_forces.Add(line);
                 count++;
             }
-            
+
             reciprocal_diagram.Add("external", external_forces);
             // Draw lines for element forces
             List<Line> internalForces = new List<Line>();
@@ -228,7 +228,7 @@ namespace SimpleShapeGrammar.Classes
                 Line l = new Line(o, ext_line.From);
                 internalForces.Add(l);
             }
-            internalForces.Add(new Line(o, external_forces[ external_forces.Count-1 ].To));
+            internalForces.Add(new Line(o, external_forces[external_forces.Count - 1].To));
 
             reciprocal_diagram.Add("internal", internalForces);
 
@@ -236,7 +236,7 @@ namespace SimpleShapeGrammar.Classes
             List<double> heights = new List<double>();
             var start_node = ordered_nodes[0]; // start node
             var h0 = ordered_nodes[0].Position.Z; // height at beginning
-            for (int i = 0; i < ordered_indices.Count-1; i++)
+            for (int i = 0; i < ordered_indices.Count - 1; i++)
             {
                 var p1 = ordered_nodes[i].Position; // first node
                 var p2 = ordered_nodes[i + 1].Position; // second node
@@ -245,12 +245,12 @@ namespace SimpleShapeGrammar.Classes
                 var h_i = (f.Direction.Y / f.Direction.X) * (p2.X - p1.X);
                 heights.Add(h_i);
 
-                
-                if(i < ordered_indices.Count - 2)
+
+                if (i < ordered_indices.Count - 2)
                 {
                     // deck nodes
                     var s_node = ss.Nodes[ordered_indices[i]];
-                    var e_node = ss.Nodes[ordered_indices[i+1]];
+                    var e_node = ss.Nodes[ordered_indices[i + 1]];
 
 
                     // add new node for the funicular
@@ -260,7 +260,7 @@ namespace SimpleShapeGrammar.Classes
                     ss.Nodes.Add(end_node);
 
                     // new element for funicular
-                    SH_Node[] nodes = new SH_Node[] {start_node , end_node};
+                    SH_Node[] nodes = new SH_Node[] { start_node, end_node };
                     string name = "funicular";
                     int id = ss.elementCount++;
                     SH_Line funicular = new SH_Line(nodes, id, name);
@@ -274,9 +274,9 @@ namespace SimpleShapeGrammar.Classes
                     start_node = end_node;
                     ss.Elements["Line"].Add(ve);
                 }
-                if(i == ordered_indices.Count - 2)
+                if (i == ordered_indices.Count - 2)
                 {
-                    
+
                     // only adding the element
                     SH_Node[] nodes = new SH_Node[] { start_node, ss.Nodes[1] };
                     string name = "funicular";
@@ -294,27 +294,27 @@ namespace SimpleShapeGrammar.Classes
             List<Line> funiculars = new List<Line>();
 
             Point3d startPt = ss.Nodes[0].Position;
-            
-            // To calculate this I need: 
-                // - The length of the bar underneath (from sorted nodes maybe?)
-                // - The vector representing the direction of each line from the reciprocal diagram. 
-                // - The formular for finding the height of the new node: h_n = l_deck * ( y / x)
 
-            return funiculars; 
+            // To calculate this I need: 
+            // - The length of the bar underneath (from sorted nodes maybe?)
+            // - The vector representing the direction of each line from the reciprocal diagram. 
+            // - The formular for finding the height of the new node: h_n = l_deck * ( y / x)
+
+            return funiculars;
         }
         public static void SortNodes(SH_SimpleShape ss, SH_Node node, ref List<SH_Node> nodes, ref List<int> sort_ind)
         {
-            
+
             List<SH_Element> els = ss.Elements["Line"].Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
             SH_Node new_node = new SH_Node();
-            if(els.Count == 1)
+            if (els.Count == 1)
             {
                 var el = els[0];
                 int new_ind = el.Nodes.First(n => n.ID != node.ID);
                 new_node = el.Nodes[new_ind];
                 nodes.Add(new_node);
                 sort_ind.Add(ss.Nodes.IndexOf(new_node));
-                       
+
             }
             else
             {
@@ -336,6 +336,6 @@ namespace SimpleShapeGrammar.Classes
             }
 
         }
-        
+
     }
 }

@@ -11,7 +11,7 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
         public double HorizontalThrustParameter { get; set; }
         public bool Compression { get; set; }
-        private double[] bounds = {0.1, 0.9};
+        private double[] bounds = { 0.1, 0.9 };
         //public State RuleState = State.gamma;
 
         // --- constructors ---
@@ -45,7 +45,7 @@ namespace SimpleShapeGrammar.Classes
             // --- solve ---
             SH_Evaluation.ConstructMatrices(_ss, out double[,] a, out double[] b);
 
-            
+
 
             // calculate moments over the supports
             double[] moments = SH_Evaluation.CalculateMoments(a, b);
@@ -62,8 +62,8 @@ namespace SimpleShapeGrammar.Classes
             try
             {
                 reciprocal_diagram = SH_Evaluation.DrawReciprocal(_ss, reactions, forces, thrust);
-                
-                
+
+
             }
             catch (Exception ex)
             {
@@ -85,10 +85,10 @@ namespace SimpleShapeGrammar.Classes
         {
             this.bounds[1] = upperBound;
         }
-        
+
         public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
-            HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
+            HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
         }
 
         public override State GetNextState()

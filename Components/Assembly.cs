@@ -56,17 +56,17 @@ namespace SimpleShapeGrammar.Components
             List<SH_Element> elems = new List<SH_Element>();
             List<SH_Support> sups = new List<SH_Support>();
             List<SH_Load> loads = new List<SH_Load>();
-            
+
 
             // --- input ---
             if (!DA.GetDataList(0, elems)) return;
-           
-            if(!DA.GetDataList(1, sups))
+
+            if (!DA.GetDataList(1, sups))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are no supports in the assembly!");
             }
 
-            if(!DA.GetDataList(2, loads))
+            if (!DA.GetDataList(2, loads))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are no loads in the assembly!");
             }
@@ -80,7 +80,7 @@ namespace SimpleShapeGrammar.Components
 
             // --- solve ---
             simpleShape.NurbsCurves = curves;
-            
+
             // renumbering Element Ids
             simpleShape.elementCount = 0;
             // renumbering Node IDs
@@ -88,7 +88,7 @@ namespace SimpleShapeGrammar.Components
             simpleShape.supCount = 0;
 
 
-            
+
             List<SH_Node> nodes = new List<SH_Node>();
             List<SH_Element> numberedElems = new List<SH_Element>();
             foreach (SH_Element e in elems)
@@ -102,11 +102,11 @@ namespace SimpleShapeGrammar.Components
                 foreach (SH_Node node in e.Nodes)
                 {
                     // test if there is already a node in this position
-                    if (nodes.Any(n => n.Position.DistanceToSquared(node.Position) < 0.001 ))
-                    {                        
+                    if (nodes.Any(n => n.Position.DistanceToSquared(node.Position) < 0.001))
+                    {
                         continue;
                     }
-                    
+
 
                     node.ID = simpleShape.nodeCount;
                     nodes.Add(node);
@@ -116,7 +116,7 @@ namespace SimpleShapeGrammar.Components
             }
             simpleShape.Elements["Line"] = numberedElems;
 
-            
+
             /*
             foreach (var sup in sups)
             {
@@ -140,7 +140,7 @@ namespace SimpleShapeGrammar.Components
             // add the loads to the simple shape            
             SortLoads(loads, out List<SH_LineLoad> l_loads, out List<SH_PointLoad> p_loads);
 
-            
+
 
 
 
@@ -172,14 +172,14 @@ namespace SimpleShapeGrammar.Components
             simpleShape.SimpleShapeState = State.alpha;
 
             // --- output ---
-            DA.SetData(0, simpleShape); 
+            DA.SetData(0, simpleShape);
 
 
         }
         /// <summary>
         /// Private methods for this components
         /// </summary>
-        private void SortLoads(List<SH_Load> loads ,out List<SH_LineLoad> line_loads, out List<SH_PointLoad> point_loads)
+        private void SortLoads(List<SH_Load> loads, out List<SH_LineLoad> line_loads, out List<SH_PointLoad> point_loads)
         {
             // create the empty list
             List<SH_PointLoad> pl = new List<SH_PointLoad>();
@@ -190,11 +190,11 @@ namespace SimpleShapeGrammar.Components
             {
                 if (l is SH_LineLoad)
                 {
-                    ll.Add( (SH_LineLoad) l);
+                    ll.Add((SH_LineLoad)l);
                 }
                 if (l is SH_PointLoad)
                 {
-                    pl.Add( (SH_PointLoad) l);
+                    pl.Add((SH_PointLoad)l);
                 }
             }
             line_loads = ll;

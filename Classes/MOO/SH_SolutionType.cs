@@ -19,7 +19,7 @@ namespace SimpleShapeGrammar.Classes
         /// <param name="problem"></param>
         public SH_SolutionType(SH_NSGAIIProblem problem) : base(problem)
         {
-            Problem = problem; 
+            Problem = problem;
         }
         // -- methods -- 
 
@@ -30,8 +30,8 @@ namespace SimpleShapeGrammar.Classes
         public override Variable[] CreateVariables()
         {
             Variable[] variables = new Variable[1];
-            variables[0] = new SH_Variable( (SH_NSGAIIProblem) Problem);
-            return variables; 
+            variables[0] = new SH_Variable((SH_NSGAIIProblem)Problem);
+            return variables;
         }
     }
 }

@@ -84,7 +84,7 @@ namespace SimpleShapeGrammar.Components
             {
                 // karamba point
                 Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
-                
+
 
                 // conditions
                 List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
@@ -111,10 +111,10 @@ namespace SimpleShapeGrammar.Components
 
             // line loads
             var lineLoads = new List<Load>();
-            foreach(var l in ss.LineLoads)
+            foreach (var l in ss.LineLoads)
             {
                 //var ids = l.ElementIds;
-                var ids = l.ElementId; 
+                var ids = l.ElementId;
                 var k_vec = new Vector3(l.Load.X, l.Load.Y, l.Load.Z);
                 var orient = LoadOrientation.global;
                 int lc = l.LoadCase;
@@ -126,12 +126,12 @@ namespace SimpleShapeGrammar.Components
             }
 
             loads.AddRange(lineLoads);
-            
+
 
             // point loads : not implemented yet
-            
-            
-            
+
+
+
 
             // assembly
             double mass;
@@ -158,12 +158,12 @@ namespace SimpleShapeGrammar.Components
         private List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
         {
             // initiate list
-            
+
             List<Line3> k_lines = new List<Line3>();
             List<string> k_names = new List<string>();
             // create karamabe BuilderBeam elements using Factory method
             foreach (SH_Element el in elements)
-            {                
+            {
                 // get node points
                 Point3d sPt = el.Nodes[0].Position;
                 Point3d ePt = el.Nodes[1].Position;
@@ -171,7 +171,7 @@ namespace SimpleShapeGrammar.Components
 
                 Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
                 Point3 k_ePt = new Point3(ePt.X, ePt.Y, ePt.Z);
-                
+
 
                 // create Line3
                 Line3 k_line = new Line3(k_sPt, k_ePt);
@@ -179,8 +179,8 @@ namespace SimpleShapeGrammar.Components
 
                 // add name
                 k_names.Add(el.elementName);
-                
-                
+
+
             }
             el_names = k_names;
             return k_lines;
@@ -200,7 +200,7 @@ namespace SimpleShapeGrammar.Components
             }
             return conditions;
         }
-        
+
 
 
         /// <summary>

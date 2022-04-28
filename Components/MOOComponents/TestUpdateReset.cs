@@ -53,8 +53,8 @@ namespace SimpleShapeGrammar.Components.MOOComponents
 
             // -- register input -- 
             if (!DA.GetData(0, ref run)) return;
-            if (!DA.GetData(1, ref reset)) return; 
-            if(!DA.GetData(2, ref output)) return;
+            if (!DA.GetData(1, ref reset)) return;
+            if (!DA.GetData(2, ref output)) return;
 
 
             // -- solve the problem --
@@ -76,7 +76,7 @@ namespace SimpleShapeGrammar.Components.MOOComponents
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Input component \"Run\" should be a Boolean Toggle.");
                 return;
             }
-             
+
             if (run)
             {
                 /*
@@ -94,28 +94,28 @@ namespace SimpleShapeGrammar.Components.MOOComponents
                 doc.ScheduleSolution(5, callbackDelegate);
                 outVal = outputData;
             }
-            else AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set the Boolean to \"True\" to run the component"); 
+            else AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set the Boolean to \"True\" to run the component");
 
             if (reset)
             {
                 runBool.Value = false;
-                outVal = null; 
+                outVal = null;
                 runBool.ExpireSolution(true); // This expires the input toggle component. Then the downstream component is also recomputed.  
-                
+
 
 
             }
 
-            
-
-            
-             
 
 
-            
+
+
+
+
+
             // -- output -- 
             DA.SetData(0, outVal); // 0
-            
+
         }
 
         private void Callback(GH_Document doc)

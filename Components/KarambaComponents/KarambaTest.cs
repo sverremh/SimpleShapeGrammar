@@ -40,7 +40,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Model_out" ,"mod", "Model of simple beam", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Model_out", "mod", "Model of simple beam", GH_ParamAccess.item);
             //pManager.RegisterParam(new Param_Model(), "Model_out", "Model_out",  "Model after eliminating all tension elements");
         }
 
@@ -88,7 +88,7 @@ namespace SimpleShapeGrammar.Components
             var pload = k3d.Load.PointLoad(1,
                 new Vector3(10, 0, 0), new Vector3());
             var ploads = new List<Load>() { pload };
-            
+
 
             // assembly
             double mass;

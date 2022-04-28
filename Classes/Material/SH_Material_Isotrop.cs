@@ -9,10 +9,10 @@ namespace SimpleShapeGrammar.Classes
     [Serializable]
     public class SH_Material_Isotrop : SH_Material
     {
-        
+
         // --- properties ---
-        
-        
+
+
         public double E { get; private set; }
         public double G_ip { get; private set; }
         public double G_tr { get; private set; }
@@ -33,7 +33,7 @@ namespace SimpleShapeGrammar.Classes
             E = _e;
             Poisson = _v;
             Fy = _fy;
-            G_ip = G_tr = _e / (2 * (1 + _v) );
+            G_ip = G_tr = _e / (2 * (1 + _v));
             alphaT = _alphaT;
 
         }

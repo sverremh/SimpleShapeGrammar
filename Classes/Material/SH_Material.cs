@@ -10,15 +10,20 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Material
     {
         // --- properties ---
-        
+
         public string Tag { get; internal set; }
         public string Family { get; set; }
-        public string Name { get; internal set; }
+        public string Name { get; set; }
         public double Density { get; internal set; }
         // --- constructors --
         public SH_Material()
         {
 
+        }
+
+        public SH_Material(string _Name)
+        {
+            Name = _Name;
         }
         // --- methods 
 

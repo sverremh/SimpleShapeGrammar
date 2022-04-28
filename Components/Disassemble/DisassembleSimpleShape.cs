@@ -38,7 +38,7 @@ namespace SimpleShapeGrammar.Components
 
             // future implementations
 
-            
+
             //pManager.AddGenericParameter("SH_Loads", "loads", "SH_Loads", GH_ParamAccess.list); // 0
         }
 

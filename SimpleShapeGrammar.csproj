@@ -139,7 +139,9 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
+    <Compile Include="Kristiane\CreateVolume.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Classes\ColumnRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\LateralStabilityRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Classes\SecondaryRoofStructureRule.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\LateralStability.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\SecondaryRoofStructure.cs" />
+    <Compile Include="Kristiane\MitchellGrammar\Components\Column.cs" />
     <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -165,6 +168,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Kristiane\ClassDiagram1.cd" />
+    <None Include="Kristiane\ClassDiagram2.cd" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

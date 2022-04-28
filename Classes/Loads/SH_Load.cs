@@ -10,7 +10,7 @@ namespace SimpleShapeGrammar.Classes
     public class SH_Load
     {
         // --- properties ---
-        
+
         // --- constructors ---
 
         // --- methods ---

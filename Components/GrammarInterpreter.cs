@@ -53,7 +53,7 @@ namespace SimpleShapeGrammar.Components
 
             // --- solve ---
 
-            
+
             foreach (SH_Rule rule in rules)
             {
                 try
@@ -66,9 +66,9 @@ namespace SimpleShapeGrammar.Components
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
                     return;
                 }
-                
+
             }
-            
+
 
             // --- output ---
             DA.SetData(0, copyShape);

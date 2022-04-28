@@ -79,7 +79,7 @@ namespace SimpleShapeGrammar.Classes
             // Add the grammar spesific solution type here
             if (solutionType == "SH_Solution")
             {
-                SolutionType = new SH_SolutionType(this); 
+                SolutionType = new SH_SolutionType(this);
             }
             else
             {
@@ -118,15 +118,15 @@ namespace SimpleShapeGrammar.Classes
             {
                 solution.Objective[i] = objectives[i];
             }
-            
+
 
             // add the evaluated solutions to all solutions
-            
+
             currentSolution.ruleList = ruleList;
-            currentSolution.objectiveValues = objectives; 
+            currentSolution.objectiveValues = objectives;
             allSolutions.Add(currentSolution);
 
-            
+
         }
 
         public override void Evaluate(Solution solution)

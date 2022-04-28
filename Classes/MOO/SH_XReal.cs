@@ -72,7 +72,7 @@ namespace SimpleShapeGrammar.Classes
 
             if (type == typeof(SH_SolutionType))
             {
-                ((SH_Variable)SH_solution.SH_Variable[0]).RuleList = ruleList; 
+                ((SH_Variable)SH_solution.SH_Variable[0]).RuleList = ruleList;
             }
             else
             {

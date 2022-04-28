@@ -41,7 +41,7 @@ namespace SimpleShapeGrammar.Classes
             SupportCondition = SetConditions(_support_conditions);
 
             Position = _position;
-            
+
         }
         // --- methods ---
         private int SetConditions(string _stringCondition)
@@ -52,13 +52,13 @@ namespace SimpleShapeGrammar.Classes
             {
                 if (el == '1')
                 {
-                    condition += (int) Math.Pow(2, n);
+                    condition += (int)Math.Pow(2, n);
                 }
-                n++; 
+                n++;
             }
-            return condition;            
+            return condition;
         }
 
-        
+
     }
 }

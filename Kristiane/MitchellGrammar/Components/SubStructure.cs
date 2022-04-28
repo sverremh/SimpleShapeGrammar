@@ -23,9 +23,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Number of substructure","nrSub","Gives the number of the substructures",GH_ParamAccess.item,0) ;
-            pManager.AddNumberParameter("Height", "h", "Height for pitched and bowed roof", GH_ParamAccess.item,1);
-            pManager.AddNumberParameter("Count", "c", "Count to divide arhc, bowed roof", GH_ParamAccess.item,6);
+            pManager.AddNumberParameter("Number of substructure", "nrSub", "Gives the number of the substructures", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Height", "h", "Height for pitched and bowed roof", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Count", "cnt", "Count to divide arhc, bowed roof", GH_ParamAccess.item, 6);
+            pManager.AddTextParameter("Cross-Section", " cSec", "Cross-Section", GH_ParamAccess.item, "200x200");
+            pManager.AddTextParameter("Material", " matName", "Material Name", GH_ParamAccess.item, "timber_C20");
         }
 
         /// <summary>
@@ -46,14 +48,20 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             double nrSub = 0; //number of subsection
             double h = 0; // height
             double count = 0; //count, divide arch for bowed roof
+            string cSec = "200x200"; // cross-section
+            string matName = "timber_C20"; //material
 
             //input
             if (!DA.GetData(0, ref nrSub)) return;
             if (!DA.GetData(1, ref h)) return;
             if (!DA.GetData(2, ref count)) return;
+            if (!DA.GetData(3, ref cSec)) return;
+            DA.GetData(4, ref matName);
+
 
             // solve
-            SubStructureRule MRule2 = new SubStructureRule(nrSub, h, count);
+            SH_Material beamMat = new SH_Material(matName);
+            SubStructureRule MRule2 = new SubStructureRule(nrSub, h, count, cSec, beamMat);
 
             // output
             DA.SetData(0, MRule2);

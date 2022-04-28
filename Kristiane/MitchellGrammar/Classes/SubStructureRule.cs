@@ -17,6 +17,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         public double NrSub; //number of substructure
         public double H; // height for pitched and bowed roof
         public double Count; //counts to divide arch (bowed roof)
+        public string cSec; // Cross section name
+        SH_Material beamMat; // Material
 
 
         // --- constructor --- 
@@ -26,11 +28,13 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             RuleState = State.beta;
         }
 
-        public SubStructureRule(double _nrSub, double _h, double _count)
+        public SubStructureRule(double _nrSub, double _h, double _count, string _cSec, SH_Material _beamMat)
         {
             NrSub = _nrSub;
             H = _h;
             Count = _count;
+            cSec = _cSec;
+            beamMat = _beamMat;
             Name = "SubStructureClass";
             RuleState = State.beta;
         }
@@ -55,6 +59,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             }
 
             _ss.name = "Mitchell";
+            if (Count % 2 == 1)
+            {
+                Count = Count + 1;
+            }
+
             // ---------------------- SUBSTRUCTURE 0 --------------------
             if (NrSub == 0)
             {
@@ -80,34 +89,38 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve longBeam1 = s.IsoCurve(0, 0); //longitudinal beam = longest edge of surface
                             Curve longBeam2 = s.IsoCurve(0, 1);
 
-                                SH_Node[] lnodes1 = new SH_Node[2];
-                                lnodes1[0] = new SH_Node(longBeam1.PointAtStart, null);
-                                lnodes1[1] = new SH_Node(longBeam1.PointAtEnd, null);
-                                SH_Node[] lnodes2 = new SH_Node[2];
-                                lnodes2[0] = new SH_Node(longBeam2.PointAtStart, null);
-                                lnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
-                                SH_Node[] tnodes1 = new SH_Node[2];
-                                tnodes1[0] = new SH_Node(longBeam1.PointAtStart, null);
-                                tnodes1[1] = new SH_Node(longBeam2.PointAtStart, null);
-                                SH_Node[] tnodes2 = new SH_Node[2];
-                                tnodes2[0] = new SH_Node(longBeam1.PointAtEnd, null);
-                                tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
+                            SH_Node[] lnodes1 = new SH_Node[2];
+                            lnodes1[0] = new SH_Node(longBeam1.PointAtStart, null);
+                            lnodes1[1] = new SH_Node(longBeam1.PointAtEnd, null);
+                            SH_Node[] lnodes2 = new SH_Node[2];
+                            lnodes2[0] = new SH_Node(longBeam2.PointAtStart, null);
+                            lnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
+                            SH_Node[] tnodes1 = new SH_Node[2];
+                            tnodes1[0] = new SH_Node(longBeam1.PointAtStart, null);
+                            tnodes1[1] = new SH_Node(longBeam2.PointAtStart, null);
+                            SH_Node[] tnodes2 = new SH_Node[2];
+                            tnodes2[0] = new SH_Node(longBeam1.PointAtEnd, null);
+                            tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
-                                //SH_Line
-                                SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 1
-                                _ss.Elements["Line"].Add(sh_longBeam1);
-                                SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
-                                _ss.Elements["Line"].Add(sh_longBeam2);
-                                SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub0"); //transversal beam 1
-                                _ss.Elements["Line"].Add(sh_transBeam1);
-                                SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub0"); //transversal beam 2
-                                _ss.Elements["Line"].Add(sh_transBeam2);
+                            //SH_Line
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_0"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_longBeam1);
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_0"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                            _ss.Elements["Line"].Add(sh_longBeam2);
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_0"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_transBeam1);
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_0"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                            _ss.Elements["Line"].Add(sh_transBeam2);
 
-                                //store top nodes
-                                nodes.Add(lnodes1[0]);
-                                nodes.Add(lnodes1[1]);
-                                nodes.Add(lnodes2[0]);
-                                nodes.Add(lnodes2[1]);
+                            //store top nodes
+                            nodes.Add(lnodes1[0]);
+                            nodes.Add(lnodes1[1]);
+                            nodes.Add(lnodes2[0]);
+                            nodes.Add(lnodes2[1]);
 
                             //Curve[] c11 = c1.Offset(Plane.WorldXY, t, 000.1, 0);
                             //Curve[] c22 = c2.Offset(Plane.WorldXY, -t, 000.1, 0);
@@ -136,13 +149,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
                             //SH_Line
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_0"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub0"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_0"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub0"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_0"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub0"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_0"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element   
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //store top nodes
@@ -162,7 +179,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         Vector3d vec1 = crv1.TangentAt(0.5);
                         Curve crv2 = s.IsoCurve(1, 1);
                         Vector3d vec2 = crv2.TangentAt(0.5);
-    
+
                         //vertical curves = column
                         if (vec1.Z > 0)
                         {
@@ -179,43 +196,45 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve c2 = s.IsoCurve(1, 1);
                             col.Add(c1);
                             col.Add(c2);
-                        }   
+                        }
                     }
                 }
                 //columns and nodes
                 for (int j = 0; j < col.Count; j++)
                 {
                     Curve c = col[j];
-                        if (c.PointAtStart.Z > c.PointAtEnd.Z) //wants the node with the lowest Z value
-                        {
-                            SH_Node[] cnodes = new SH_Node[2];
-                            cnodes[0] = new SH_Node(c.PointAtStart, null);
-                            cnodes[1] = new SH_Node(c.PointAtEnd, null);
+                    if (c.PointAtStart.Z > c.PointAtEnd.Z) //wants the node with the lowest Z value
+                    {
+                        SH_Node[] cnodes = new SH_Node[2];
+                        cnodes[0] = new SH_Node(c.PointAtStart, null);
+                        cnodes[1] = new SH_Node(c.PointAtEnd, null);
 
-                            nodes.Add(cnodes[1]); //add end node to node list
+                        nodes.Add(cnodes[1]); //add end node to node list
 
-                            SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub0");
-                            _ss.Elements["Line"].Add(sh_col);
-                        }
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element     
+                        _ss.Elements["Line"].Add(sh_col);
+                    }
 
-                        else if (c.PointAtStart.Z < c.PointAtEnd.Z) //wants the node with the lowest Z value
-                        {
-                            SH_Node[] cnodes = new SH_Node[2];
-                            cnodes[0] = new SH_Node(c.PointAtStart, null);
-                            cnodes[1] = new SH_Node(c.PointAtEnd, null);
+                    else if (c.PointAtStart.Z < c.PointAtEnd.Z) //wants the node with the lowest Z value
+                    {
+                        SH_Node[] cnodes = new SH_Node[2];
+                        cnodes[0] = new SH_Node(c.PointAtStart, null);
+                        cnodes[1] = new SH_Node(c.PointAtEnd, null);
 
-                            nodes.Add(cnodes[0]); //add end node to node list
+                        nodes.Add(cnodes[0]); //add end node to node list
 
-                            SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub0");
-                            _ss.Elements["Line"].Add(sh_col);
-                        }
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element     
+                        _ss.Elements["Line"].Add(sh_col);
+                    }
                 }
                 //Add nodes to Simple Shape
-                _ss.Nodes= new List<SH_Node>();
+                _ss.Nodes = new List<SH_Node>();
                 _ss.Nodes.AddRange(nodes);
             }
 
-        
+
             // -------------------- SUBSTRUCTOR nr 1 --------------------
             if (NrSub == 1)
             {
@@ -254,13 +273,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
                             //SH_Line
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_1"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_1"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub1"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_1"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub1"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_1"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //store top nodes
@@ -289,13 +312,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
                             //SH_Line
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_1"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub1"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_1"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub1"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_1"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub1"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_1"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //add top nodes
@@ -332,7 +359,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             col.Add(c2);
                         }
                     }
-                    }
+                }
                 //columns and nodes
                 for (int j = 0; j < col.Count; j++)
                 {
@@ -345,7 +372,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[1]); //add bottom node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub1");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
 
@@ -357,16 +385,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[0]); //add bottom node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub1");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
                 }
 
                 //Add all nodes to Simple Shape
-                _ss.Nodes = new List<SH_Node>(); 
+                _ss.Nodes = new List<SH_Node>();
                 _ss.Nodes.AddRange(nodes);
             }
-            
+
             // ---------------------- SUBSTRUCTOR nr 2 ------------------- (pitched roof)
             if (NrSub == 2)
             {
@@ -403,13 +432,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[0] = new SH_Node(longBeam1.PointAtEnd, null);
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_2"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_2"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub2"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_2"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub2"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_2"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //add top nodes to list
@@ -437,14 +470,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 pnodes1[0] = new SH_Node(pRoof1.From, null);
                                 pnodes1[1] = new SH_Node(pRoof1.To, null);
 
-                                SH_Line sh_pitchedRoof = new SH_Line(pnodes1, _ss.elementCount++, "pitchedRoofSub2"); // pitched roof at one side
+                                SH_Line sh_pitchedRoof = new SH_Line(pnodes1, _ss.elementCount++, "pitchedBeam_Mitchell_2"); // pitched roof at one side
+                                sh_pitchedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_pitchedRoof);
                             }
 
                             Curve transBeam2 = s.IsoCurve(1, 1);
                             List<Point3d> pts2 = new List<Point3d>();
                             Point3d sPt2 = transBeam2.PointAtStart;
-                            pts2.Add(sPt2);                         
+                            pts2.Add(sPt2);
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
                             Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H); //move midpoint in z-dir with a distance h
                             pts2.Add(transMidPt2);
@@ -458,7 +492,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 pnodes2[0] = new SH_Node(pRoof2.From, null);
                                 pnodes2[1] = new SH_Node(pRoof2.To, null);
 
-                                SH_Line sh_pitchedRoof = new SH_Line(pnodes2, _ss.elementCount++, "pitchedRoofSub2"); // pitched roof at one side
+                                SH_Line sh_pitchedRoof = new SH_Line(pnodes2, _ss.elementCount++, "pitchedBeam_Mitchell_2"); // pitched roof at one side
+                                sh_pitchedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_pitchedRoof);
                             }
 
@@ -486,13 +521,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
                             //SH_Line
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_2"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub2"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_2"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub2"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_2"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub2"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_2"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //store top nodes
@@ -505,7 +544,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve transBeam1 = s.IsoCurve(0, 0);
                             List<Point3d> pts1 = new List<Point3d>();
                             Point3d sPt1 = transBeam1.PointAtStart;
-                            pts1.Add(sPt1);                          
+                            pts1.Add(sPt1);
                             Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
                             Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H); //move midpoint in z-dir with a distance h
                             pts1.Add(transMidPt1);
@@ -519,7 +558,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 pnodes1[0] = new SH_Node(pRoof1.From, null);
                                 pnodes1[1] = new SH_Node(pRoof1.To, null);
 
-                                SH_Line sh_pitchedRoof = new SH_Line(pnodes1, _ss.elementCount++, "pitchedRoofSub2"); // pitched roof at one side
+                                SH_Line sh_pitchedRoof = new SH_Line(pnodes1, _ss.elementCount++, "pitchedBeam_Mitchell_2"); // pitched roof at one side
+                                sh_pitchedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_pitchedRoof);
                             }
 
@@ -527,7 +567,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Curve transBeam2 = s.IsoCurve(0, 1);
                             List<Point3d> pts2 = new List<Point3d>();
                             Point3d sPt2 = transBeam2.PointAtStart;
-                            pts2.Add(sPt2);                         
+                            pts2.Add(sPt2);
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
                             Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H); //move midpoint in z-dir with a distance h
                             pts2.Add(transMidPt2);
@@ -541,7 +581,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 pnodes2[0] = new SH_Node(pRoof2.From, null);
                                 pnodes2[1] = new SH_Node(pRoof2.To, null);
 
-                                SH_Line sh_pitchedRoof = new SH_Line(pnodes2, _ss.elementCount++, "pitchedRoofSub2"); // pitched roof at one side
+                                SH_Line sh_pitchedRoof = new SH_Line(pnodes2, _ss.elementCount++, "pitchedBeam_Mitchell_2"); // pitched roof at one side
+                                sh_pitchedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_pitchedRoof);
                             }
 
@@ -592,7 +633,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[1]); //add bottom node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub2");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
 
@@ -604,7 +646,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[0]); //add bottom node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub2");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
                 }
@@ -651,13 +694,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             tnodes2[1] = new SH_Node(longBeam2.PointAtEnd, null);
 
                             //SH_Lines
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_3"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_3"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub3"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_3"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub3"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_3"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //store top nodes
@@ -670,14 +717,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             // Arch 1
                             Curve transBeam1 = s.IsoCurve(1, 0); //get correct line from surface, transversal
                             List<Point3d> bPts1 = new List<Point3d>();
-                            bPts1.Add(transBeam1.PointAtStart);                         
+                            bPts1.Add(transBeam1.PointAtStart);
                             Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
                             Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H);
                             bPts1.Add(transMidPt1);
                             bPts1.Add(transBeam1.PointAtEnd);
 
                             Curve arch1 = Curve.CreateControlPointCurve(bPts1, 2); //create arch
-                            Point3d[] bowedPts1; 
+                            Point3d[] bowedPts1;
                             arch1.DivideByCount(Convert.ToInt32(Count), true, out bowedPts1); // Divide arch into segments, store points
 
                             for (int j = 0; j < bowedPts1.Length - 1; j++)
@@ -686,14 +733,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] bnodes1 = new SH_Node[2];
                                 bnodes1[0] = new SH_Node(bLine1.From, null);
                                 bnodes1[1] = new SH_Node(bLine1.To, null);
-                                SH_Line sh_bowedRoof = new SH_Line(bnodes1, _ss.elementCount++, "bowedRoofSub3"); // bowed roof at one side
+                                SH_Line sh_bowedRoof = new SH_Line(bnodes1, _ss.elementCount++, "bowedBeam_Mitchell_3"); // bowed roof at one side
+                                sh_bowedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_bowedRoof);
                             }
 
-                           // Arch 2
+                            // Arch 2
                             Curve transBeam2 = s.IsoCurve(1, 1); //get correct line from surface, transversal
                             List<Point3d> bPts2 = new List<Point3d>();
-                            bPts2.Add(transBeam2.PointAtStart);                         
+                            bPts2.Add(transBeam2.PointAtStart);
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
                             Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H);
                             bPts2.Add(transMidPt2);
@@ -709,7 +757,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] bnodes2 = new SH_Node[2];
                                 bnodes2[0] = new SH_Node(bLine2.From, null);
                                 bnodes2[1] = new SH_Node(bLine2.To, null);
-                                SH_Line sh_bowedRoof = new SH_Line(bnodes2, _ss.elementCount++, "bowedRoofSub3"); // bowed roof at one side
+                                SH_Line sh_bowedRoof = new SH_Line(bnodes2, _ss.elementCount++, "bowedBeam_Mitchell_3"); // bowed roof at one side
+                                sh_bowedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_bowedRoof);
                             }
 
@@ -731,7 +780,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         else if (s.IsoCurve(0, 0).GetLength() < s.IsoCurve(1, 1).GetLength())
                         {
                             //get the longitudinal beams
-                            Curve longBeam1 = s.IsoCurve(1, 1); 
+                            Curve longBeam1 = s.IsoCurve(1, 1);
                             Curve longBeam2 = s.IsoCurve(1, 0);
 
                             SH_Node[] lnodes1 = new SH_Node[2];
@@ -746,16 +795,20 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] tnodes2 = new SH_Node[2];
                             tnodes2[0] = new SH_Node(longBeam1.PointAtStart, null);
                             tnodes2[1] = new SH_Node(longBeam2.PointAtStart, null);
-                            
+
 
                             //SH_Line
-                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 1
+                            SH_Line sh_longBeam1 = new SH_Line(lnodes1, _ss.elementCount++, "longBeam_Mitchell_3"); //longitudinal beam 1
+                            sh_longBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam1);
-                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeamSub3"); //longitudinal beam 2 
+                            SH_Line sh_longBeam2 = new SH_Line(lnodes2, _ss.elementCount++, "longBeam_Mitchell_3"); //longitudinal beam 2 
+                            sh_longBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_longBeam2);
-                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeamSub3"); //transversal beam 1
+                            SH_Line sh_transBeam1 = new SH_Line(tnodes1, _ss.elementCount++, "transBeam_Mitchell_3"); //transversal beam 1
+                            sh_transBeam1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam1);
-                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeamSub3"); //transversal beam 2
+                            SH_Line sh_transBeam2 = new SH_Line(tnodes2, _ss.elementCount++, "transBeam_Mitchell_3"); //transversal beam 2
+                            sh_transBeam2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                             _ss.Elements["Line"].Add(sh_transBeam2);
 
                             //store top nodes
@@ -768,7 +821,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             // Arch 1
                             Curve transBeam1 = s.IsoCurve(0, 1); //get correct line from surface, transversal
                             List<Point3d> bPts1 = new List<Point3d>();
-                            bPts1.Add(transBeam1.PointAtStart);                         
+                            bPts1.Add(transBeam1.PointAtStart);
                             Point3d midPt1 = transBeam1.PointAtNormalizedLength(0.5);
                             Point3d transMidPt1 = new Point3d(midPt1.X, midPt1.Y, midPt1.Z + H);
                             bPts1.Add(transMidPt1);
@@ -784,14 +837,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] bnodes1 = new SH_Node[2];
                                 bnodes1[0] = new SH_Node(bLine1.From, null);
                                 bnodes1[1] = new SH_Node(bLine1.To, null);
-                                SH_Line sh_bowedRoof = new SH_Line(bnodes1, _ss.elementCount++, "bowedRoofSub3"); // bowed roof at one side
+                                SH_Line sh_bowedRoof = new SH_Line(bnodes1, _ss.elementCount++, "bowedBeam_Mitchell_3"); // bowed roof at one side
+                                sh_bowedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_bowedRoof);
                             }
 
                             // Arch 2
                             Curve transBeam2 = s.IsoCurve(0, 0); //get correct line from surface, transversal
                             List<Point3d> bPts2 = new List<Point3d>();
-                            bPts2.Add(transBeam2.PointAtStart);                         
+                            bPts2.Add(transBeam2.PointAtStart);
                             Point3d midPt2 = transBeam2.PointAtNormalizedLength(0.5);
                             Point3d transMidPt2 = new Point3d(midPt2.X, midPt2.Y, midPt2.Z + H);
                             bPts2.Add(transMidPt2);
@@ -807,7 +861,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] bnodes2 = new SH_Node[2];
                                 bnodes2[0] = new SH_Node(bLine2.From, null);
                                 bnodes2[1] = new SH_Node(bLine2.To, null);
-                                SH_Line sh_bowedRoof = new SH_Line(bnodes2, _ss.elementCount++, "bowedRoofSub3"); // bowed roof at one side
+                                SH_Line sh_bowedRoof = new SH_Line(bnodes2, _ss.elementCount++, "bowedBeam_Mitchell_3"); // bowed roof at one side
+                                sh_bowedRoof.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                                 _ss.Elements["Line"].Add(sh_bowedRoof);
                             }
 
@@ -868,7 +923,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[1]); //add end node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub3");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
 
@@ -880,7 +936,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                         nodes.Add(cnodes[0]); //add end node to node list
 
-                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "ColumnSub3");
+                        SH_Line sh_col = new SH_Line(cnodes, _ss.elementCount++, "Column");
+                        sh_col.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element 
                         _ss.Elements["Line"].Add(sh_col);
                     }
                 }
@@ -889,11 +946,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 _ss.Nodes.AddRange(nodes);
             }
 
+            // Remove surfaces
+            _ss.Elements["Surface"].RemoveAll(el => el.elementName == "Bottom");
+            _ss.Elements["Surface"].RemoveAll(el => el.elementName == "Top");
+            _ss.Elements["Surface"].RemoveAll(el => el.elementName == "Shortest Wall");
+            _ss.Elements["Surface"].RemoveAll(el => el.elementName == "Longest Wall");
+
             // change the state
             _ss.SimpleShapeState = State.gamma;
-                    return "SubStructureRule successfully applied.";
+            return "SubStructureRule successfully applied.";
         }
-      
+
 
         public override State GetNextState()
         {

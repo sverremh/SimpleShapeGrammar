@@ -11,7 +11,7 @@ using Rhino.Geometry;
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
     [Serializable]
-    public class PrimaryRoofStructureRule : SH_Rule 
+    public class PrimaryRoofStructureRule : SH_Rule
     {
         // --- properties ---
         public double nrPrimaryRS;
@@ -53,23 +53,38 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 return "The State is not compatible with PrimaryRoofStructureRule.";
             }
 
+            // Get material and cross section from substructure 
+            var elements = from el in _ss.Elements["Line"]
+                           where el.elementName.Contains("Mitchell")
+                           select el;
+
+            SH_Line sh_el = (SH_Line)elements.ElementAt(0);
+            string matName = sh_el.CrossSection.Material.Name;
+            SH_Material beamMat = new SH_Material(matName);
+            string cSec = sh_el.CrossSection.Name;
+
             // Get the substructure number from MRule2
             string name = _ss.name;
             string[] nrSub = name.Split('_');
 
             List<SH_Node> nodeLst = new List<SH_Node>(); //list for nodes
 
+            if (count % 2 == 1)
+            {
+                count = count + 1;
+            }
+
             // ------------- Primary roof structure for substructure 0 ------------- 
             if (nrSub[1] == "0")
             {
                 // ------------- Truss ------------
-                if (nrPrimaryRS == 0) 
+                if (nrPrimaryRS == 0)
                 {
                     _ss.name += "_0"; //Add number of primary substructure to _ss.name
 
                     //Search for the two elements that are the transversal beams
                     var tBeams = from tBeam in _ss.Elements["Line"]
-                                 where tBeam.elementName == "transBeamSub0"
+                                 where tBeam.elementName == "transBeam_Mitchell_0"
                                  select tBeam;
 
                     foreach (SH_Element tb in tBeams.ToList())
@@ -89,9 +104,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         nodeLst.Add(nodes[1]);
 
                         //new beam, constructed bases on the first transversal beam
-                        //SH_Line sh_line = new SH_Line(nodes, _ss.elementCount++, "nTransBeamSub0");
-                        //_ss.Elements["Line"].Add(sh_line);
-                        Line tline = new Line(np1 , np2); //top beam/line
+                        Line tline = new Line(np1, np2); //top beam/line
 
                         //Divide beams and sort list, thereby construct lines
                         Point3d[] trussPts1;
@@ -126,24 +139,27 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         }
 
                         //horizontal top lines
-                        for (int i = 0; i < sortedtrussPts1.Count()-1; i++)
+                        for (int i = 0; i < sortedtrussPts1.Count() - 1; i++)
                         {
-                            Line htLine = new Line(sortedtrussPts1[i], sortedtrussPts1[i+1]);
+                            Line htLine = new Line(sortedtrussPts1[i], sortedtrussPts1[i + 1]);
                             SH_Node[] htnodes = new SH_Node[2];
                             htnodes[0] = new SH_Node(htLine.From, null);
                             htnodes[1] = new SH_Node(htLine.To, null);
-                            SH_Line sh_htTrussPrimary = new SH_Line(htnodes, _ss.elementCount++, "htTrussPrimarySub0"); //top horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            //SH_Line sh_htTrussPrimary = new SH_Line(htnodes, _ss.elementCount++, "htTrussPrimarySub0"); //top horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_htTrussPrimary = new SH_Line(htnodes, _ss.elementCount++, "htTrans_Mitchell_0_0");
+                            sh_htTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_htTrussPrimary);
                         }
 
                         //horizontal bottom lines
-                        for (int j = 0; j < sortedtrussPts2.Count()-1; j++)
+                        for (int j = 0; j < sortedtrussPts2.Count() - 1; j++)
                         {
                             Line bhLine = new Line(sortedtrussPts2[j], sortedtrussPts2[j + 1]);
                             SH_Node[] hbnodes = new SH_Node[2];
                             hbnodes[0] = new SH_Node(bhLine.From, null);
                             hbnodes[1] = new SH_Node(bhLine.To, null);
-                            SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTrussPrimarySub0"); //bottom horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTrans_Mitchell_0_0"); //bottom horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_hbTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_hbTrussPrimary);
                         }
 
@@ -154,18 +170,20 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] vnodes = new SH_Node[2];
                             vnodes[0] = new SH_Node(vLine.From, null);
                             vnodes[1] = new SH_Node(vLine.To, null);
-                            SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTrussPrimarySub0"); //verticals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTruss_Mitchell_0_0"); //verticals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_vTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_vTrussPrimary);
                         }
 
                         //diagonal lines
                         for (int i = 0; i < sortedtrussPts2.Count() - 1; i += 2)
                         {
-                            Line dLine = new Line(sortedtrussPts2[i], sortedtrussPts1[i+1]);
+                            Line dLine = new Line(sortedtrussPts2[i], sortedtrussPts1[i + 1]);
                             SH_Node[] dnodes = new SH_Node[2];
                             dnodes[0] = new SH_Node(dLine.From, null);
                             dnodes[1] = new SH_Node(dLine.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTrussPrimarySub0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTruss_Mitchell_0_0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_dTrussPrimary);
                         }
                         for (int j = 1; j < sortedtrussPts1.Count() - 1; j += 2)
@@ -174,7 +192,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] dnodes = new SH_Node[2];
                             dnodes[0] = new SH_Node(dLine.From, null);
                             dnodes[1] = new SH_Node(dLine.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTrussPrimarySub0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTruss_Mitchell_0_0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_dTrussPrimary);
                         }
 
@@ -193,7 +212,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         }
                     }
                     //Remove transversal beams
-                    _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeamSub0");
+                    _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeam_Mitchell_0");
 
                 }
 
@@ -277,7 +296,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                     //Search for the two elements that are the transversal beams
                     var tBeams = from tBeam in _ss.Elements["Line"]
-                                 where tBeam.elementName == "transBeamSub1"
+                                 where tBeam.elementName == "transBeam_Mitchell_1"
                                  select tBeam;
 
                     foreach (SH_Element tb in tBeams.ToList())
@@ -333,7 +352,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] htnodes = new SH_Node[2];
                             htnodes[0] = new SH_Node(htLine.From, null);
                             htnodes[1] = new SH_Node(htLine.To, null);
-                            SH_Line sh_htTrussPrimary = new SH_Line(htnodes, _ss.elementCount++, "htTrussPrimarySub1"); //top horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_htTrussPrimary = new SH_Line(htnodes, _ss.elementCount++, "htTruss_Mitchell_1_0"); //top horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_htTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_htTrussPrimary);
                         }
 
@@ -344,7 +364,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] hbnodes = new SH_Node[2];
                             hbnodes[0] = new SH_Node(bhLine.From, null);
                             hbnodes[1] = new SH_Node(bhLine.To, null);
-                            SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTrussPrimarySub1"); //bottom horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTruss_Mitchell_1_0"); //bottom horizontals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_hbTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_hbTrussPrimary);
                         }
 
@@ -355,7 +376,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] vnodes = new SH_Node[2];
                             vnodes[0] = new SH_Node(vLine.From, null);
                             vnodes[1] = new SH_Node(vLine.To, null);
-                            SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTrussPrimarySub1"); //verticals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTruss_Mitchell_1_0"); //verticals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_vTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_vTrussPrimary);
                         }
 
@@ -366,7 +388,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] dnodes = new SH_Node[2];
                             dnodes[0] = new SH_Node(dLine.From, null);
                             dnodes[1] = new SH_Node(dLine.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTrussPrimarySub1"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTruss_Mitchell_1_0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_dTrussPrimary);
                         }
                         for (int j = 1; j < sortedtrussPts1.Count() - 1; j += 2)
@@ -375,7 +398,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             SH_Node[] dnodes = new SH_Node[2];
                             dnodes[0] = new SH_Node(dLine.From, null);
                             dnodes[1] = new SH_Node(dLine.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTrussPrimarySub1"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            SH_Line sh_dTrussPrimary = new SH_Line(dnodes, _ss.elementCount++, "dTruss_Mitchell_1_0"); //diagonals for truss beam for Primary Roof Strucutre, substructure 0
+                            sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                             _ss.Elements["Line"].Add(sh_dTrussPrimary);
                         }
 
@@ -394,170 +418,173 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         }
                     }
                     //Remove transversal beams
-                    _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeamSub1");
+                    _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeam_Mitchell_1");
                 }
 
                 if (nrPrimaryRS == 1) // Beam (solid)
                 {
-                    _ss.name += "_1";                                                    
+                    _ss.name += "_1";
                 }
 
             }
             // ------------- Primary roof structure for substructure 2 (pitched roof) ------------- 
             if (nrSub[1] == "2")
             {
-                // only even numbers
-                if (count % 2 == 0)
+                //Search for the transversal beams, bottom beam  
+                var tBeams = from tBeam in _ss.Elements["Line"]
+                             where tBeam.elementName == "transBeam_Mitchell_2"
+                             select tBeam;
+
+                //Search for the two pitched beams
+                var pBeams = from pBeam in _ss.Elements["Line"]
+                             where pBeam.elementName == "pitchedBeam_Mitchell_2"
+                             select pBeam;
+
+                for (int b = 0; b < 2; b++)
                 {
-                    //Search for the transversal beams, bottom beam  
-                    var tBeams = from tBeam in _ss.Elements["Line"]
-                                 where tBeam.elementName == "transBeamSub2"
-                                 select tBeam;
+                    //Bottom beam
+                    Point3d[] bPts;
+                    SH_Element tb = tBeams.ToList().ElementAt(b);
+                    Line bline = new Line(tb.Nodes[0].Position, tb.Nodes[1].Position);
+                    Curve bLine = bline.ToNurbsCurve();
+                    bLine.DivideByCount(Convert.ToInt32(count), true, out bPts);
 
-                    //Search for the two pitched beams
-                    var pBeams = from pBeam in _ss.Elements["Line"]
-                                 where pBeam.elementName == "pitchedRoofSub2"
-                                 select pBeam;
-
-                    for (int b = 0; b < 2; b++)
+                    //Sort the list of points
+                    List<Point3d> sortedbPts = new List<Point3d>();
+                    if (bLine.PointAtEnd.X == bLine.PointAtStart.X)
                     {
-                        //Bottom beam
-                        Point3d[] bPts;
-                        SH_Element tb = tBeams.ToList().ElementAt(b);
-                        Line bline = new Line(tb.Nodes[0].Position, tb.Nodes[1].Position);
-                        Curve bLine = bline.ToNurbsCurve();
-                        bLine.DivideByCount(Convert.ToInt32(count), true, out bPts);
+                        sortedbPts = bPts.OrderBy(pt => pt.Y).ToList();
+                    }
+                    else if (bLine.PointAtEnd.Y == bLine.PointAtStart.Y)
+                    {
+                        sortedbPts = bPts.OrderBy(pt => pt.X).ToList();
+                    }
 
-                        //Sort the list of points
-                        List<Point3d> sortedbPts = new List<Point3d>();
-                        if (bLine.PointAtEnd.X == bLine.PointAtStart.X)
-                        {
-                            sortedbPts = bPts.OrderBy(pt => pt.Y).ToList();
-                        }
-                        else if (bLine.PointAtEnd.Y == bLine.PointAtStart.Y)
-                        {
-                            sortedbPts = bPts.OrderBy(pt => pt.X).ToList();
-                        }
+                    //Inclined beams, pitched beams
+                    Point3d[] pPts;
+                    List<Point3d> ppts = new List<Point3d>();
+                    if (b == 0)
+                    {
+                        SH_Element pb1 = pBeams.ToList().ElementAt(0);
+                        SH_Element pb2 = pBeams.ToList().ElementAt(1);
+                        ppts.Add(pb1.Nodes[0].Position);
+                        ppts.Add(pb1.Nodes[1].Position);
+                        ppts.Add(pb2.Nodes[1].Position);
+                    }
 
-                        //Inclined beams, pitched beams
-                        Point3d[] pPts;
-                        List<Point3d> ppts = new List<Point3d>();
-                        if (b == 0)
-                        {
-                            SH_Element pb1 = pBeams.ToList().ElementAt(0);
-                            SH_Element pb2 = pBeams.ToList().ElementAt(1);
-                            ppts.Add(pb1.Nodes[0].Position);
-                            ppts.Add(pb1.Nodes[1].Position);
-                            ppts.Add(pb2.Nodes[1].Position);
-                        }
-
-                        if (b == 1)
-                        {
-                            SH_Element pb1 = pBeams.ToList().ElementAt(2);
-                            SH_Element pb2 = pBeams.ToList().ElementAt(3);
-                            ppts.Add(pb1.Nodes[0].Position);
-                            ppts.Add(pb1.Nodes[1].Position);
-                            ppts.Add(pb2.Nodes[1].Position);
-                        }
+                    if (b == 1)
+                    {
+                        SH_Element pb1 = pBeams.ToList().ElementAt(2);
+                        SH_Element pb2 = pBeams.ToList().ElementAt(3);
+                        ppts.Add(pb1.Nodes[0].Position);
+                        ppts.Add(pb1.Nodes[1].Position);
+                        ppts.Add(pb2.Nodes[1].Position);
+                    }
 
 
-                        Curve pcrv = Curve.CreateControlPointCurve(ppts, 1);
-                        pcrv.DivideByCount(Convert.ToInt32(count), true, out pPts);
+                    Curve pcrv = Curve.CreateControlPointCurve(ppts, 1);
+                    pcrv.DivideByCount(Convert.ToInt32(count), true, out pPts);
 
-                        //Sort the list of points
-                        List<Point3d> sortedpPts = new List<Point3d>();
-                        if (pcrv.PointAtEnd.X == pcrv.PointAtStart.X)
-                        {
-                            sortedpPts = pPts.OrderBy(pt => pt.Y).ToList();
-                        }
-                        else if (pcrv.PointAtEnd.Y == pcrv.PointAtStart.Y)
-                        {
-                            sortedpPts = pPts.OrderBy(pt => pt.X).ToList();
-                        }
+                    //Sort the list of points
+                    List<Point3d> sortedpPts = new List<Point3d>();
+                    if (pcrv.PointAtEnd.X == pcrv.PointAtStart.X)
+                    {
+                        sortedpPts = pPts.OrderBy(pt => pt.Y).ToList();
+                    }
+                    else if (pcrv.PointAtEnd.Y == pcrv.PointAtStart.Y)
+                    {
+                        sortedpPts = pPts.OrderBy(pt => pt.X).ToList();
+                    }
 
-                        //Horizontal bottom lines
-                        for (int i = 0; i < sortedbPts.Count() - 1; i++)
-                        {
-                            Line hbline = new Line(sortedbPts[i], sortedbPts[i + 1]);
-                            SH_Node[] hbnodes = new SH_Node[2];
-                            hbnodes[0] = new SH_Node(hbline.From, null);
-                            hbnodes[1] = new SH_Node(hbline.To, null);
-                            SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTrussPrimarySub2"); //bottom horizontals for trusses for Primary Roof Strucutre, substructure 2
-                            _ss.Elements["Line"].Add(sh_hbTrussPrimary);
-                        }
+                    //Horizontal bottom lines
+                    for (int i = 0; i < sortedbPts.Count() - 1; i++)
+                    {
+                        Line hbline = new Line(sortedbPts[i], sortedbPts[i + 1]);
+                        SH_Node[] hbnodes = new SH_Node[2];
+                        hbnodes[0] = new SH_Node(hbline.From, null);
+                        hbnodes[1] = new SH_Node(hbline.To, null);
+                        SH_Line sh_hbTrussPrimary = new SH_Line(hbnodes, _ss.elementCount++, "hbTruss_Mitchell_2_"); //bottom horizontals for trusses for Primary Roof Strucutre, substructure 2
+                        sh_hbTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                        _ss.Elements["Line"].Add(sh_hbTrussPrimary);
+                    }
 
-                        //Vertical lines
-                        for (int n = 1; n < sortedbPts.Count() - 1; n++)
-                        {
-                            Line vline = new Line(sortedbPts[n], sortedpPts[n]);
-                            SH_Node[] vnodes = new SH_Node[2];
-                            vnodes[0] = new SH_Node(vline.From, null);
-                            vnodes[1] = new SH_Node(vline.To, null);
-                            SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTrussPrimarySub2"); //verticals for trusses for Primary Roof Strucutre, substructure 2
-                            _ss.Elements["Line"].Add(sh_vTrussPrimary);
-                        }
+                    //Vertical lines
+                    for (int n = 1; n < sortedbPts.Count() - 1; n++)
+                    {
+                        Line vline = new Line(sortedbPts[n], sortedpPts[n]);
+                        SH_Node[] vnodes = new SH_Node[2];
+                        vnodes[0] = new SH_Node(vline.From, null);
+                        vnodes[1] = new SH_Node(vline.To, null);
+                        SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTruss_Mitchell_2_"); //verticals for trusses for Primary Roof Strucutre, substructure 2
+                        sh_vTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                        _ss.Elements["Line"].Add(sh_vTrussPrimary);
+                    }
 
-                        //Pitched lines
-                        for (int j = 0; j < sortedpPts.Count() - 1; j++)
-                        {
-                            Line pLine = new Line(sortedpPts[j], sortedpPts[j + 1]);
-                            SH_Node[] pnodes = new SH_Node[2];
-                            pnodes[0] = new SH_Node(pLine.From, null);
-                            pnodes[1] = new SH_Node(pLine.To, null);
-                            SH_Line sh_pTrussPrimary = new SH_Line(pnodes, _ss.elementCount++, "pTrussPrimarySub2"); //inclined lines for trusses for Primary Roof Strucutre, substructure 2
-                            _ss.Elements["Line"].Add(sh_pTrussPrimary);
-                        }
+                    //Pitched lines
+                    for (int j = 0; j < sortedpPts.Count() - 1; j++)
+                    {
+                        Line pLine = new Line(sortedpPts[j], sortedpPts[j + 1]);
+                        SH_Node[] pnodes = new SH_Node[2];
+                        pnodes[0] = new SH_Node(pLine.From, null);
+                        pnodes[1] = new SH_Node(pLine.To, null);
+                        SH_Line sh_pTrussPrimary = new SH_Line(pnodes, _ss.elementCount++, "pTruss_Mitchell_2_"); //inclined lines for trusses for Primary Roof Strucutre, substructure 2
+                        sh_pTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                        _ss.Elements["Line"].Add(sh_pTrussPrimary);
+                    }
 
-                        //Trusses/diagonals
-                        for (int k = 1; k < sortedbPts.Count() / 2; k++)
-                        {
-                            Line line = new Line(sortedpPts[k], sortedbPts[k + 1]);
-                            SH_Node[] nodes = new SH_Node[2];
-                            nodes[0] = new SH_Node(line.From, null);
-                            nodes[1] = new SH_Node(line.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(nodes, _ss.elementCount++, "dTrussPrimarySub2"); //diagonals for trusses for Primary Roof Strucutre, substructure 2
-                            _ss.Elements["Line"].Add(sh_dTrussPrimary);
-                        }
-                        for (int m = sortedbPts.Count() / 2; m < sortedbPts.Count() - 2; m++)
-                        {
-                            Line line = new Line(sortedbPts[m], sortedpPts[m + 1]);
-                            SH_Node[] nodes = new SH_Node[2];
-                            nodes[0] = new SH_Node(line.From, null);
-                            nodes[1] = new SH_Node(line.To, null);
-                            SH_Line sh_dTrussPrimary = new SH_Line(nodes, _ss.elementCount++, "dTrussPrimarySub2"); //diagonals for trusses for Primary Roof Strucutre, substructure 2
-                            _ss.Elements["Line"].Add(sh_dTrussPrimary);
-                        }
+                    //Trusses/diagonals
+                    for (int k = 1; k < sortedbPts.Count() / 2; k++)
+                    {
+                        Line line = new Line(sortedpPts[k], sortedbPts[k + 1]);
+                        SH_Node[] nodes = new SH_Node[2];
+                        nodes[0] = new SH_Node(line.From, null);
+                        nodes[1] = new SH_Node(line.To, null);
+                        SH_Line sh_dTrussPrimary = new SH_Line(nodes, _ss.elementCount++, "dTruss_Mitchell_2_"); //diagonals for trusses for Primary Roof Strucutre, substructure 2
+                        sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                        _ss.Elements["Line"].Add(sh_dTrussPrimary);
+                    }
+                    for (int m = sortedbPts.Count() / 2; m < sortedbPts.Count() - 2; m++)
+                    {
+                        Line line = new Line(sortedbPts[m], sortedpPts[m + 1]);
+                        SH_Node[] nodes = new SH_Node[2];
+                        nodes[0] = new SH_Node(line.From, null);
+                        nodes[1] = new SH_Node(line.To, null);
+                        SH_Line sh_dTrussPrimary = new SH_Line(nodes, _ss.elementCount++, "dTruss_Mitchell_2_"); //diagonals for trusses for Primary Roof Strucutre, substructure 2
+                        sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element    
+                        _ss.Elements["Line"].Add(sh_dTrussPrimary);
+                    }
 
-                        //store nodes from bPts and pPts
-                        for (int node1 = 0; node1 < sortedbPts.Count; node1++)
-                        {
-                            SH_Node[] tnodes = new SH_Node[1];
-                            tnodes[0] = new SH_Node(sortedbPts[node1], null);
-                            nodeLst.Add(tnodes[0]);
-                        }
-                        for (int node1 = 0; node1 < sortedpPts.Count; node1++)
-                        {
-                            SH_Node[] tnodes = new SH_Node[1];
-                            tnodes[0] = new SH_Node(sortedpPts[node1], null);
-                            nodeLst.Add(tnodes[0]);
-                        }
+                    //store nodes from bPts and pPts
+                    for (int node1 = 0; node1 < sortedbPts.Count; node1++)
+                    {
+                        SH_Node[] tnodes = new SH_Node[1];
+                        tnodes[0] = new SH_Node(sortedbPts[node1], null);
+                        nodeLst.Add(tnodes[0]);
+                    }
+                    for (int node1 = 0; node1 < sortedpPts.Count; node1++)
+                    {
+                        SH_Node[] tnodes = new SH_Node[1];
+                        tnodes[0] = new SH_Node(sortedpPts[node1], null);
+                        nodeLst.Add(tnodes[0]);
                     }
                 }
+
                 //Remove transversal and pitched beams
-                _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeamSub2");
-               
+                _ss.Elements["Line"].RemoveAll(el => el.elementName == "pitchedBeam_Mitchell_2");
+                _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeam_Mitchell_2");
+
             }
             // ------------- Primary roof structure for substructure 3 (bowed roof) ------------- 
             if (nrSub[1] == "3")
             {
                 //Search for the transversal beams, bottom beam  
                 var tBeams = from tBeam in _ss.Elements["Line"]
-                             where tBeam.elementName == "transBeamSub3"
+                             where tBeam.elementName == "transBeam_Mitchell_3"
                              select tBeam;
 
                 //Search for the two bowed beams
                 var bBeams = from bBeam in _ss.Elements["Line"]
-                             where bBeam.elementName == "bowedRoofSub3"
+                             where bBeam.elementName == "bowedBeam_Mitchell_3"
                              select bBeam;
 
                 for (int s = 0; s < tBeams.Count(); s++)
@@ -593,9 +620,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         bowedLst = bowedLst2;
                     }
 
-
                     var cnt = bowedLst.Count(); //number of segments of one arch
-                                                //bLine.DivideByCount(cnt - 1, true, out bPts); //one less segment than the arch, for another truss type
+                    //bLine.DivideByCount(cnt - 1, true, out bPts); //one less segment than the arch, for another truss type
                     bLine.DivideByCount(cnt, true, out bPts);
                     //Sort the list of points
                     List<Point3d> sortedbPts = new List<Point3d>();
@@ -622,7 +648,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(botline.From, null);
                         bnodes[1] = new SH_Node(botline.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "bTrussPrimarySub3"); //bottom beams for Primary Roof Strucutre, substructure 3
+                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "bTruss_Mitchell_3_"); //bottom beams for Primary Roof Strucutre, substructure 3
+                        sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_dTrussPrimary);
                     }
 
@@ -645,7 +672,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(line.From, null);
                         bnodes[1] = new SH_Node(line.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTrussPrimarySub3"); //trusses for Primary Roof Strucutre, substructure 3
+                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTruss_Mitchell_3_"); //trusses for Primary Roof Strucutre, substructure 3
+                        sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_dTrussPrimary);
                     }
                     for (int bb2 = bowedLst.Count() / 2; bb2 < bowedLst.Count() - 1; bb2++)
@@ -654,28 +682,10 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(line.From, null);
                         bnodes[1] = new SH_Node(line.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTrussPrimarySub3"); //trusses for Primary Roof Strucutre, substructure 3
+                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTruss_Mitchell_3_"); //trusses for Primary Roof Strucutre, substructure 3
+                        sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_dTrussPrimary);
                     }
-                    /*for (int bb1 = 1; bb1 < bowedLst.Count()-1; bb1++)
-                    {
-                        Line line = new Line(bowedBeams.ElementAt(bb1).Nodes[0].Position, sortedbPts[bb1]);
-                        SH_Node[] bnodes = new SH_Node[2];
-                        bnodes[0] = new SH_Node(line.From, null);
-                        bnodes[1] = new SH_Node(line.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTrussPrimarySub3"); //trusses for Primary Roof Strucutre, substructure 3
-                        _ss.Elements["Line"].Add(sh_dTrussPrimary);
-                    }
-                    for (int bb2 = 1; bb2 < bowedLst.Count()-1; bb2++)
-                    {
-                        Line line = new Line(sortedbPts[bb2], bowedBeams.ElementAt(bb2 + 1).Nodes[0].Position);
-                        SH_Node[] bnodes = new SH_Node[2];
-                        bnodes[0] = new SH_Node(line.From, null);
-                        bnodes[1] = new SH_Node(line.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "dTrussPrimarySub3"); //trusses for Primary Roof Strucutre, substructure 3
-                        _ss.Elements["Line"].Add(sh_dTrussPrimary);
-                    }*/
-                    //Remove transversal and pitched beams
 
                     //vertical lines
                     for (int n = 1; n < sortedbPts.Count() - 1; n++)
@@ -684,15 +694,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] vnodes = new SH_Node[2];
                         vnodes[0] = new SH_Node(vline.From, null);
                         vnodes[1] = new SH_Node(vline.To, null);
-                        SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTrussPrimarySub3"); //verticals for trusses for Primary Roof Strucutre, substructure 2
+                        SH_Line sh_vTrussPrimary = new SH_Line(vnodes, _ss.elementCount++, "vTruss_Mitchell_3_"); //verticals for trusses for Primary Roof Strucutre, substructure 2
+                        sh_vTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_vTrussPrimary);
                     }
                 }
-                    _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeamSub3");
+                //Remove transversa
+                _ss.Elements["Line"].RemoveAll(el => el.elementName == "transBeam_Mitchell_3");
             }
 
             //Add all nodes to SH_Elements
-            _ss.Nodes = new List<SH_Node>();
+            //_ss.Nodes = new List<SH_Node>();
             _ss.Nodes.AddRange(nodeLst);
 
             // change the state

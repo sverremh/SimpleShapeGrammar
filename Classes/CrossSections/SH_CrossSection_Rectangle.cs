@@ -12,7 +12,7 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---        
         public double height;
         public double width;
-       
+
         // --- constructors --
         public SH_CrossSection_Rectangle()
         {
@@ -29,13 +29,13 @@ namespace SimpleShapeGrammar.Classes
             Area = width * height;
         }
 
-        
+
 
         // --- methods ---
         public double GetCrossSectionWeigth()
         {
-            return Area* Material.Density;
+            return Area * Material.Density;
         }
-            
+
     }
 }

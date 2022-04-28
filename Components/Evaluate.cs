@@ -70,10 +70,10 @@ namespace SimpleShapeGrammar.Components
 
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not enough elements to draw reciprocal. Minimum number is 2.");
             }
-            
 
 
-            
+
+
         }
 
         /// <summary>

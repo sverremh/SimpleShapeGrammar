@@ -22,7 +22,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape", "sShape", "The Simple Shape element", GH_ParamAccess.item) ;
+            pManager.AddGenericParameter("Simple Shape", "sShape", "The Simple Shape element", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -31,6 +31,8 @@ namespace SimpleShapeGrammar.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddLineParameter("Lines", "l", "Lines from the simple shape", GH_ParamAccess.list);
+            pManager.AddSurfaceParameter("Surfaces", "srf", "Surfaces from the simple shape", GH_ParamAccess.list);
+            pManager.AddPointParameter("Supports", "sup", "Supports from the simple shape", GH_ParamAccess.list);
             pManager.AddGenericParameter("Test", "test", "test", GH_ParamAccess.list);
         }
 
@@ -48,14 +50,21 @@ namespace SimpleShapeGrammar.Components
 
             // --- solve ---
             List<Line> lines = simpleShape.GetLinesFromShape();
+            List<Surface> surfaces = simpleShape.GetSurfacesFromShape();
+            List<Point3d> supports = simpleShape.GetSupportsFromShape();
+
             List<int?> ids = new List<int?>();
             foreach (var item in simpleShape.Elements["Line"])
             {
                 ids.Add(item.ID);
             }
+
+
             // --- output ---
             DA.SetDataList(0, lines);
-            DA.SetDataList(1, ids);
+            DA.SetDataList(1, surfaces);
+            DA.SetDataList(2, supports);
+            DA.SetDataList(3, ids);
         }
 
         /// <summary>

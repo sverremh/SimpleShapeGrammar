@@ -15,7 +15,7 @@ namespace SimpleShapeGrammar.Classes
         // --- properties ---
         public Vector3d TranslateStart { get; private set; }
         public Vector3d TranslateEnd { get; private set; }
-        
+
 
         private double[] xBounds = { -1.0, 1.0 }; // lower and upper bounds for translation of of support in x direction
         private double[] yBounds = { -1.0, 1.0 }; // lower and upper bounds for translation of of support in y direction
@@ -53,7 +53,7 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // take the 1st element
-            SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
+            SH_Line sh_elem = (SH_Line)_ss.Elements["Line"][0];
 
             // apply the change
             #region NewMethod
@@ -116,7 +116,7 @@ namespace SimpleShapeGrammar.Classes
             double y1 = SH_UtilityClass.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
             double z0 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
             double z1 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
-            
+
             // set the vectors
             TranslateStart = new Vector3d(x0, y0, z0);
             TranslateEnd = new Vector3d(x1, y1, z1);

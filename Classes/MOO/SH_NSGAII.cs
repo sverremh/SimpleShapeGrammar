@@ -12,7 +12,7 @@ using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes
 {
-    class SH_NSGAII: Algorithm
+    class SH_NSGAII : Algorithm
     {
         // -- properties --
 
@@ -20,7 +20,7 @@ namespace SimpleShapeGrammar.Classes
         // -- constructors --
         public SH_NSGAII(SH_NSGAIIProblem problem) : base(problem)
         {
-            SH_Problem = problem; 
+            SH_Problem = problem;
         }
 
         // -- methods --
@@ -73,7 +73,7 @@ namespace SimpleShapeGrammar.Classes
                 SH_Problem.EvaluateConstraints(newSolution);
                 evaluations++;
                 population.Add(newSolution); // try to add a copy
-                
+
             }
 
             List<double> objectives1 = new List<double>();
@@ -91,7 +91,7 @@ namespace SimpleShapeGrammar.Classes
                 // create the offspring solutionSet
                 offspringPopulation = new SolutionSet(populationSize);
                 SH_Solution[] parents = new SH_Solution[2];
-                for (int i = 0; i < populationSize/2; i++)
+                for (int i = 0; i < populationSize / 2; i++)
                 {
                     if (evaluations < maxEvaluations)
                     {
@@ -117,7 +117,7 @@ namespace SimpleShapeGrammar.Classes
 
                         evaluations += 2;
                     }
-                    
+
                 }
                 // create the solutionSet union of parents and offspring
                 union = ((SolutionSet)population).Union(offspringPopulation);
@@ -148,7 +148,7 @@ namespace SimpleShapeGrammar.Classes
 
                     // obtain next front
                     index++;
-                    if (remain>0)
+                    if (remain > 0)
                     {
                         front = ranking.GetSubfront(index);
                     }
@@ -189,7 +189,7 @@ namespace SimpleShapeGrammar.Classes
 
             return Result;
 
-            
+
         }
     }
 }

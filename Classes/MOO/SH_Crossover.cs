@@ -20,7 +20,7 @@ namespace SimpleShapeGrammar.Classes
 
         public SH_Crossover(Dictionary<string, object> parameters) : base(parameters)
         {
-            
+
         }
 
         // -- methods -- 
@@ -28,9 +28,9 @@ namespace SimpleShapeGrammar.Classes
         private SH_Solution[] DoCrossover(SH_Solution parent1, SH_Solution parent2)
         {
             SH_NSGAIIProblem problem = (SH_NSGAIIProblem)parent1.sh_problem;
-            
+
             SH_Solution[] offspring = new SH_Solution[2];
-           
+
             // get the list of SH_Rule to use for identification of splicePoints
             List<SH_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
             List<SH_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
@@ -55,21 +55,21 @@ namespace SimpleShapeGrammar.Classes
             }
 
             // select a random splice pair
-            int spliceInd = JMetalRandom.Next(0, splicePoints.Count-1); // compared to Random.Next(), the JMetalRandom.Next() method gives the maximum value equal to the max input, not smaller than. 
+            int spliceInd = JMetalRandom.Next(0, splicePoints.Count - 1); // compared to Random.Next(), the JMetalRandom.Next() method gives the maximum value equal to the max input, not smaller than. 
             int[] splicePair = splicePoints[spliceInd]; // select the random splice points
 
             // split the list
             List<SH_Rule> p1_1 = p1Genome.GetRange(0, splicePair[0] + 1);
-            List<SH_Rule> p1_2 = p1Genome.GetRange(splicePair[0]+1, p1Genome.Count - p1_1.Count);
+            List<SH_Rule> p1_2 = p1Genome.GetRange(splicePair[0] + 1, p1Genome.Count - p1_1.Count);
 
             List<SH_Rule> p2_1 = p2Genome.GetRange(0, splicePair[1] + 1);
-            List<SH_Rule> p2_2 = p2Genome.GetRange(splicePair[1] +1, p2Genome.Count - p2_1.Count);
+            List<SH_Rule> p2_2 = p2Genome.GetRange(splicePair[1] + 1, p2Genome.Count - p2_1.Count);
 
             List<SH_Rule> o1Genome = p1_1.Concat(p2_2).ToList(); // genome for the first offspring
             List<SH_Rule> o2Genome = p2_1.Concat(p1_2).ToList(); // genome for the second offspring
 
             // create the offspring
-            SH_Variable[] o1Var = new SH_Variable[1] {new SH_Variable(o1Genome) }; // create a variable of the first offspring
+            SH_Variable[] o1Var = new SH_Variable[1] { new SH_Variable(o1Genome) }; // create a variable of the first offspring
             SH_Variable[] o2Var = new SH_Variable[1] { new SH_Variable(o2Genome) }; // create a variable of the second offspring
 
             offspring[0] = new SH_Solution(problem, o1Var);
@@ -91,7 +91,7 @@ namespace SimpleShapeGrammar.Classes
         {
             SH_Solution[] parents = (SH_Solution[])obj; // cast the input to the correct type
 
-            if(parents.Length != 2)
+            if (parents.Length != 2)
             {
                 // to do: Create log message
                 throw new Exception("Exception in " + this.GetType().FullName + ".Excecute");
@@ -103,7 +103,7 @@ namespace SimpleShapeGrammar.Classes
                 // to do: create log message
                 throw new Exception("Exception in " + this.GetType().FullName + ".Excecute():" + " The input SolutionType is not correct.");
             }
-            
+
             SH_Solution[] offspring;
             offspring = DoCrossover(parents[0], parents[1]);
 

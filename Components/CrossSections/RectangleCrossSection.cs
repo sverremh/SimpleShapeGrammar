@@ -54,9 +54,9 @@ namespace SimpleShapeGrammar.Components
             DA.GetData(2, ref height);
 
             // --- solve ---
-            SH_CrossSection_Rectangle crossSection = new SH_CrossSection_Rectangle("Test",height, width);
+            SH_CrossSection_Rectangle crossSection = new SH_CrossSection_Rectangle("Test", height, width);
             crossSection.Material = material;
-            
+
 
             // --- output ---
             DA.SetData(0, crossSection);

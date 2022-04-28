@@ -8,7 +8,7 @@ using JMetalCSharp.Core;
 
 namespace SimpleShapeGrammar.Classes
 {
-    public class SH_Solution : Solution 
+    public class SH_Solution : Solution
     {
         // test if this class is unnecessary
 
@@ -18,7 +18,7 @@ namespace SimpleShapeGrammar.Classes
         public SH_Variable[] SH_Variable { get; set; }
 
         private int numberOfObjectives;
-        
+
         new private int NumberOfObjectives
         {
             get
@@ -53,14 +53,14 @@ namespace SimpleShapeGrammar.Classes
         {
             Variable = variables;
         }
-        
+
         public SH_Solution(SH_NSGAIIProblem _problem)
         {
             sh_problem = _problem;
             Type = _problem.SolutionType;
             numberOfObjectives = _problem.NumberOfObjectives;
             Objective = new double[numberOfObjectives];
-            
+
             Fitness = 0.0;
             KDistance = 0.0;
             CrowdingDistance = 0.0;
@@ -83,6 +83,6 @@ namespace SimpleShapeGrammar.Classes
             SH_Variable = variables;
         }
         // -- methods
-        
+
     }
 }

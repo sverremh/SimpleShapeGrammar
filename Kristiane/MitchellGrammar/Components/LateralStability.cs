@@ -23,8 +23,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Number of Lateral Stability", "nrLatStability", "Number to select type of bracing.", GH_ParamAccess.item,0);
-            pManager.AddIntegerParameter("Wall", "nrWall", "Number to select wall to brace.", GH_ParamAccess.item,0);
+            pManager.AddIntegerParameter("Number of Lateral Stability", "nrLatStability", "Number to select type of bracing.", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("Number of Wall", "nrWall", "Number to select wall to brace.", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Corner distance", "distKneeBrace", "Distance from corner for knee brace", GH_ParamAccess.item, 0.1);
         }
 
         /// <summary>
@@ -44,13 +45,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             // variables
             int nrLateralStability = 0; //number of lateral stability
             int nrWall = 0; // number of wall to brace
+            double distBrace = 0; //distance from corner for knee brace
 
             //input
             if (!DA.GetData(0, ref nrLateralStability)) return;
             if (!DA.GetData(1, ref nrWall)) return;
+            if (!DA.GetData(2, ref distBrace)) return;
 
             // solve
-            LateralStabilityRule MRule5 = new LateralStabilityRule(nrLateralStability, nrWall);
+            LateralStabilityRule MRule5 = new LateralStabilityRule(nrLateralStability, nrWall, distBrace);
 
             // output
             DA.SetData(0, MRule5);

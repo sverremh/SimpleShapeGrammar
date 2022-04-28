@@ -19,7 +19,7 @@ namespace SimpleShapeGrammar.Classes
                 // to do: log message
                 throw new Exception("The input Mutation is not a valid one.");
             }
-                
+
         }
     }
 }

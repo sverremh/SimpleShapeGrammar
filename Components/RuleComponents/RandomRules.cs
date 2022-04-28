@@ -25,9 +25,9 @@ namespace SimpleShapeGrammar.Components
         {
             pManager.AddGenericParameter("Rules", "rules", "List of the rules that can be used", GH_ParamAccess.list); //0
             pManager.AddGenericParameter("Weights", "w", "Optional weights for the different rules. If none are provided, an equal distribution is chosen.", GH_ParamAccess.list); // 1
-            pManager.AddIntegerParameter("RuleNumber", "num", "Number of random rules to be generated.", GH_ParamAccess.item, 5) ; // 2
+            pManager.AddIntegerParameter("RuleNumber", "num", "Number of random rules to be generated.", GH_ParamAccess.item, 5); // 2
 
-            pManager[1].Optional = true; 
+            pManager[1].Optional = true;
 
         }
 
@@ -52,8 +52,8 @@ namespace SimpleShapeGrammar.Components
 
 
             // --- input ---
-            if (!DA.GetDataList(0, rules)) return; 
-            if(!DA.GetDataList(1, weights))
+            if (!DA.GetDataList(0, rules)) return;
+            if (!DA.GetDataList(1, weights))
             {
                 // if no input, create a list corresponding to the length of the rules list.
                 //double w = (1 / rules.Count);
@@ -68,14 +68,14 @@ namespace SimpleShapeGrammar.Components
 
 
             // --- solve ---
-            
+
             // iniate list of output rules
             List<object> out_rules = new List<object>();
 
             var rnd = new Random(Guid.NewGuid().GetHashCode());
             for (int i = 0; i < length; i++)
             {
-                SH_UtilityClass.TakeRandomItem( rules, weights, rnd, out object rule);
+                SH_UtilityClass.TakeRandomItem(rules, weights, rnd, out object rule);
                 out_rules.Add(rule);
             }
 

@@ -1,19 +1,20 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Components.Disassemble
+namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
-    public class DisassemleSupport : GH_Component
+    public class Column : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassemleSupport class.
+        /// Initializes a new instance of the SubStructure class.
         /// </summary>
-        public DisassemleSupport()
-          : base("DisassemleSupport", "Nickname",
-              "Description",
-              "SimpleGrammar", "Disassemble")
+        public Column()
+          : base("Rule_Column", "Nickname",
+              "Defining Column",
+              "SimpleGrammar", "Kristiane")
         {
         }
 
@@ -22,7 +23,8 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Support", "sup", "SH_Support", GH_ParamAccess.item);
+            //pManager.AddNumberParameter("Number of substructure","nrSub","Gives the number of the substructures",GH_ParamAccess.item,0) ;
+
         }
 
         /// <summary>
@@ -30,8 +32,7 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Position", "pos", "Point3d represenation of position", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("SupportCondition", "cond", "Integerr representation of support condition", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Mitchell Rule Class 6", "MRule6", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,23 +41,18 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // ---variables-- -
-            SH_Support sup = new SH_Support();
+            // variables
 
-            // --- input ---
-            if (!DA.GetData(0, ref sup)) return;
+            //input
+            //if (!DA.GetData(0, ref nrSub)) return;
 
-            // --- solve ---
-            Point3d pt = sup.Position;
-            int cond = sup.SupportCondition;
 
-            // future implementations
-            // - Node index
-            // - Support ID
+            // solve
+            ColumnRule MRule2 = new ColumnRule();
 
-            // --- output ---
-            DA.SetData(0, pt);
-            DA.SetData(1, cond);
+            // output
+            DA.SetData(0, MRule2);
+
         }
 
         /// <summary>
@@ -77,7 +73,7 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
+            get { return new Guid("06690E33-B184-48F2-87A7-541A5E0BA676"); }
         }
     }
 }

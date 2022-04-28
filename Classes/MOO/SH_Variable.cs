@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
-using JMetalCSharp.Encoding.Variable; 
+using JMetalCSharp.Encoding.Variable;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -34,18 +34,18 @@ namespace SimpleShapeGrammar.Classes
         {
             RuleList = null;
             Size = 0;
-            problem = null; 
+            problem = null;
         }
         public SH_Variable(List<SH_Rule> ruleList)
         {
             Size = ruleList.Count;
-            RuleList = ruleList; 
+            RuleList = ruleList;
         }
         public SH_Variable(SH_NSGAIIProblem _problem)
         {
             problem = _problem;
             // this method should return both the rule list and the corresponding simpleshape.
-            RuleList = MOO_Utility.NewGenome( this  ,problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
+            RuleList = MOO_Utility.NewGenome(this, problem.availableRules, problem.weights, problem.MyComponent.MyRand, problem.MyComponent.SimpleShape);
             Size = RuleList.Count;
         }
 
@@ -56,7 +56,7 @@ namespace SimpleShapeGrammar.Classes
             Size = RuleList.Count;
         }
 
-        
+
 
         // -- methods --
         public override Variable DeepCopy()

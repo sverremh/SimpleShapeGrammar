@@ -24,7 +24,7 @@ namespace SimpleShapeGrammar.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddIntegerParameter("Length", "len", "The length of the list of rules to be generated.", GH_ParamAccess.item, 5); // 0
-            
+
             // not implemented
             // - weights as list
             // - rules as just classes? Not sure how to solve this best yet.
@@ -45,7 +45,7 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-           
+
             int length = 0;
 
             // --- input ---
@@ -56,7 +56,7 @@ namespace SimpleShapeGrammar.Components
             List<SH_Rule> rulesList = new List<SH_Rule>(); // initiate empty list
             Random random = new Random(Guid.NewGuid().GetHashCode()); // create a guid and use the HashCode as seed for the random instance
             List<object> rules = new List<object>() { "r1", "r2", "rA" };
-            List<double> weights = new List<double>() {0.1, 0.8, 0.1 };
+            List<double> weights = new List<double>() { 0.1, 0.8, 0.1 };
 
             // add the first rule
             rulesList.Add(NewRule01(random));
@@ -88,7 +88,7 @@ namespace SimpleShapeGrammar.Components
             // add final rules
             rulesList.Add(NewRuleA());
             rulesList.Add(NewRule03(random));
-            
+
             // --- output ---
             DA.SetDataList(0, rulesList);
         }
@@ -102,7 +102,7 @@ namespace SimpleShapeGrammar.Components
         private SH_Rule02 NewRule02(Random rnd, ref int numLines)
         {
             int ind = rnd.Next(0, numLines);
-             // double check if this will include the final item in the list. 
+            // double check if this will include the final item in the list. 
             double param = SH_UtilityClass.RandomExtensions.NextDouble(rnd, 0.3, 0.7);
             var r2 = new SH_Rule02(ind, param);
             numLines += 1;

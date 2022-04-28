@@ -16,6 +16,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         // --- properties ---
         public int nrLateralStability;
         public int nrWall;
+        public double distBrace;
 
         // --- constructors ---
         public LateralStabilityRule()
@@ -24,10 +25,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             RuleState = State.epsilon;
         }
 
-        public LateralStabilityRule(int _nrLateralStability, int _nrWall)
+        public LateralStabilityRule(int _nrLateralStability, int _nrWall, double _distBrace)
         {
             nrLateralStability = _nrLateralStability;
             nrWall = _nrWall;
+            distBrace = _distBrace;
             Name = "LateralStabilityClass";
             RuleState = State.epsilon;
         }
@@ -53,83 +55,963 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             }
 
 
-            // Same bracing for all substructures
-            // ------------- nrLateralStability = 0 (Diagonal bracing) ---------- 
-                if (nrLateralStability == 0)
+            // Same bracing for all substructures 
+            var columns = from col in _ss.Elements["Line"]
+                          where col.elementName.Contains("Column")
+                          select col;
+
+            SH_Line sh_el = (SH_Line)columns.ElementAt(0);
+            string matName = sh_el.CrossSection.Material.Name;
+            SH_Material beamMat = new SH_Material(matName);
+            string cSec = sh_el.CrossSection.Name;
+
+            SH_Element col1 = columns.ElementAt(0); //one column
+            SH_Element col2 = new SH_Line(); //diagonal column of col1
+            List<SH_Element> cols = new List<SH_Element>(); //list with the two last columns, that are diagonal from each other
+            for (int c = 1; c < columns.Count(); c++)
+            {
+                if (col1.Nodes[0].Position.X == columns.ElementAt(c).Nodes[0].Position.X || col1.Nodes[0].Position.Y == columns.ElementAt(c).Nodes[0].Position.Y)
                 {
-                    var columns = from col in _ss.Elements["Line"]
-                                  where col.elementName.Contains("ColumnSub")
-                                  select col;
+                    cols.Add(columns.ElementAt(c));
+                }
+                else
+                {
+                    col2 = columns.ElementAt(c);
+                }
+            }
 
-                    //Point to compare with
-                    Point3d pt = columns.ElementAt(0).Nodes[0].Position;
-                    List<Line> linesToCompare = new List<Line>();
-                    for (int c = 1; c < columns.Count(); c++)
+            // Store nodes
+            List<SH_Node> nodeLst = new List<SH_Node>();
+
+            // ------------- nrLateralStability = 0 (DIAGONAL BRACING) ----------
+            if (nrLateralStability == 0)
+            {
+                if (nrWall == 0)
+                {
+                    Line brace = new Line(col1.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position); //0 1
+                    SH_Node[] bnodes = new SH_Node[2];
+                    bnodes[0] = new SH_Node(brace.From, null);
+                    bnodes[1] = new SH_Node(brace.To, null);
+                    SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall0");
+                    sh_diagonalBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_diagonalBrace);
+                }
+                else if (nrWall == 1)
+                {
+                    Line brace = new Line(col2.Nodes[0].Position, cols.ElementAt(1).Nodes[1].Position);
+                    SH_Node[] bnodes = new SH_Node[2];
+                    bnodes[0] = new SH_Node(brace.From, null);
+                    bnodes[1] = new SH_Node(brace.To, null);
+                    SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall3");
+                    sh_diagonalBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_diagonalBrace);
+                }
+                else if (nrWall == 2)
+                {
+                    Line brace = new Line(col1.Nodes[0].Position, cols.ElementAt(1).Nodes[1].Position);
+                    SH_Node[] bnodes = new SH_Node[2];
+                    bnodes[0] = new SH_Node(brace.To, null);
+                    bnodes[1] = new SH_Node(brace.From, null);
+                    SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall1");
+                    sh_diagonalBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_diagonalBrace);
+                }
+                else if (nrWall == 3)
+                {
+                    Line brace = new Line(col2.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position); //01
+                    SH_Node[] bnodes = new SH_Node[2];
+                    bnodes[0] = new SH_Node(brace.To, null);
+                    bnodes[1] = new SH_Node(brace.From, null);
+                    SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall2");
+                    sh_diagonalBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_diagonalBrace);
+                }
+                
+            }
+
+            // ------------- nrLateralStability = 1 (CROSS BRACING) ----------
+            if (nrLateralStability == 1)
+            {
+                if (nrWall == 0)
+                {
+                    Line cbrace1 = new Line(col1.Nodes[0].Position, cols.ElementAt(0).Nodes[1].Position);
+                    SH_Node[] bnodes1 = new SH_Node[2];
+                    bnodes1[0] = new SH_Node(cbrace1.From, null);
+                    bnodes1[1] = new SH_Node(cbrace1.To, null);
+                    SH_Line sh_crossBrace1 = new SH_Line(bnodes1, _ss.elementCount++, "CrossBraceWall0");
+                    sh_crossBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace1);
+
+                    Line cbrace2 = new Line(col1.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position);
+                    SH_Node[] bnodes2 = new SH_Node[2];
+                    bnodes2[0] = new SH_Node(cbrace2.From, null);
+                    bnodes2[1] = new SH_Node(cbrace2.To, null);
+                    SH_Line sh_crossBrace2 = new SH_Line(bnodes2, _ss.elementCount++, "CrossBraceWall0");
+                    sh_crossBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace2);
+                }
+                else if (nrWall == 1)
+                {
+                    Line cbrace1 = new Line(col1.Nodes[0].Position, cols.ElementAt(1).Nodes[1].Position);
+                    SH_Node[] bnodes1 = new SH_Node[2];
+                    bnodes1[0] = new SH_Node(cbrace1.From, null);
+                    bnodes1[1] = new SH_Node(cbrace1.To, null);
+                    SH_Line sh_crossBrace1 = new SH_Line(bnodes1, _ss.elementCount++, "CrossBraceWall1");
+                    sh_crossBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace1);
+
+                    Line cbrace2 = new Line(col1.Nodes[1].Position, cols.ElementAt(1).Nodes[0].Position);
+                    SH_Node[] bnodes2 = new SH_Node[2];
+                    bnodes2[0] = new SH_Node(cbrace2.From, null);
+                    bnodes2[1] = new SH_Node(cbrace2.To, null);
+                    SH_Line sh_crossBrace2 = new SH_Line(bnodes2, _ss.elementCount++, "CrossBraceWall1");
+                    sh_crossBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace2);
+                }
+                else if (nrWall == 2)
+                {
+                    Line cbrace1 = new Line(col2.Nodes[0].Position, cols.ElementAt(0).Nodes[1].Position);
+                    SH_Node[] bnodes1 = new SH_Node[2];
+                    bnodes1[0] = new SH_Node(cbrace1.From, null);
+                    bnodes1[1] = new SH_Node(cbrace1.To, null);
+                    SH_Line sh_crossBrace1 = new SH_Line(bnodes1, _ss.elementCount++, "CrossBraceWall2");
+                    sh_crossBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace1);
+
+                    Line cbrace2 = new Line(col2.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position);
+                    SH_Node[] bnodes2 = new SH_Node[2];
+                    bnodes2[0] = new SH_Node(cbrace2.From, null);
+                    bnodes2[1] = new SH_Node(cbrace2.To, null);
+                    SH_Line sh_crossBrace2 = new SH_Line(bnodes2, _ss.elementCount++, "CrossBraceWall2");
+                    sh_crossBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace2);
+                }
+                else if (nrWall == 3)
+                {
+                    Line cbrace1 = new Line(col2.Nodes[0].Position, cols.ElementAt(1).Nodes[1].Position);
+                    SH_Node[] bnodes1 = new SH_Node[2];
+                    bnodes1[0] = new SH_Node(cbrace1.From, null);
+                    bnodes1[1] = new SH_Node(cbrace1.To, null);
+                    SH_Line sh_crossBrace1 = new SH_Line(bnodes1, _ss.elementCount++, "CrossBraceWall3");
+                    sh_crossBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace1);
+
+                    Line cbrace2 = new Line(col2.Nodes[1].Position, cols.ElementAt(1).Nodes[0].Position);
+                    SH_Node[] bnodes2 = new SH_Node[2];
+                    bnodes2[0] = new SH_Node(cbrace2.From, null);
+                    bnodes2[1] = new SH_Node(cbrace2.To, null);
+                    SH_Line sh_crossBrace2 = new SH_Line(bnodes2, _ss.elementCount++, "CrossBraceWall3");
+                    sh_crossBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_crossBrace2);
+                }
+            }
+
+            // ------------- nrLateralStability = 2 (KNEE BRACES) ----------
+            if (nrLateralStability == 2)
+            {
+                var transBeam = from tBeam in _ss.Elements["Line"]
+                                where tBeam.elementName.Contains("Trans")
+                                select tBeam;
+
+                var longBeam = from lBeam in _ss.Elements["Line"]
+                               where lBeam.elementName.Contains("Longitudinal")
+                               select lBeam;
+                // Wall 0
+                if (nrWall == 0)
+                {
+                    //First knee brace
+                    Point3d pt1 = col1.Nodes[1].Position;
+                    Point3d pt11 = new Point3d(pt1.X + distBrace, pt1.Y, pt1.Z);
+                    Point3d pt12 = new Point3d(pt1.X, pt1.Y, pt1.Z - distBrace);
+
+                    Line kbrace1 = new Line(pt11, pt12);
+                    SH_Node[] knodes1 = new SH_Node[2];
+                    knodes1[0] = new SH_Node(kbrace1.From, null);
+                    knodes1[1] = new SH_Node(kbrace1.To, null);
+                    SH_Line sh_kneeBrace1 = new SH_Line(knodes1, _ss.elementCount++, "KneeBraceWall0");
+                    sh_kneeBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace1);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes1);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
                     {
-                        if (pt.X == columns.ElementAt(c).Nodes[0].Position.X || pt.Y == columns.ElementAt(c).Nodes[0].Position.Y)
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
                         {
-                            Line l = new Line(pt, columns.ElementAt(c).Nodes[1].Position);
-                            linesToCompare.Add(l);
-                        }
-                        else
-                        { 
-                        SH_Element bracingElement = columns.ElementAt(c); //element diagonal from pt
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(brace1.From, null);
+                            knodes11[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(brace2.From, null);
+                            knodes12[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
                         }
                     }
 
-                    
-
-                    //find out which wall the bracing is located
-                    if (linesToCompare[0].Length > linesToCompare[1].Length)
+                    // check intersection with column, and split
+                    foreach (SH_Element c in columns.ToList())
                     {
-                        // ------------ (nrWall = 0) diagonal bracing on longitudinal wall ----------- 
-                        if (nrWall == 0)
-                        {
-                        SH_Node[] bnodes = new SH_Node[2];
-                        bnodes[0] = new SH_Node(linesToCompare[0].From, null);
-                        bnodes[1] = new SH_Node(linesToCompare[0].To, null);
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
 
-                        SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall0");
-                        _ss.Elements["Line"].Add(sh_diagonalBrace);
-                        }
-                        // ------------ (nrWall = 1) diagonal bracing on transversal wall ----------- 
-                        else if (nrWall == 1)
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
                         {
-                            SH_Node[] bnodes = new SH_Node[2];
-                            bnodes[0] = new SH_Node(linesToCompare[1].From, null);
-                            bnodes[1] = new SH_Node(linesToCompare[1].To, null);
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(c1.From, null);
+                            knodes11[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
 
-                            SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall1");
-                            _ss.Elements["Line"].Add(sh_diagonalBrace);
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(c2.From, null);
+                            knodes12[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
                         }
                     }
-                    else if (linesToCompare[0].Length < linesToCompare[1].Length)
+
+                    //Second knee brace
+                    Point3d pt2 = cols.ElementAt(0).Nodes[1].Position;
+                    Point3d pt21 = new Point3d(pt2.X - distBrace, pt2.Y, pt2.Z);
+                    Point3d pt22 = new Point3d(pt2.X, pt2.Y, pt2.Z - distBrace);
+
+                    Line kbrace2 = new Line(pt21, pt22);
+                    SH_Node[] knodes2 = new SH_Node[2];
+                    knodes2[0] = new SH_Node(kbrace2.From, null);
+                    knodes2[1] = new SH_Node(kbrace2.To, null);
+                    SH_Line sh_kneeBrace2 = new SH_Line(knodes2, _ss.elementCount++, "KneeBraceWall0");
+                    sh_kneeBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace2);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes2);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
                     {
-                        // ------------ (nrWall = 0) diagonal bracing on longitudinal wall ----------- 
-                        if (nrWall == 0)
-                        {
-                            SH_Node[] bnodes = new SH_Node[2];
-                            bnodes[0] = new SH_Node(linesToCompare[1].From, null);
-                            bnodes[1] = new SH_Node(linesToCompare[1].To, null);
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace2 = kbrace2.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
 
-                            SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall0");
-                            _ss.Elements["Line"].Add(sh_diagonalBrace);
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(brace1.From, null);
+                            knodes21[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(brace2.From, null);
+                            knodes22[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
                         }
-                        // ------------ (nrWall = 1) diagonal bracing on transversal wall ----------- 
-                        else if (nrWall == 1)
-                        {
-                            SH_Node[] bnodes = new SH_Node[2];
-                            bnodes[0] = new SH_Node(linesToCompare[0].From, null);
-                            bnodes[1] = new SH_Node(linesToCompare[0].To, null);
+                    }
 
-                            SH_Line sh_diagonalBrace = new SH_Line(bnodes, _ss.elementCount++, "DiagonalBraceWall1");
-                            _ss.Elements["Line"].Add(sh_diagonalBrace);
+                    // check intersection with column, and split
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(c1.From, null);
+                            knodes21[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(c2.From, null);
+                            knodes22[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+                }
+                //Wall 1
+                if (nrWall == 1)
+                {
+                    //First knee brace
+                    Point3d pt1 = cols.ElementAt(1).Nodes[1].Position;
+                    Point3d pt11 = new Point3d(pt1.X + distBrace, pt1.Y, pt1.Z);
+                    Point3d pt12 = new Point3d(pt1.X, pt1.Y, pt1.Z - distBrace);
+
+                    Line kbrace1 = new Line(pt11, pt12);
+                    SH_Node[] knodes1 = new SH_Node[2];
+                    knodes1[0] = new SH_Node(kbrace1.From, null);
+                    knodes1[1] = new SH_Node(kbrace1.To, null);
+                    SH_Line sh_kneeBrace1 = new SH_Line(knodes1, _ss.elementCount++, "KneeBraceWall1");
+                    sh_kneeBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace1);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes1);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(brace1.From, null);
+                            knodes11[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(brace2.From, null);
+                            knodes12[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split + make the  new column and beam
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(c1.From, null);
+                            knodes11[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartCo");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(c2.From, null);
+                            knodes12[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    //Second knee brace
+                    Point3d pt2 = col2.Nodes[1].Position;
+                    Point3d pt21 = new Point3d(pt2.X - distBrace, pt2.Y, pt2.Z);
+                    Point3d pt22 = new Point3d(pt2.X, pt2.Y, pt2.Z - distBrace);
+
+                    Line kbrace2 = new Line(pt21, pt22);
+                    SH_Node[] knodes2 = new SH_Node[2];
+                    knodes2[0] = new SH_Node(kbrace2.From, null);
+                    knodes2[1] = new SH_Node(kbrace2.To, null);
+                    SH_Line sh_kneeBrace2 = new SH_Line(knodes2, _ss.elementCount++, "KneeBraceWall1");
+                    sh_kneeBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element  
+                    _ss.Elements["Line"].Add(sh_kneeBrace2);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes2);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(brace1.From, null);
+                            knodes21[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(brace2.From, null);
+                            knodes22[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(c1.From, null);
+                            knodes21[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(c2.From, null);
+                            knodes22[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
                         }
                     }
                 }
 
+                // Wall 2
+                if (nrWall == 2)
+                {
+                    //First knee brace
+                    Point3d pt1 = col1.Nodes[1].Position;
+                    Point3d pt11 = new Point3d(pt1.X, pt1.Y + distBrace, pt1.Z);
+                    Point3d pt12 = new Point3d(pt1.X, pt1.Y, pt1.Z - distBrace);
+
+                    Line kbrace1 = new Line(pt11, pt12);
+                    SH_Node[] knodes1 = new SH_Node[2];
+                    knodes1[0] = new SH_Node(kbrace1.From, null);
+                    knodes1[1] = new SH_Node(kbrace1.To, null);
+                    SH_Line sh_kneeBrace1 = new SH_Line(knodes1, _ss.elementCount++, "KneeBraceWall2");
+                    sh_kneeBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace1);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes1);
+
+                    //check for line intersetion and divide the curves corresponding curves
+                    foreach (SH_Element t in longBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(brace1.From, null);
+                            knodes11[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(brace2.From, null);
+                            knodes12[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        //Curve checkCurve = checkLine.ToNurbsCurve();
+                        //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(c1.From, null);
+                            knodes11[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(c2.From, null);
+                            knodes12[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    //Second knee brace
+                    Point3d pt2 = cols.ElementAt(1).Nodes[1].Position;
+                    Point3d pt21 = new Point3d(pt2.X, pt2.Y - distBrace, pt2.Z);
+                    Point3d pt22 = new Point3d(pt2.X, pt2.Y, pt2.Z - distBrace);
+
+                    Line kbrace2 = new Line(pt21, pt22);
+                    SH_Node[] knodes2 = new SH_Node[2];
+                    knodes2[0] = new SH_Node(kbrace2.From, null);
+                    knodes2[1] = new SH_Node(kbrace2.To, null);
+                    SH_Line sh_kneeBrace2 = new SH_Line(knodes2, _ss.elementCount++, "KneeBraceWall2");
+                    sh_kneeBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace2);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes2);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in longBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(brace1.From, null);
+                            knodes21[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(brace2.From, null);
+                            knodes22[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(c1.From, null);
+                            knodes21[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(c2.From, null);
+                            knodes22[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+                }
+
+                //Wall 3
+                if (nrWall == 3)
+                {
+                    //First knee brace
+                    Point3d pt1 = cols.ElementAt(0).Nodes[1].Position;
+                    Point3d pt11 = new Point3d(pt1.X, pt1.Y + distBrace, pt1.Z);
+                    Point3d pt12 = new Point3d(pt1.X, pt1.Y, pt1.Z - distBrace);
+
+                    Line kbrace1 = new Line(pt11, pt12);
+                    SH_Node[] knodes1 = new SH_Node[2];
+                    knodes1[0] = new SH_Node(kbrace1.From, null);
+                    knodes1[1] = new SH_Node(kbrace1.To, null);
+                    SH_Line sh_kneeBrace1 = new SH_Line(knodes1, _ss.elementCount++, "KneeBraceWall3");
+                    sh_kneeBrace1.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace1);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes1);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(brace1.From, null);
+                            knodes11[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(brace2.From, null);
+                            knodes12[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split + construct new column and beam
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes11 = new SH_Node[2];
+                            knodes11[0] = new SH_Node(c1.From, null);
+                            knodes11[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes12 = new SH_Node[2];
+                            knodes12[0] = new SH_Node(c2.From, null);
+                            knodes12[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    //Second knee brace
+                    Point3d pt2 = col2.Nodes[1].Position;
+                    Point3d pt21 = new Point3d(pt2.X, pt2.Y - distBrace, pt2.Z);
+                    Point3d pt22 = new Point3d(pt2.X, pt2.Y, pt2.Z - distBrace);
+
+                    Line kbrace2 = new Line(pt21, pt22);
+                    SH_Node[] knodes2 = new SH_Node[2];
+                    knodes2[0] = new SH_Node(kbrace2.From, null);
+                    knodes2[1] = new SH_Node(kbrace2.To, null);
+                    SH_Line sh_kneeBrace2 = new SH_Line(knodes2, _ss.elementCount++, "KneeBraceWall3");
+                    sh_kneeBrace2.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                    _ss.Elements["Line"].Add(sh_kneeBrace2);
+
+                    //Store nodes
+                    nodeLst.AddRange(knodes2);
+
+                    //check for line intersetion and diivide the curves corresponding curves
+                    foreach (SH_Element t in transBeam.ToList())
+                    {
+                        Point3d p1 = t.Nodes[0].Position;
+                        Point3d p2 = t.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line brace1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(brace1.From, null);
+                            knodes21[1] = new SH_Node(brace1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line brace2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(brace2.From, null);
+                            knodes22[1] = new SH_Node(brace2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = t.ID;
+                            string name = t.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+
+                    // check intersection with column, and split + construct new column and beam
+                    foreach (SH_Element c in columns.ToList())
+                    {
+                        Point3d p1 = c.Nodes[0].Position;
+                        Point3d p2 = c.Nodes[1].Position;
+                        Line checkLine = new Line(p1, p2);
+                        double intersectPt1;
+                        double intersectPt2;
+
+                        bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
+                        if (intersection == true)
+                        {
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            Line c1 = new Line(checkLine.From, intersectPt);
+                            SH_Node[] knodes21 = new SH_Node[2];
+                            knodes21[0] = new SH_Node(c1.From, null);
+                            knodes21[1] = new SH_Node(c1.To, null);
+                            SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartCol");
+                            sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace);
+
+                            Line c2 = new Line(intersectPt, checkLine.To);
+                            SH_Node[] knodes22 = new SH_Node[2];
+                            knodes22[0] = new SH_Node(c2.From, null);
+                            knodes22[1] = new SH_Node(c2.To, null);
+                            SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartCol");
+                            sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
+                            _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                            //Remove the SH_element that intersect
+                            int? id = c.ID;
+                            string name = c.elementName;
+                            _ss.Elements["Line"].RemoveAll(el => el.ID == id && el.elementName == name);
+                        }
+                    }
+                }
+            }
+
+            // ------------- nrLateralStability = 2 (shear wall) ----------
+            if (nrLateralStability == 3)
+            {
+                if (nrWall == 0)
+                {
+                    Point3d corner1 = col1.Nodes[0].Position;
+                    Point3d corner2 = col1.Nodes[1].Position;
+                    Point3d corner3 = cols.ElementAt(0).Nodes[1].Position;
+                    Point3d corner4 = cols.ElementAt(0).Nodes[0].Position;
+                    Surface srf = NurbsSurface.CreateFromCorners(corner1, corner2, corner3, corner4, 0.0001);
+                    SH_Surface sh_srf = new SH_Surface(srf, "ShearWall0");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+
+                if (nrWall == 1)
+                {
+                    Point3d corner1 = col2.Nodes[0].Position;
+                    Point3d corner2 = col2.Nodes[1].Position;
+                    Point3d corner3 = cols.ElementAt(1).Nodes[1].Position;
+                    Point3d corner4 = cols.ElementAt(1).Nodes[0].Position;
+                    Surface srf = NurbsSurface.CreateFromCorners(corner1, corner2, corner3, corner4, 0.0001);
+                    SH_Surface sh_srf = new SH_Surface(srf, "ShearWall1");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+
+                if (nrWall == 2)
+                {
+                    Point3d corner1 = col1.Nodes[0].Position;
+                    Point3d corner2 = col1.Nodes[1].Position;
+                    Point3d corner3 = cols.ElementAt(1).Nodes[1].Position;
+                    Point3d corner4 = cols.ElementAt(1).Nodes[0].Position;
+                    Surface srf = NurbsSurface.CreateFromCorners(corner1, corner2, corner3, corner4, 0.0001);
+                    SH_Surface sh_srf = new SH_Surface(srf, "ShearWall2");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+
+                if (nrWall == 3)
+                {
+                    Point3d corner1 = col2.Nodes[0].Position;
+                    Point3d corner2 = col2.Nodes[1].Position;
+                    Point3d corner3 = cols.ElementAt(0).Nodes[1].Position;
+                    Point3d corner4 = cols.ElementAt(0).Nodes[0].Position;
+                    Surface srf = NurbsSurface.CreateFromCorners(corner1, corner2, corner3, corner4, 0.0001);
+                    SH_Surface sh_srf = new SH_Surface(srf, "ShearWall3");
+                    _ss.Elements["Surface"].Add(sh_srf);
+                }
+            }
+
+            // -------------nrLateralStability = 2(none)----------
+            if (nrLateralStability == 4 && beamMat.Name == "concrete")
+            {
+                if (nrWall == 0 || nrWall == 1 || nrWall == 2 || nrWall == 3)
+                {
+                }
+            }
+
+            //Add nodeFs to Simple Shape
+            //_ss.Nodes = new List<SH_Node>();
+            _ss.Nodes.AddRange(nodeLst);
+
             // change the state
-            _ss.SimpleShapeState = State.zeta;
+            //_ss.SimpleShapeState = State.zeta; (remains in epsilon state)
             return "LateralStability successfully applied.";
 
         }
@@ -137,7 +1019,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
         public override State GetNextState()
         {
-            return State.zeta;
+            return State.epsilon;
         }
 
     }

@@ -22,7 +22,7 @@ namespace SimpleShapeGrammar.Classes
 
         public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
-            
+
         }
 
         public override SH_Rule CopyRule(SH_Rule rule)

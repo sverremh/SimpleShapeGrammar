@@ -36,7 +36,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
 
             // Restart the counter
-            
+
 
             //Initiate the Simple Shape
             SH_SimpleShape simpleShape = new SH_SimpleShape();
@@ -66,13 +66,13 @@ namespace SimpleShapeGrammar.Components
             SH_Node[] nodes = new SH_Node[2];
             nodes[0] = new SH_Node(line.From, null);
             nodes[1] = new SH_Node(line.To, null);
-                   
+
             //SH_Element sH_Element = new SH_Element(nodes, null);
             SH_Line sh_Line = new SH_Line(nodes, null);
             sh_Line.CrossSection = crossSection;
             sh_Line.elementName = name;
-            
-          
+
+
             // --- output ---
             DA.SetData(0, sh_Line);
 

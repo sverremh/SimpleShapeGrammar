@@ -11,10 +11,10 @@ using SimpleShapeGrammar.Classes.Elements;
 namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 {
     [Serializable]
-    public  class BrepToSurfaceRule : SH_Rule
+    public class BrepToSurfaceRule : SH_Rule
     {
         // --- properties ---
-       
+
         // --- constructors ---
         public BrepToSurfaceRule()
         {
@@ -65,7 +65,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 if (sh_solid.Brep.IsPointInside(checkpt, 0, true))
                 {
                     v.Reverse(); // Flips the normal vector if the point is inside of the brep
-                }       
+                }
 
                 if (v.Z > 0)
                 {
@@ -75,7 +75,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 else if (v.Z < 0)
                 {
                     SH_Surface sh_srf = new SH_Surface(srf, "Bottom");
-                    _ss.Elements["Surface"].Add(sh_srf);
+                    _ss.Elements["Surface"].Add(sh_srf); 
                 }
                 else if (v.Z == 0)
                 {
@@ -83,12 +83,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     //double area = AreaMassProperties.Compute(srf).Area;
                     //areas.Add(area);   
                 }
-                
+
             }
 
             // Sort wall into transversal wall = smallest wall, and logintudinal wall = longest wall
             var sortedWalls = walls.OrderBy(w => AreaMassProperties.Compute(w).Area);
-            for (int i = 0;  i < sortedWalls.Count() + 1; i++)
+            for (int i = 0; i < sortedWalls.Count() + 1; i++)
             {
                 if (i == 0 || i == 1)
                 {

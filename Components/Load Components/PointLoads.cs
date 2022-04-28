@@ -22,7 +22,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddVectorParameter("Load Vector", "load", "Load as Vector in x,y,z direction", GH_ParamAccess.item, new Vector3d(0,0,0));
+            pManager.AddVectorParameter("Load Vector", "load", "Load as Vector in x,y,z direction", GH_ParamAccess.item, new Vector3d(0, 0, 0));
             pManager.AddVectorParameter("Moment Vector", "moment", "Moment as Vector", GH_ParamAccess.item, new Vector3d(0, 0, 0));
             pManager.AddPointParameter("Position", "pos", "Position as Point3d", GH_ParamAccess.item);
         }
@@ -32,7 +32,7 @@ namespace SimpleShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Loads", "loads", "An instance of the load class", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Loads", "loads", "An instance of the load class", GH_ParamAccess.item);
         }
 
         /// <summary>

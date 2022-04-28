@@ -7,11 +7,11 @@ using System.Web.UI.WebControls;
 using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes.Elements
 {
-    [Serializable] 
+    [Serializable]
     public abstract class SH_Element //: SH_CrossSection_Beam
     {
         // --- properties ---
-        
+
         public int? ID { get; set; }
         public string elementName { get; set; }
 

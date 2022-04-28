@@ -36,7 +36,7 @@ namespace SimpleShapeGrammar.Classes.Elements
             ID = _id;
             elementSurface = _surface;
         }
-        
+
         // -- methods --
     }
 }
