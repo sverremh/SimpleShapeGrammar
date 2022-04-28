@@ -141,11 +141,7 @@ namespace SimpleShapeGrammar.Components
             SortLoads(loads, out List<SH_LineLoad> l_loads, out List<SH_PointLoad> p_loads);
 
             
-
-
-
-            simpleShape.Nodes = nodes;
-
+            simpleShape.AddNodes(nodes);
 
             // add supports to the simple shape
             List<SH_Support> uniqueSupports = new List<SH_Support>();

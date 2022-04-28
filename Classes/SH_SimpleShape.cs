@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grasshopper.Kernel.Types;
+using Karamba.Nodes;
 using Rhino.Geometry;
 using SimpleShapeGrammar.Classes.Elements;
 
@@ -22,11 +23,12 @@ namespace SimpleShapeGrammar.Classes
         /// <summary>
         /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
         /// </summary>
-        public Dictionary<string, List<SH_Element>> Elements { get; set; } = new Dictionary<string, List<SH_Element>>();
-        public List<SH_Node> Nodes { get; set; }
-        public List<SH_Support> Supports { get; set; }
-        public List<SH_LineLoad> LineLoads { get; set; }
-        public List<SH_PointLoad> PointLoads { get; set; }
+        public Dictionary<string, List<SH_Element>> Elements { get; private set; } = new Dictionary<string, List<SH_Element>>();
+
+        public List<SH_Node> Nodes { get; private set; } = new List<SH_Node>();
+        public List<SH_Support> Supports { get; set; } = new List<SH_Support>();
+        public List<SH_LineLoad> LineLoads { get; set; } = new List<SH_LineLoad>();
+        public List<SH_PointLoad> PointLoads { get; set; } = new List<SH_PointLoad>();
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---
@@ -37,6 +39,15 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
+        public void AddNodes(List<SH_Node> nodes)
+        {
+            Nodes.AddRange(Nodes);
+        }
+
+        public void AddNode(SH_Node node)
+        {
+            Nodes.Add(node);
+        }
         public void AddLine(SH_Element _line)
         {
             if (!Elements.ContainsKey("Line"))
@@ -44,6 +55,15 @@ namespace SimpleShapeGrammar.Classes
                 Elements["Line"] = new List<SH_Element>();
             }
             Elements["Line"].Add(_line);
+        }
+
+        public void AddLines(List<SH_Element> _lines)
+        {
+            if (!Elements.ContainsKey("Line"))
+            {
+                Elements["Line"] = new List<SH_Element>();
+            }
+            Elements["Line"].AddRange(_lines);
         }
 
         public void AddSurface(SH_Element _surface)
