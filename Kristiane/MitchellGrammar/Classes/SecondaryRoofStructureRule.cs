@@ -1253,7 +1253,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 _ss.Elements["Line"].RemoveAll(el => el.elementName == "longBeam_Mitchell_1");
             }
 
-            // ------------- SECONDARY ROOF STRUCTURE FOR SUBSTRUCTURE 0 AND PRIMARY ROOF STRUCTURE 1 (SOLID BEAM) -------------
+            // ------------- SECONDARY ROOF STRUCTURE FOR SUBSTRUCTURE 1 AND PRIMARY ROOF STRUCTURE 1 (SOLID BEAM) -------------
             if (nummberStructure[1] == "1" && nummberStructure[2] == "1")
             {
                 //Collect the two elements that are the transversal beams (bottom beam and top beam)
@@ -1341,10 +1341,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             _ss.Elements["Line"].Add(sh_hbSecondary);
                         }
 
-
                         // Pitched lines/beams  
                         Point3d midpt = bLine.PointAt(0.5);
-                        Point3d moveMidtPt = new Point3d(midpt.X, midpt.Y, midpt.Y + h);
+                        Point3d moveMidtPt = new Point3d(midpt.X, midpt.Y, midpt.Z + h);
                         List<Point3d> pPts = new List<Point3d>(); //store points to create a polyline
                         pPts.Add(pts1[k]);
                         pPts.Add(moveMidtPt);
@@ -1555,7 +1554,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] hnodes = new SH_Node[2];
                         hnodes[0] = new SH_Node(bLine.From, null);
                         hnodes[1] = new SH_Node(bLine.To, null);
-                        SH_Line sh_hbSecondary = new SH_Line(hnodes, _ss.elementCount++, "hb_Mitchell_1_1_2"); //horizontal bottom lines for Secondary Roof Structure, substructure 0 Primary roof structure 1
+                        SH_Line sh_hbSecondary = new SH_Line(hnodes, _ss.elementCount++, "hBeam_Mitchell_1_1_2"); //horizontal bottom lines for Secondary Roof Structure, substructure 0 Primary roof structure 1
                         sh_hbSecondary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_hbSecondary);
                     }
@@ -1696,7 +1695,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
 
                 //Joist
-                for (int pt = 0; pt < pitchedPts.Count() / 2 - 1; pt++)
+                for (int pt = 0; pt < pitchedPts.Count() / 2; pt++)
                 {
                     Line jLine = new Line(pitchedPts[pt], pitchedPts[pt + pitchedPts.Count() / 2]);
                     SH_Node[] nodes = new SH_Node[2];
@@ -1731,6 +1730,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
 
                 // Remove the bowed beams from primary roof structure
                 _ss.Elements["Line"].RemoveAll(el => el.elementName == "pTruss_Mitchell_2_");
+                _ss.Elements["Line"].RemoveAll(el => el.elementName == "longBeam_Mitchell_2");
             }
 
             // ------------- SECONDARY ROOF STRUCTUREE FOR SUBSTRUCTURE 3 (bowed roof) ------------- 
@@ -1764,7 +1764,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
 
                 //Joist
-                for (int pt = 1; pt < bowedPts.Count() / 2 - 1; pt++)
+                for (int pt = 0; pt < bowedPts.Count() / 2; pt++)
                 {
                     Line jLine = new Line(bowedPts[pt], bowedPts[pt + bowedPts.Count() / 2]);
                     SH_Node[] nodes = new SH_Node[2];
@@ -1776,7 +1776,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
 
                 //bowed lines
-                for (int pt = 0; pt < bowedPts.Count() / 2-1 ; pt++)
+                for (int pt = 0; pt < bowedPts.Count() / 2 -1; pt++)
                 {
                     Line bowLine = new Line(bowedPts[pt], bowedPts[pt + 1]);
                     SH_Node[] nodes = new SH_Node[2];
@@ -1798,6 +1798,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
                 // Remove the bowed beams from primary roof structure
                 _ss.Elements["Line"].RemoveAll(el => el.elementName == "bowedBeam_Mitchell_3");
+                _ss.Elements["Line"].RemoveAll(el => el.elementName == "longBeam_Mitchell_3");
             }
 
             //Add all nodes to SH_Elements
