@@ -80,10 +80,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
             }
 
-            // Store nodes
-            List<SH_Node> nodeLst = new List<SH_Node>();
+            List<SH_Node> nodeLst = new List<SH_Node>();  // Store nodes
             List<int?> IDLst = new List<int?>(); // Empty list to store ID that will remove corresponding element removed later
-            List<string> nameLst = new List<String>(); //Empty list to store element names to remove corresponding element later
+            List<string> nameLst = new List<string>(); //Empty list to store element names to remove corresponding element later
 
             for (int numberLat = 0; numberLat < nrWall.Count(); numberLat++)
             {
@@ -92,7 +91,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 {
                     if (nrWall.ElementAt(numberLat) == 0)
                     {
-                        Line brace = new Line(col1.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position); //0 1
+                        Line brace = new Line(col1.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position);
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(brace.From, null);
                         bnodes[1] = new SH_Node(brace.To, null);
@@ -122,7 +121,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     }
                     else if (nrWall.ElementAt(numberLat) == 3)
                     {
-                        Line brace = new Line(col2.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position); //01
+                        Line brace = new Line(col2.Nodes[1].Position, cols.ElementAt(0).Nodes[0].Position);
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(brace.To, null);
                         bnodes[1] = new SH_Node(brace.From, null);
@@ -237,18 +236,17 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace1);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes1);
+                        //nodeLst.AddRange(knodes1);
 
-                        //check for line intersetion and diivide the curves corresponding curves
-                        foreach (SH_Element t in transBeam.ToList())
+                        //check for line intersetion and divide the curves corresponding curves
+                        List<SH_Element> transBeamLst = transBeam.ToList();
+                        foreach (SH_Element t in transBeamLst)
                         {
                             Point3d p1 = t.Nodes[0].Position;
                             Point3d p2 = t.Nodes[1].Position;
-                            Line checkLine = new Line(p1, p2);
-                            //Curve checkCurve = checkLine.ToNurbsCurve();
-                            //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                            Line checkLine = new Line(p1, p2); // t-element to check
                             double intersectPt1;
-                            double intersectPt2;
+                            double intersectPt2; // parameter on checkLine that intersects with kbrace1
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
                             if (intersection == true)
@@ -270,6 +268,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
+
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
@@ -284,16 +287,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         {
                             Point3d p1 = c.Nodes[0].Position;
                             Point3d p2 = c.Nodes[1].Position;
-                            Line checkLine = new Line(p1, p2);
-                            //Curve checkCurve = checkLine.ToNurbsCurve();
-                            //Curve kneebrace1 = kbrace1.ToNurbsCurve();
+                            Line checkLine = new Line(p1, p2); //column to check
                             double intersectPt1;
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(c1.From, null);
@@ -309,6 +310,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -330,7 +336,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace2);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes2);
+                        //nodeLst.AddRange(knodes2);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in transBeam.ToList())
@@ -363,6 +369,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
+
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
@@ -381,9 +392,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(c1.From, null);
@@ -399,6 +410,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -423,7 +439,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace1);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes1);
+                        //nodeLst.AddRange(knodes1);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in transBeam.ToList())
@@ -472,9 +488,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(c1.From, null);
@@ -491,7 +507,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
+
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
                                 nameLst.Add(c.elementName);
                             }
@@ -511,7 +532,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace2);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes2);
+                        //nodeLst.AddRange(knodes2);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in transBeam.ToList())
@@ -560,9 +581,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(c1.From, null);
@@ -578,6 +599,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -603,7 +629,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace1);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes1);
+                        //nodeLst.AddRange(knodes1);
 
                         //check for line intersetion and divide the curves corresponding curves
                         foreach (SH_Element t in longBeam.ToList())
@@ -634,7 +660,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
                             }
@@ -646,15 +672,13 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             Point3d p1 = c.Nodes[0].Position;
                             Point3d p2 = c.Nodes[1].Position;
                             Line checkLine = new Line(p1, p2);
-                            //Curve checkCurve = checkLine.ToNurbsCurve();
-                            //Curve kneebrace1 = kbrace1.ToNurbsCurve();
                             double intersectPt1;
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(c1.From, null);
@@ -671,7 +695,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
+
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
                                 nameLst.Add(c.elementName);
                             }
@@ -691,7 +720,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace2);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes2);
+                        //nodeLst.AddRange(knodes2);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in longBeam.ToList())
@@ -738,9 +767,9 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(c1.From, null);
@@ -756,6 +785,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -781,7 +815,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace1);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes1);
+                        //nodeLst.AddRange(knodes1);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in transBeam.ToList())
@@ -828,14 +862,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace1, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(c1.From, null);
                                 knodes11[1] = new SH_Node(c1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartColum");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "topPartColumn");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -843,9 +877,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes12 = new SH_Node[2];
                                 knodes12[0] = new SH_Node(c2.From, null);
                                 knodes12[1] = new SH_Node(c2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartColum");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -867,7 +906,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         _ss.Elements["Line"].Add(sh_kneeBrace2);
 
                         //Store nodes
-                        nodeLst.AddRange(knodes2);
+                        //nodeLst.AddRange(knodes2);
 
                         //check for line intersetion and diivide the curves corresponding curves
                         foreach (SH_Element t in transBeam.ToList())
@@ -881,7 +920,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
                             if (intersection == true)
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
+                                Point3d intersectPt = checkLine.PointAt(intersectPt2); //construct point at intersetion 
                                 Line brace1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(brace1.From, null);
@@ -914,14 +953,15 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             double intersectPt2;
 
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
-                            if (intersection == true)
+                            Point3d intersectPt = checkLine.PointAt(intersectPt2);
+
+                            if (intersection == true && (nodeLst.Any(x => x.Position == intersectPt) == false))
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line c1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(c1.From, null);
                                 knodes21[1] = new SH_Node(c1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartColum");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "topPartColumn");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -929,9 +969,14 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes22 = new SH_Node[2];
                                 knodes22[0] = new SH_Node(c2.From, null);
                                 knodes22[1] = new SH_Node(c2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartColum");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "bottomPartColumn");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
+
+                                // Add intersection point to nodeLst
+                                SH_Node[] intersectPoint = new SH_Node[1];
+                                intersectPoint[0] = new SH_Node(intersectPt, null);
+                                nodeLst.AddRange(intersectPoint);
 
                                 //Stor the SH_element that intersect, later removed
                                 IDLst.Add(c.ID);
@@ -1010,7 +1055,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
             }
 
             // change the state
-            //_ss.SimpleShapeState = State.zeta; (remains in epsilon state)
+            _ss.SimpleShapeState = State.zeta;
             return "LateralStability successfully applied.";
 
         }

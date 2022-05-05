@@ -1776,7 +1776,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                 }
 
                 //bowed lines
-                for (int pt = 0; pt < bowedPts.Count() / 2 -1; pt++)
+                for (int pt = 0; pt < bowedPts.Count() / 2-1; pt++)
                 {
                     Line bowLine = new Line(bowedPts[pt], bowedPts[pt + 1]);
                     SH_Node[] nodes = new SH_Node[2];
