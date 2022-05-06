@@ -648,7 +648,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         SH_Node[] bnodes = new SH_Node[2];
                         bnodes[0] = new SH_Node(botline.From, null);
                         bnodes[1] = new SH_Node(botline.To, null);
-                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "bTruss_Mitchell_3_"); //bottom beams for Primary Roof Strucutre, substructure 3
+                        SH_Line sh_dTrussPrimary = new SH_Line(bnodes, _ss.elementCount++, "bTransTruss_Mitchell_3_"); //bottom beams for Primary Roof Strucutre, substructure 3
                         sh_dTrussPrimary.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                         _ss.Elements["Line"].Add(sh_dTrussPrimary);
                     }

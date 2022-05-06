@@ -215,10 +215,19 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                     var transBeam = from tBeam in _ss.Elements["Line"]
                                     where tBeam.elementName.Contains("Trans")
                                     select tBeam;
+                    
+                    var keys = new HashSet<string>() { "Longitudinal", "joist" };
+                    List<SH_Element> longBeam = new List<SH_Element>();
+                    foreach (string key in keys)
+                    {
+                        var longitudinalBeam = from lBeam in _ss.Elements["Line"]
+                                       where lBeam.elementName.Contains(key)
+                                       select lBeam;
 
-                    var longBeam = from lBeam in _ss.Elements["Line"]
-                                   where lBeam.elementName.Contains("Longitudinal")
-                                   select lBeam;
+                        longBeam.AddRange(longitudinalBeam);
+                    }
+
+
                     // Wall 0
                     if (nrWall.ElementAt(numberLat) == 0)
                     {
@@ -256,7 +265,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(brace1.From, null);
                                 knodes11[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -264,7 +273,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes12 = new SH_Node[2];
                                 knodes12[0] = new SH_Node(brace2.From, null);
                                 knodes12[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
@@ -357,7 +366,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(brace1.From, null);
                                 knodes21[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -365,7 +374,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes22 = new SH_Node[2];
                                 knodes22[0] = new SH_Node(brace2.From, null);
                                 knodes22[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
@@ -460,7 +469,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(brace1.From, null);
                                 knodes11[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -468,7 +477,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes12 = new SH_Node[2];
                                 knodes12[0] = new SH_Node(brace2.From, null);
                                 knodes12[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
@@ -551,7 +560,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(brace1.From, null);
                                 knodes21[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -559,7 +568,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes22 = new SH_Node[2];
                                 knodes22[0] = new SH_Node(brace2.From, null);
                                 knodes22[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "transversalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
@@ -648,7 +657,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(brace1.From, null);
                                 knodes11[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -656,7 +665,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes12 = new SH_Node[2];
                                 knodes12[0] = new SH_Node(brace2.From, null);
                                 knodes12[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
@@ -739,7 +748,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(brace1.From, null);
                                 knodes21[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -747,11 +756,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes22 = new SH_Node[2];
                                 knodes22[0] = new SH_Node(brace2.From, null);
                                 knodes22[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
                             }
@@ -818,7 +827,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         //nodeLst.AddRange(knodes1);
 
                         //check for line intersetion and diivide the curves corresponding curves
-                        foreach (SH_Element t in transBeam.ToList())
+                        foreach (SH_Element t in longBeam.ToList())
                         {
                             Point3d p1 = t.Nodes[0].Position;
                             Point3d p2 = t.Nodes[1].Position;
@@ -834,7 +843,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes11 = new SH_Node[2];
                                 knodes11[0] = new SH_Node(brace1.From, null);
                                 knodes11[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes11, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -842,11 +851,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes12 = new SH_Node[2];
                                 knodes12[0] = new SH_Node(brace2.From, null);
                                 knodes12[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes12, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
                             }
@@ -909,7 +918,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                         //nodeLst.AddRange(knodes2);
 
                         //check for line intersetion and diivide the curves corresponding curves
-                        foreach (SH_Element t in transBeam.ToList())
+                        foreach (SH_Element t in longBeam.ToList())
                         {
                             Point3d p1 = t.Nodes[0].Position;
                             Point3d p2 = t.Nodes[1].Position;
@@ -920,12 +929,12 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                             bool intersection = Rhino.Geometry.Intersect.Intersection.LineLine(kbrace2, checkLine, out intersectPt1, out intersectPt2, 0.001, true);
                             if (intersection == true)
                             {
-                                Point3d intersectPt = checkLine.PointAt(intersectPt2); //construct point at intersetion 
+                                Point3d intersectPt = checkLine.PointAt(intersectPt2);
                                 Line brace1 = new Line(checkLine.From, intersectPt);
                                 SH_Node[] knodes21 = new SH_Node[2];
                                 knodes21[0] = new SH_Node(brace1.From, null);
                                 knodes21[1] = new SH_Node(brace1.To, null);
-                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace = new SH_Line(knodes21, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace);
 
@@ -933,11 +942,11 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
                                 SH_Node[] knodes22 = new SH_Node[2];
                                 knodes22[0] = new SH_Node(brace2.From, null);
                                 knodes22[1] = new SH_Node(brace2.To, null);
-                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam");
+                                SH_Line sh_kneeBrace0 = new SH_Line(knodes22, _ss.elementCount++, "longitudinalBeam_Mitchell");
                                 sh_kneeBrace0.CrossSection = new SH_CrossSection_Beam(cSec, beamMat); // Add cross section and material to element
                                 _ss.Elements["Line"].Add(sh_kneeBrace0);
 
-                                //Stor the SH_element that intersect, later removed
+                                //Store the SH_element that intersect, later removed
                                 IDLst.Add(t.ID);
                                 nameLst.Add(t.elementName);
                             }
