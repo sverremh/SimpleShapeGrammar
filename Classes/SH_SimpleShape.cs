@@ -19,7 +19,7 @@ namespace SimpleShapeGrammar.Classes
         public int elementCount = 0;
         public int supCount = 0;
         public List<NurbsCurve> NurbsCurves { get; set; }
-        
+        public string GrammarName { get; set; }
         /// <summary>
         /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
         /// </summary>
