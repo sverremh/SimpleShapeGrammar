@@ -7,6 +7,7 @@ using Grasshopper.Kernel.Types;
 using Karamba.Nodes;
 using Rhino.Geometry;
 using SimpleShapeGrammar.Classes.Elements;
+using SimpleShapeGrammar.Classes.Loads;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -29,6 +30,7 @@ namespace SimpleShapeGrammar.Classes
         public List<SH_Support> Supports { get; set; } = new List<SH_Support>();
         public List<SH_LineLoad> LineLoads { get; set; } = new List<SH_LineLoad>();
         public List<SH_PointLoad> PointLoads { get; set; } = new List<SH_PointLoad>();
+        public List<SH_SurfaceLoad> SurfaceLoads { get; set; } = new List<SH_SurfaceLoad>();
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---

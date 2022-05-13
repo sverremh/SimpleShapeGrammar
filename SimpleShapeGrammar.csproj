@@ -86,6 +86,7 @@
     <Compile Include="Classes\Elements\SH_Surface.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
     <Compile Include="Classes\Kristiane\Test.cs" />
+    <Compile Include="Classes\Loads\SH_SurfaceLoad.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
     <Compile Include="Classes\MOO\SH_Crossover.cs" />
