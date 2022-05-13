@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Accord;
 using Karamba.Geometry;
 using Rhino.Geometry;
 
@@ -23,9 +24,13 @@ namespace SimpleShapeGrammar.Classes
         /// </summary>
         /// <param name="srf"></param>
         /// <returns>Mesh which can be used for applying loads and creating shell elements.</returns>
-        public static Mesh3 MeshSurface(Surface srf, List<Point3d> inclusionPoint3ds, double horSizeTol, double inclusionRadius, double scalarFactor, double gradation, double tol)
+        public static Mesh MeshSurface(Surface srf, List<Point3d> inclusionPoint3ds, double horSizeTol, double inclusionRadius, double scalarFactor, double gradation, double tol)
         {
-            /// Why is this not working from C# script component. Seems to be the mesh() method that is causing the problem. 
+            // This method is working.Should use this in the future. Then convert to Mesh3...
+            Karamba.GHopper.Utilities.MeshBreps.solve(new List<Brep>() { srf.ToBrep() }, new List<Point3d>(), 1.0, 2,
+                1.0, 10.0, 0.01, 1.0, 4, out string text, out string info, out List<Mesh> resutMeshes);
+            return resutMeshes[0];
+            /*
             GHMesh m = new GHMesh();
             
             List<Point3> incList = (inclusionPoint3ds).Select(p => p.Convert()).ToList<Point3>();
@@ -37,7 +42,7 @@ namespace SimpleShapeGrammar.Classes
             else
             {
                 return null;
-            }
+            }*/
         }
         public static IBrep ConvertToRhinoBrep(Surface srf)
         {
