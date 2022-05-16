@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Accord;
+using Grasshopper.Kernel.Types;
 using Karamba.Geometry;
 using Rhino.Geometry;
 
 using Karamba.GHopper;
 using Karamba.GHopper.Geometry;
+using Karamba.GHopper.Utilities;
 using Karamba.Utilities.Mesher;
 
 namespace SimpleShapeGrammar.Classes
@@ -20,16 +22,26 @@ namespace SimpleShapeGrammar.Classes
     public static class KarambaUtility
     {
         /// <summary>
-        /// Meshes a surface using a similar approach as the "MeshBreps" Karamba component. 
+        /// Create necessary description. 
         /// </summary>
         /// <param name="srf"></param>
-        /// <returns>Mesh which can be used for applying loads and creating shell elements.</returns>
-        public static Mesh MeshSurface(Surface srf, List<Point3d> inclusionPoint3ds, double horSizeTol, double inclusionRadius, double scalarFactor, double gradation, double tol)
+        /// <param name="inclusionPoint3ds"></param>
+        /// <param name="mResolution"></param>
+        /// <param name="edgeRefinement"></param>
+        /// <param name="inclusionRadius"></param>
+        /// <param name="scalarFactor"></param>
+        /// <param name="gradation"></param>
+        /// <param name="info"></param>
+        /// <param name="cullDist"></param>
+        /// <param name="mesh_mode"></param>
+        /// <param name="tol"></param>
+        /// <returns>A mesh representation of the input brep.</returns>
+        public static Mesh MeshSurface(Surface srf, List<Point3d> inclusionPoint3ds, double mResolution,double edgeRefinement,  double inclusionRadius, double scalarFactor, double gradation, out string info, double cullDist = 1.0, int mesh_mode = 1, double tol = 0.01)
         {
             // This method is working.Should use this in the future. Then convert to Mesh3...
-            Karamba.GHopper.Utilities.MeshBreps.solve(new List<Brep>() { srf.ToBrep() }, new List<Point3d>(), 1.0, 2,
-                1.0, 10.0, 0.01, 1.0, 4, out string text, out string info, out List<Mesh> resutMeshes);
-            return resutMeshes[0];
+            Karamba.GHopper.Utilities.MeshBreps.solve(new List<Brep>() { srf.ToBrep() }, inclusionPoint3ds, mResolution, mesh_mode,
+                edgeRefinement, cullDist, tol, 1.0, 4, out string text, out info, out List<Mesh> resultMeshes);
+            return resultMeshes[0];
             /*
             GHMesh m = new GHMesh();
             
@@ -44,9 +56,22 @@ namespace SimpleShapeGrammar.Classes
                 return null;
             }*/
         }
+        /// <summary>
+        /// Converts a Surface to a IBrep interface from KarambaCommon. 
+        /// </summary>
+        /// <param name="srf">The instance of the Rhino Surface class</param>
+        /// <returns>An instance of an IBrep from KarambaCommon</returns>
         public static IBrep ConvertToRhinoBrep(Surface srf)
         {
             return (IBrep)new RhinoBrep(srf.ToBrep());
+        }
+
+        public static List<Mesh3> MeshToMesh3(List<Mesh> mLst)
+        {
+            var mg = mLst.Select(m => new GH_Mesh(m)).ToList(); // convert to GH_Mesh
+            var m3 = FromGH.Values(mg); // convert to Karamba Mesh
+            return m3;
+
         }
 
     }
