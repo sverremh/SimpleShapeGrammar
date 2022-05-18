@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Accord;
+//using CsvHelper;
 using Grasshopper.Kernel.Types;
 using Karamba.Geometry;
 using Rhino.Geometry;
@@ -75,12 +78,39 @@ namespace SimpleShapeGrammar.Classes
 
         }
 
-        public static FemMaterial GetKarambaMaterial(string materialName)
+        public static List<string> GetKarambaMaterial(string materialName)
         {
+            string dir0 = Directory.GetCurrentDirectory(); // get the directory for later. 
+            Directory.SetCurrentDirectory(@"$(UserProfile)\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Materials\");
+            var filePath = "MaterialProperties_2_2_0.csv";
+            Directory.SetCurrentDirectory(dir0); // reset the directory back to default
+            /*
+            var streamReader = File.OpenText(filePath);
+            var csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
 
+            var test = csvReader.GetRecords<string>().ToList();
 
+            streamReader.Close(); // always close the file. 
 
-            
+            return test[0];
+
+           */
+
+            var materialData = new List<string>();
+            using (var reader = new StreamReader(filePath))
+            {
+                
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    if (line.Contains(materialName))
+                    {
+                        materialData.Add(line);
+                    }
+                }
+            }
+
+            return materialData;
 
         }
     }
