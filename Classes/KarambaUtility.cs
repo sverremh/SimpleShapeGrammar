@@ -11,6 +11,7 @@ using Rhino.Geometry;
 using Karamba.GHopper;
 using Karamba.GHopper.Geometry;
 using Karamba.GHopper.Utilities;
+using Karamba.Materials;
 using Karamba.Utilities.Mesher;
 
 namespace SimpleShapeGrammar.Classes
@@ -74,5 +75,13 @@ namespace SimpleShapeGrammar.Classes
 
         }
 
+        public static FemMaterial GetKarambaMaterial(string materialName)
+        {
+
+
+
+            
+
+        }
     }
 }
