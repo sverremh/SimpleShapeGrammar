@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Rhino.Geometry;
 
 using Rhino.Geometry;
+using SimpleShapeGrammar.Classes.Loads;
+
 namespace SimpleShapeGrammar.Classes.Elements
 {
     [Serializable]
@@ -14,6 +16,7 @@ namespace SimpleShapeGrammar.Classes.Elements
         // -- properties -- 
         public Surface elementSurface { get; set; }
 
+        public SH_SurfaceLoad Load { get; set; }
         // -- constructors --
         public SH_Surface()
         {

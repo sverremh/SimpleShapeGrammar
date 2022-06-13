@@ -7,6 +7,7 @@ using Grasshopper.Kernel.Types;
 using Karamba.Nodes;
 using Rhino.Geometry;
 using SimpleShapeGrammar.Classes.Elements;
+using SimpleShapeGrammar.Classes.Loads;
 
 namespace SimpleShapeGrammar.Classes
 {
@@ -20,7 +21,7 @@ namespace SimpleShapeGrammar.Classes
         public int supCount = 0;
         
         public List<NurbsCurve> NurbsCurves { get; set; }
-        
+        public string GrammarName { get; set; }
         /// <summary>
         /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
         /// </summary>
@@ -31,6 +32,7 @@ namespace SimpleShapeGrammar.Classes
         public List<SH_Support> Supports { get; set; } = new List<SH_Support>();
         public List<SH_LineLoad> LineLoads { get; set; } = new List<SH_LineLoad>();
         public List<SH_PointLoad> PointLoads { get; set; } = new List<SH_PointLoad>();
+        public List<SH_SurfaceLoad> SurfaceLoads { get; set; } = new List<SH_SurfaceLoad>();
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
-    public class SH_Load
+    public abstract class SH_Load
     {
         // --- properties ---
-        
+        public int LoadCase { get; set; }
         // --- constructors ---
 
         // --- methods ---

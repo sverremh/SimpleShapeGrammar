@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
 using SimpleShapeGrammar.Classes.Elements;
+using SimpleShapeGrammar.Classes.Kristiane;
+
 namespace SimpleShapeGrammar.Classes
 {
     [Serializable]
@@ -39,6 +41,7 @@ namespace SimpleShapeGrammar.Classes
 
 
         }*/
+        
 
 
     }
