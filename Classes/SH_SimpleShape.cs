@@ -18,6 +18,7 @@ namespace SimpleShapeGrammar.Classes
         public int nodeCount = 0;
         public int elementCount = 0;
         public int supCount = 0;
+        
         public List<NurbsCurve> NurbsCurves { get; set; }
         
         /// <summary>
@@ -25,6 +26,7 @@ namespace SimpleShapeGrammar.Classes
         /// </summary>
         public Dictionary<string, List<SH_Element>> Elements { get; private set; } = new Dictionary<string, List<SH_Element>>();
 
+        public string GrammarName { get; set; }          
         public List<SH_Node> Nodes { get; private set; } = new List<SH_Node>();
         public List<SH_Support> Supports { get; set; } = new List<SH_Support>();
         public List<SH_LineLoad> LineLoads { get; set; } = new List<SH_LineLoad>();
