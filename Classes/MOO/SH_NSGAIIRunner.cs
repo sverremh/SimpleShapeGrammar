@@ -17,7 +17,7 @@ namespace ShapeGrammar.Classes
     class SH_NSGAIIRunner
     {
         // - properties --
-        FirstGrammarMOO MyComponent;
+        // FirstGrammarMOO MyComponent;
 
         // -- constructor --
         public SH_NSGAIIRunner(string[] args, SH_NSGAIIProblem _problem, string Path, FirstGrammarMOO component)

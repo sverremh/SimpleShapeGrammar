@@ -51,10 +51,10 @@ namespace ShapeGrammar.Components.RuleComponents
 
             // --- solve ---
 
-            SG_AutoRule01 ar1 = new SG_AutoRule01();
+            SG_AutoRule01 ar1 = new SG_AutoRule01(eNames);
 
             // --- output ---
-
+            DA.SetData(0, ar1);
 
         }
 

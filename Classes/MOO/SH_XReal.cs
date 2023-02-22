@@ -70,7 +70,7 @@ namespace ShapeGrammar.Classes
         public void SetRuleList(List<SH_Rule> ruleList)
         {
             Type type = this.type.GetType();
-            List<SH_Rule> results;
+            // List<SH_Rule> results;
 
             if (type == typeof(SH_SolutionType))
             {

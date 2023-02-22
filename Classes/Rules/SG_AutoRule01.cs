@@ -25,7 +25,7 @@ namespace ShapeGrammar.Classes.Rules
         public int EID { get; set; }
         public double T { get; set; }
         public List<string> ElemNames { get; set; } = new List<string>();
-        private double[] bounds = { 0.2, 0.8 };
+        private readonly double[] bounds = { 0.2, 0.8 };
 
         // --- constructors --- 
 
@@ -57,43 +57,76 @@ namespace ShapeGrammar.Classes.Rules
             // find relevant range in genotype
             int sid = -999;
             int eid = -999;
+            bool fl = false;
+            List<int> selectedIntGenes;
+            List<double> selectedDGenes;
 
             for (int i = 0; i < gt.IntGenes.Count; i++)
-            { 
-                
-            }
-
-
-            // 
-
-
-            SH_Elem1D elem = ss_ref.Elems.Where(e => e.ID == EID).First() as SH_Elem1D; 
-
-            double seglen1 = elem.Ln.Length * T;
-            double seglen2 = elem.Ln.Length * (1 - T);
-
-            if (seglen1 < Util.MIN_SEG_LEN || seglen2 < Util.MIN_SEG_LEN)
             {
-                return "Segments are too short for Autorule01.";
+                if (gt.IntGenes[i] == 0 || gt.IntGenes[i] == 1) continue;
+                if (gt.IntGenes[i] == Util.RULE01_MARKER)
+                {
+                    sid = i+1;
+                    fl = true;
+                }
+                if (fl == true && gt.IntGenes[i] == Util.RULE_END_MARKER)
+                {
+                    eid = i;
+                }
+            }
+            if (sid == -999 || eid == -999)
+            {
+                return "Autorule01 - wrong marker";
             }
 
-            // add intermediate node
-            SH_Node newNode = AddNode(elem, T, ss_ref.nodeCount);
-            ss_ref.Nodes.Add(newNode);
-            ss_ref.nodeCount++;
+            // extract relevant genes
+            selectedIntGenes = gt.IntGenes.GetRange(sid, eid - sid);
+            selectedDGenes = gt.DGenes.GetRange(sid, eid - sid);
 
-            // create 2x Element
-            SH_Elem1D newLn0 = new SH_Elem1D(new SH_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
-            SH_Elem1D newLn1 = new SH_Elem1D(new SH_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
+            for (int i = 0; i < selectedIntGenes.Count; i++)
+            {
+                if (selectedIntGenes[i] == 0) continue;
+                if (i >= ss_ref.Elems.Count) break;
 
-            ss_ref.elementCount++;
+                SH_Elem1D elem = ss_ref.Elems[i] as SH_Elem1D;
+                double param = selectedDGenes[i];
+                if (param < bounds[0])
+                {
+                    param = bounds[0];
+                }
+                else if (param > bounds[1])
+                {
+                    param = bounds[1];
+                }
 
-            // remove Element just split
-            int at = ss_ref.Elems.IndexOf(elem);
-            ss_ref.Elems.RemoveAt(at);
-            ss_ref.Elems.InsertRange(at, new List<SH_Element>() { newLn0, newLn1 } );
+                double seglen1 = elem.Ln.Length * param;
+                double seglen2 = elem.Ln.Length * (1 - param);
 
-            return "auto rule 01 applied.";
+                if (seglen1 < Util.MIN_SEG_LEN || seglen2 < Util.MIN_SEG_LEN)
+                {
+                    return "Segments are too short for Autorule01.";
+                }
+
+                // add intermediate node
+                SH_Node newNode = AddNode(elem, param, ss_ref.nodeCount);
+                ss_ref.Nodes.Add(newNode);
+                ss_ref.nodeCount++;
+
+                // create 2x Element
+                SH_Elem1D newLn0 = new SH_Elem1D(new SH_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
+                SH_Elem1D newLn1 = new SH_Elem1D(new SH_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
+
+                ss_ref.elementCount++;
+
+                // remove Element just split
+                int at = ss_ref.Elems.IndexOf(elem);
+                ss_ref.Elems.RemoveAt(at);
+                ss_ref.Elems.InsertRange(at, new List<SH_Element>() { newLn0, newLn1 });
+
+            }
+
+            return "Auto-rule 01 successfully applied.";
+
         }
         public override State GetNextState() 
         {

@@ -61,7 +61,7 @@ namespace ShapeGrammar.Components
 
             // Create a deep copy
             SG_Shape shape = Util.DeepCopy(iniShape);
-            SG_Genotype gt = Util.DeepCopy(inigt);
+            SG_Genotype gt = inigt; // Util.DeepCopy(inigt);
 
             // Select relevant elements
             for (int i = 0; i < rls.Count; i++)

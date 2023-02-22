@@ -8,10 +8,10 @@ namespace ShapeGrammar.Classes
 {
     class ObjectiveComparer : IComparer<List<double>>
     {
-        public int NumVars;
+        // public int NumVars = 0;
         public int Compare(List<double> x, List<double> y)
         {
-            if (x[NumVars] >= y[NumVars])
+            if (x[0] >= y[0])
             {
                 return 1;
             }

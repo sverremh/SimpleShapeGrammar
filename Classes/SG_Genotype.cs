@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShapeGrammar.Classes
 {
+    [Serializable]
     public class SG_Genotype
     {
         // --- properties ---

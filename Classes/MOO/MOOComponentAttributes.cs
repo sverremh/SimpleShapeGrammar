@@ -20,7 +20,7 @@ namespace ShapeGrammar.Classes
         FirstGrammarMOO MyComponent;
         List<GH_NumberSlider> variablesSliders = new List<GH_NumberSlider>();
         public int solutionsCounter = 0; // count the number of designs evaluated
-        (List<SH_Rule> genome, List<double> fitness) allSolutionsTrack;
+        // (List<SH_Rule> genome, List<double> fitness) allSolutionsTrack;
         
         public MOOComponentAttributes(IGH_Component component ) : base(component)
         {

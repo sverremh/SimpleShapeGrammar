@@ -65,7 +65,7 @@ namespace ShapeGrammar.Classes.Rules
                 
                 
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 throw new Exception("The number of elements are not sufficient to create the funicular. There must be at least two lines.");
                 //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not enough elements to draw reciprocal. Minimum number is 2.");

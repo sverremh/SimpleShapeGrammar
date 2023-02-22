@@ -103,6 +103,7 @@
     <Compile Include="Classes\Elements\SH_Elem1D.cs" />
     <Compile Include="Classes\Elements\SH_Solid.cs" />
     <Compile Include="Classes\Elements\SH_Surface.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule02.cs" />
     <Compile Include="Classes\SG_Genotype.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />

@@ -42,7 +42,9 @@ namespace ShapeGrammar.Classes
     {
         public static double MIN_SEG_LEN = 1.0;
 
-        public static int RULE_MARKER = -999;
+        public static int RULE_END_MARKER = -999;
+
+        public static int RULE01_MARKER = -1;
 
         public static string CAT = "SimpleGrammar";
         public static string GR_RLS = "04. Rules";
@@ -85,7 +87,7 @@ namespace ShapeGrammar.Classes
                     string message = rule.RuleOperation(ref ssCopy);
                     //comp.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
                 }
-                catch (Exception ex)
+                catch // (Exception ex)
                 {
                     //comp.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);;
                 }
@@ -105,8 +107,7 @@ namespace ShapeGrammar.Classes
             var k3d = new KarambaCommon.Toolkit();
             SG_Shape simpleShape = ss.DeepCopy();
             // create karamba Line3 elements
-            List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elems, k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elems, k3d, out List<string> element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,
@@ -167,12 +168,10 @@ namespace ShapeGrammar.Classes
             // point loads : not implemented yet
 
             // -- assembly --
-            double mass;
-            Point3 cog; // centre of gravity for the model
-            bool flag;
+            // centre of gravity for the model
             string info;
             Model model = k3d.Model.AssembleModel(elems, supports, loads,
-                out info, out mass, out cog, out info, out flag);
+                out info, out double mass, out Point3 cog, out info, out bool flag);
 
             return model;
 
@@ -185,14 +184,10 @@ namespace ShapeGrammar.Classes
 
             var k3d = new KarambaCommon.Toolkit();
             // calculate Th.I response
-            List<double> max_disp;
-            List<double> out_g;
-            List<double> out_comp;
-            string message;
 
             try
             {
-                Model analysedModel = k3d.Algorithms.AnalyzeThI(model, out max_disp, out out_g, out out_comp, out message);
+                Model analysedModel = k3d.Algorithms.AnalyzeThI(model, out List<double> max_disp, out List<double> out_g, out List<double> out_comp, out string message);
                 // iterate through each objective function
                 foreach (string objective in objectives)
                 {
@@ -210,7 +205,7 @@ namespace ShapeGrammar.Classes
 
                 }
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 // to do: log this error
                 // if there is an exception, there is an error in the model. Add high objective values to avoid these solution. 
@@ -219,9 +214,9 @@ namespace ShapeGrammar.Classes
                     results.Add(double.PositiveInfinity);
                 }
             }
-            
-            
-            
+
+
+
             return results;
         }
 
@@ -286,7 +281,6 @@ namespace ShapeGrammar.Classes
             // find the sum of weights
             double sum_of_weights = weights.Sum();
             object el = new object();
-            int ind = 0;
             // initiate random
             //var random = new Random();
             double rnd = RandomExtensions.NextDouble(random, 0, sum_of_weights);
@@ -296,7 +290,6 @@ namespace ShapeGrammar.Classes
                 if (rnd < weights[i])
                 {
                     el = fromList[i];
-                    ind = i;
                     break;
                 }
                 rnd -= weights[i];
