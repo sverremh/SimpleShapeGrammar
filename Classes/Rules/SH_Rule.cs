@@ -20,7 +20,7 @@ namespace SimpleShapeGrammar.Classes.Rules
         public abstract void NewRuleParameters(Random random, SH_SimpleShape ss);
         public abstract SH_Rule CopyRule(SH_Rule rule);
 
-        public abstract string RuleOperation(SH_SimpleShape _ss);
+        public abstract string RuleOperation(ref SH_SimpleShape _ss);
         
         public abstract State GetNextState();
 

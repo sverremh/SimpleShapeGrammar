@@ -59,7 +59,7 @@ namespace SimpleShapeGrammar.Classes
 
                             try
                             {
-                                string message = copyRule.RuleOperation(simpleShape);
+                                string message = copyRule.RuleOperation(ref simpleShape);
 
                             }
                             catch (Exception ex)

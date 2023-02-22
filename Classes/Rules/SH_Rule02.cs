@@ -44,8 +44,9 @@ namespace SimpleShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SH_SimpleShape _ss)
         {
+
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
@@ -58,13 +59,13 @@ namespace SimpleShapeGrammar.Classes.Rules
             // to do: evaluate if this is the best method for avoiding an index out of range error. 
             try
             {
-                line = (SH_Line)_ss.Elements["Line"][LineIndex];
+                line = (SH_Line)_ss.Elems[LineIndex];
             }
             catch (Exception ex)
             {
                 if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
                 {
-                   line = (SH_Line)_ss.Elements["Line"][_ss.elementCount-1]; // if out of range, take the last item
+                   line = (SH_Line)_ss.Elems[_ss.elementCount-1]; // if out of range, take the last item
                 }
                 
             }
@@ -78,7 +79,7 @@ namespace SimpleShapeGrammar.Classes.Rules
                 return "The line segment are too short for the rule to be applied on this element"; 
             }
 
-            int elInd = _ss.Elements["Line"].IndexOf(line);
+            int elInd = _ss.Elems.IndexOf(line);
             // add the intermediate node
             SH_Node newNode = AddNode(line, Param, _ss.nodeCount);
             _ss.Nodes.Add(newNode);
@@ -96,11 +97,11 @@ namespace SimpleShapeGrammar.Classes.Rules
             
             
             // remove the line which has been split
-            _ss.Elements["Line"].RemoveAt(elInd);
-            _ss.Elements["Line"].Insert(elInd, newLine1);
+            _ss.Elems.RemoveAt(elInd);
+            _ss.Elems.Insert(elInd, newLine1);
 
             // insert the new lines in its position
-            _ss.Elements["Line"].Insert(elInd, newLine0);
+            _ss.Elems.Insert(elInd, newLine0);
 
             // no change in the state (remains in beta state)
             // _ss.SimpleShapeState = State.beta; 

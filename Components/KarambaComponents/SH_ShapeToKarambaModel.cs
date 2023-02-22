@@ -67,7 +67,7 @@ namespace SimpleShapeGrammar.Components
 
             // create karamba Line3 elements
             List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elements["Line"], k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elems, k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,

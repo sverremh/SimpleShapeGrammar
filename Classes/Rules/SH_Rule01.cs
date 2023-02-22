@@ -44,16 +44,17 @@ namespace SimpleShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SH_SimpleShape _ss)
         {
-            // check if the state maches the simple shape state
+            // check if the state matches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
                 return "The State is not compatible with Rule01.";
             }
 
             // take the 1st element
-            SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
+            // SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
+            SH_Line sh_elem = (SH_Line)_ss.Elems[0];
 
             // apply the change
             #region NewMethod

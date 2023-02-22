@@ -72,7 +72,7 @@ namespace SimpleShapeGrammar.Classes
             {
                 try
                 {
-                    string message = rule.RuleOperation(ssCopy);
+                    string message = rule.RuleOperation(ref ssCopy);
                     //comp.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
                 }
                 catch (Exception ex)
@@ -96,7 +96,7 @@ namespace SimpleShapeGrammar.Classes
             SH_SimpleShape simpleShape = ss.DeepCopy();
             // create karamba Line3 elements
             List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elements["Line"], k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elems, k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,

@@ -2,6 +2,8 @@
 using Rhino.Geometry;
 using System;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Rules;
+
 namespace SimpleShapeGrammar.Components
 {
     public class RuleA : GH_Component

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
 
+using SimpleShapeGrammar.Classes.Rules;
+
 namespace SimpleShapeGrammar.Components.RuleComponents
 {
     public class Rule03 : GH_Component

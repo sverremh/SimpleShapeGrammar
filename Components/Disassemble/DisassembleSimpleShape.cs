@@ -58,7 +58,7 @@ namespace SimpleShapeGrammar.Components
 
             // list of elements
             List<SH_Element> elems = new List<SH_Element>();
-            elems.AddRange(ss.Elements["Line"]);
+            elems.AddRange(ss.Elems);
 
             // list of supports
             List<SH_Support> sups = new List<SH_Support>();

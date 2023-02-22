@@ -60,7 +60,7 @@ namespace SimpleShapeGrammar.Components
             {
                 try
                 {
-                    string message = rule.RuleOperation(copyShape);
+                    string message = rule.RuleOperation(ref copyShape);
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
                 }
                 catch (Exception ex)

@@ -112,7 +112,7 @@ namespace SimpleShapeGrammar.Components
 
                 }
             }
-            simpleShape.Elements["Line"] = numberedElems;
+            simpleShape.Elems = numberedElems;
 
             
             /*

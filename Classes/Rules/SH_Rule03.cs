@@ -35,7 +35,7 @@ namespace SimpleShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SH_SimpleShape _ss)
         {
             // test for correct state
             if (_ss.SimpleShapeState != State.gamma)

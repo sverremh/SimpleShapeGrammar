@@ -8,6 +8,8 @@ using JMetalCSharp.Core;
 using JMetalCSharp.Operators.Crossover;
 using JMetalCSharp.Utils;
 
+using SimpleShapeGrammar.Classes.Rules;
+
 namespace SimpleShapeGrammar.Classes
 {
     class SH_Crossover : Crossover
