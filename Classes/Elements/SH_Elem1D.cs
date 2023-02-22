@@ -39,14 +39,14 @@ namespace ShapeGrammar.Classes.Elements
         {
             ID = _id;
             Nodes = _nodes;
-            elementName = _el_name;
+            Name = _el_name;
             CreateLine();
         }
 
         public SH_Elem1D(Line _ln, int? _id, string _el_name, SH_CrossSection_Beam _cs)
         {
             ID = _id;
-            elementName = _el_name;
+            Name = _el_name;
             Ln = _ln;
 
             SH_Node[] nodes = new SH_Node[2];

@@ -22,19 +22,19 @@ namespace ShapeGrammar.Classes.Elements
 
         public SH_Solid(string _name, int _id)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
         }
 
         public SH_Solid(string _name, int _id, Brep _brep)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
             Brep = _brep;
         }
         public SH_Solid(string _name, Brep _brep)
         {
-            elementName = _name;
+            Name = _name;
             Brep = _brep;
         }
 

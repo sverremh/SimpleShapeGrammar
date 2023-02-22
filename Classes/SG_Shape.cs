@@ -12,7 +12,7 @@ namespace ShapeGrammar.Classes
     public enum State { alpha, beta, gamma, delta, epsilon, zeta, eta, theta, end}; // add more if needed. 
 
     [Serializable]
-    public class SH_SimpleShape
+    public class SG_Shape
     {
         // --- properties ---
         public int nodeCount = 0;
@@ -33,7 +33,7 @@ namespace ShapeGrammar.Classes
         public State SimpleShapeState { get; set; }
 
         // --- constructors ---
-        public SH_SimpleShape()
+        public SG_Shape()
         {
             // empty constructor
             
@@ -78,9 +78,9 @@ namespace ShapeGrammar.Classes
 
         }
 
-        public SH_SimpleShape DeepCopy()
+        public SG_Shape DeepCopy()
         {
-            SH_SimpleShape simpleShapeCopy = new SH_SimpleShape();
+            SG_Shape simpleShapeCopy = new SG_Shape();
             simpleShapeCopy.nodeCount = this.nodeCount;
             simpleShapeCopy.elementCount = this.elementCount;
             simpleShapeCopy.supCount = this.supCount;

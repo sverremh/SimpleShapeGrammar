@@ -16,7 +16,7 @@ namespace ShapeGrammar.Classes
     public static class MOO_Utility
     {
         public static List<SH_Rule> NewGenome(SH_Variable variable, List<object> rules, List<double> weights,
-            Random random, SH_SimpleShape _ss)
+            Random random, SG_Shape _ss)
         {
             var simpleShape = Util.DeepCopy(_ss); // copy the default simple shape. 
 
@@ -124,7 +124,7 @@ namespace ShapeGrammar.Classes
 
             // test if something can be done with the rule
             Random rnd = new Random();
-            instantiateObject.NewRuleParameters(rnd, new SH_SimpleShape()); // Set the translation vectors for this
+            instantiateObject.NewRuleParameters(rnd, new SG_Shape()); // Set the translation vectors for this
 
             return instantiateObject;
         }

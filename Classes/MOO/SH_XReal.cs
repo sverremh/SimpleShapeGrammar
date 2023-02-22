@@ -44,9 +44,9 @@ namespace ShapeGrammar.Classes
             return results;
         }
 
-        public SH_SimpleShape GetSimpleShape()
+        public SG_Shape GetSimpleShape()
         {
-            SH_SimpleShape ss;
+            SG_Shape ss;
             Type type = this.type.GetType();
             if (type == typeof(SH_SolutionType))
             {

@@ -77,7 +77,7 @@ namespace ShapeGrammar.Components
             loads = Util.DeepCopy(loads);
             var curves = new List<NurbsCurve>();
 
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
+            SG_Shape simpleShape = new SG_Shape();
 
             // --- solve ---
             simpleShape.NurbsCurves = curves;

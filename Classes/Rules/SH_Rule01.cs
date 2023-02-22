@@ -44,7 +44,7 @@ namespace ShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(ref SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
             // check if the state matches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
@@ -108,7 +108,7 @@ namespace ShapeGrammar.Classes.Rules
             zBounds[1] = zHigh;
         }
 
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             // create a random parameter
             double x0 = Util.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);

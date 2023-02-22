@@ -41,8 +41,12 @@ namespace ShapeGrammar.Classes
     public static class Util
     {
         public static double MIN_SEG_LEN = 1.0;
+
+        public static int RULE_MARKER = -999;
+
         public static string CAT = "SimpleGrammar";
-        public static string GR_INT = "04. Interpreter";
+        public static string GR_RLS = "04. Rules";
+        public static string GR_INT = "07. Interpreter";
         public static string GR_UTIL = "99. Utilities";
 
         public static T DeepCopy<T>(T target)
@@ -71,9 +75,9 @@ namespace ShapeGrammar.Classes
         /// </summary>
         /// <param name="rules"></param>
         /// <param name="ss"></param>
-        public static SH_SimpleShape ApplyRulesToSimpleShape(List<SH_Rule> rules, SH_SimpleShape ss)
+        public static SG_Shape ApplyRulesToSimpleShape(List<SH_Rule> rules, SG_Shape ss)
         {
-            SH_SimpleShape ssCopy = Util.DeepCopy(ss) ; 
+            SG_Shape ssCopy = Util.DeepCopy(ss) ; 
             foreach (SH_Rule rule in rules)
             {
                 try
@@ -94,12 +98,12 @@ namespace ShapeGrammar.Classes
         /// </summary>
         /// <param name="ss">Simple shape model to create Karamba model from.</param>
         /// <returns></returns>
-        public static Model Karamba3DModelFromSimpleShape(SH_SimpleShape ss)
+        public static Model Karamba3DModelFromSimpleShape(SG_Shape ss)
         {
             var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
-            SH_SimpleShape simpleShape = ss.DeepCopy();
+            SG_Shape simpleShape = ss.DeepCopy();
             // create karamba Line3 elements
             List<string> element_names;
             List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elems, k3d, out element_names);
@@ -269,7 +273,7 @@ namespace ShapeGrammar.Classes
                 k_lines.Add(k_line);
 
                 // add name
-                k_names.Add(el.elementName);
+                k_names.Add(el.Name);
 
 
             }

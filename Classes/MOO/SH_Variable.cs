@@ -28,7 +28,7 @@ namespace ShapeGrammar.Classes
         /// </summary>
         public int Size { get; set; }
 
-        public SH_SimpleShape SimpleShape { get; set; }
+        public SG_Shape SimpleShape { get; set; }
 
         // -- constructors -- 
         public SH_Variable()

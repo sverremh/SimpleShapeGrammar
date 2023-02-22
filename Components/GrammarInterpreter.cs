@@ -43,7 +43,7 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
+            SG_Shape simpleShape = new SG_Shape();
             List<SH_Rule> rules = new List<SH_Rule>();
 
             // --- input --- 
@@ -51,7 +51,7 @@ namespace ShapeGrammar.Components
             if (!DA.GetDataList(1, rules)) return;
 
             //Create a deep copy of the simple Shape before performing rule operations
-            SH_SimpleShape copyShape = Util.DeepCopy(simpleShape);
+            SG_Shape copyShape = Util.DeepCopy(simpleShape);
 
             // --- solve ---
 

@@ -120,7 +120,7 @@
     <Compile Include="Classes\MOO\SH_Variable.cs" />
     <Compile Include="Classes\MOO\SH_XReal.cs" />
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
-    <Compile Include="Classes\Rules\SH_AutoRule01.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule01.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\Elements\SH_Element.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="Classes\Rules\SH_Rule02.cs" />
     <Compile Include="Classes\Rules\SH_RuleA.cs" />
     <Compile Include="Classes\Rules\SH_Rule03.cs" />
-    <Compile Include="Classes\SH_SimpleShape.cs" />
+    <Compile Include="Classes\SG_Shape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
     <Compile Include="Classes\Util.cs" />
     <Compile Include="Components\Assembly.cs" />
@@ -154,6 +154,7 @@
     <Compile Include="Components\Load Components\PointLoads.cs" />
     <Compile Include="Components\MOOComponents\FirstGrammarMOO.cs" />
     <Compile Include="Components\MOOComponents\TestUpdateReset.cs" />
+    <Compile Include="Components\RuleComponents\AutoRule01.cs" />
     <Compile Include="Components\RuleComponents\RandomTest.cs" />
     <Compile Include="Components\RuleComponents\RandomRules.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />

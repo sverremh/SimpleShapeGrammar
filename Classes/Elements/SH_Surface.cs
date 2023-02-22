@@ -27,12 +27,12 @@ namespace ShapeGrammar.Classes.Elements
         public SH_Surface(Surface elementSurface, string _name)
         {
             this.elementSurface = elementSurface;
-            elementName = _name;
+            Name = _name;
         }
 
         public SH_Surface(string _name, int _id, Surface _surface)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
             elementSurface = _surface;
         }

@@ -20,7 +20,7 @@ namespace ShapeGrammar.Classes.Rules
             Name = "SH_RuleA";
         }
 
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             
         }
@@ -31,7 +31,7 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // --- methods ---
-        public override string RuleOperation(ref SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)

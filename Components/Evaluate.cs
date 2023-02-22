@@ -41,7 +41,7 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape ss = new SH_SimpleShape();
+            SG_Shape ss = new SG_Shape();
 
             // --- input ---
             if (!DA.GetData(0, ref ss)) return;

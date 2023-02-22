@@ -12,7 +12,7 @@ using ShapeGrammar.Classes.Elements;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_AutoRule01 : SH_Rule
+    public class SG_AutoRule01 : SH_Rule
     {
         // --- properties ---
 
@@ -20,62 +20,78 @@ namespace ShapeGrammar.Classes.Rules
         // public State RuleState;
         // public string Name;
 
+        // from this class
+        
         public int EID { get; set; }
         public double T { get; set; }
+        public List<string> ElemNames { get; set; } = new List<string>();
         private double[] bounds = { 0.2, 0.8 };
 
         // --- constructors --- 
 
-        public SH_AutoRule01()
+        public SG_AutoRule01()
         {
             RuleState = State.alpha;
             Name = "SH_AutoRule_01";
         }
 
-        public SH_AutoRule01(int _eid, double _t)
+        public SG_AutoRule01(List<string> _eNames)
         {
             RuleState = State.alpha;
             Name = "SH_AutoRule_01";
+            ElemNames = _eNames;
 
-            EID = _eid;
-            T = _t;
+            // T = _t;
             
         }
 
         // --- methods ---
         // methods of parent class
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss) { }
+        public override void NewRuleParameters(Random random, SG_Shape ss) { }
         public override SH_Rule CopyRule(SH_Rule rule) 
         {
             throw new NotImplementedException();
         }
-        public override string RuleOperation(ref SH_SimpleShape _ss) 
+        public override string RuleOperation(ref SG_Shape ss_ref, ref SG_Genotype gt) 
         {
-            SH_Elem1D elem = _ss.Elems.Where(e => e.ID == EID).First() as SH_Elem1D; 
+            // find relevant range in genotype
+            int sid = -999;
+            int eid = -999;
+
+            for (int i = 0; i < gt.IntGenes.Count; i++)
+            { 
+                
+            }
+
+
+            // 
+
+
+            SH_Elem1D elem = ss_ref.Elems.Where(e => e.ID == EID).First() as SH_Elem1D; 
 
             double seglen1 = elem.Ln.Length * T;
             double seglen2 = elem.Ln.Length * (1 - T);
 
-            if (seglen1 < Util.MIN_SEG_LEN || seglen2 < 1.0)
+            if (seglen1 < Util.MIN_SEG_LEN || seglen2 < Util.MIN_SEG_LEN)
             {
                 return "Segments are too short for Autorule01.";
             }
 
             // add intermediate node
-            SH_Node newNode = AddNode(elem, T, _ss.nodeCount);
-            _ss.Nodes.Add(newNode);
-            _ss.nodeCount++;
+            SH_Node newNode = AddNode(elem, T, ss_ref.nodeCount);
+            ss_ref.Nodes.Add(newNode);
+            ss_ref.nodeCount++;
 
             // create 2x Element
-            SH_Elem1D newLn0 = new SH_Elem1D(new SH_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.elementName);
-            SH_Elem1D newLn1 = new SH_Elem1D(new SH_Node[] { newNode, elem.Nodes[1] }, _ss.elementCount, elem.elementName);
+            SH_Elem1D newLn0 = new SH_Elem1D(new SH_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
+            SH_Elem1D newLn1 = new SH_Elem1D(new SH_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
 
-            _ss.elementCount++;
+            ss_ref.elementCount++;
 
             // remove Element just split
-            int at = _ss.Elems.IndexOf(elem);
-            _ss.Elems.RemoveAt(at);
-            _ss.Elems.InsertRange(at, new List<SH_Element>() { newLn0, newLn1 } );
+            int at = ss_ref.Elems.IndexOf(elem);
+            ss_ref.Elems.RemoveAt(at);
+            ss_ref.Elems.InsertRange(at, new List<SH_Element>() { newLn0, newLn1 } );
 
             return "auto rule 01 applied.";
         }

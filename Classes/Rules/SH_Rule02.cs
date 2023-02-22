@@ -44,7 +44,7 @@ namespace ShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(ref SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
 
             // check if the state maches the simple shape state
@@ -91,9 +91,9 @@ namespace ShapeGrammar.Classes.Rules
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
 
 
-            SH_Elem1D newLine0 = new SH_Elem1D(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
+            SH_Elem1D newLine0 = new SH_Elem1D(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
-            SH_Elem1D newLine1 = new SH_Elem1D(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
+            SH_Elem1D newLine1 = new SH_Elem1D(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
             _ss.elementCount++;
 
             
@@ -161,7 +161,7 @@ namespace ShapeGrammar.Classes.Rules
             return bounds[1];
         }
 
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             // the parameter to use for the rule
             int numLines = ss.elementCount;

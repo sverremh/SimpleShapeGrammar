@@ -77,10 +77,10 @@ namespace ShapeGrammar.Classes
             offspring[0] = new SH_Solution(problem, o1Var);
             offspring[1] = new SH_Solution(problem, o2Var);
 
-            SH_SimpleShape ss01 =
+            SG_Shape ss01 =
                 Util.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
             offspring[0].SH_Variable[0].SimpleShape = ss01;
-            SH_SimpleShape ss02 =
+            SG_Shape ss02 =
                 Util.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
             offspring[1].SH_Variable[0].SimpleShape = ss02;
 

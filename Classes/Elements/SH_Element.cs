@@ -13,7 +13,7 @@ namespace ShapeGrammar.Classes.Elements
         // --- properties ---
         
         public int? ID { get; set; }
-        public string elementName { get; set; }
+        public string Name { get; set; }
 
         public SH_Node[] Nodes { get; set; }
 

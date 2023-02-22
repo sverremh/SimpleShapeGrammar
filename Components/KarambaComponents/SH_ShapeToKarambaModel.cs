@@ -56,7 +56,7 @@ namespace ShapeGrammar.Components
             var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
-            var ss = new SH_SimpleShape();
+            var ss = new SG_Shape();
 
 
             // --- input ---
@@ -178,7 +178,7 @@ namespace ShapeGrammar.Components
                 k_lines.Add(k_line);
 
                 // add name
-                k_names.Add(el.elementName);
+                k_names.Add(el.Name);
                 
                 
             }

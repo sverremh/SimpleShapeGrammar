@@ -12,7 +12,7 @@ namespace ShapeGrammar.Classes
 {
     public static class SH_Evaluation
     {
-        public static void ConstructMatrices(SH_SimpleShape ss, out double[,] a, out double[] b)
+        public static void ConstructMatrices(SG_Shape ss, out double[,] a, out double[] b)
         {
             // construct empty matrices
             double[,] a_1 = new double[ss.Nodes.Count, ss.Nodes.Count];
@@ -97,7 +97,7 @@ namespace ShapeGrammar.Classes
             double[] moments = a.Solve(b);
             return moments;
         }
-        public static double[] CalculateForces(SH_SimpleShape _ss, double[] moments)
+        public static double[] CalculateForces(SG_Shape _ss, double[] moments)
         {
             double load = _ss.LineLoads[0].Load.Z; // possible a better way to apply the loads if the element has several different ones. Future work...
 
@@ -146,7 +146,7 @@ namespace ShapeGrammar.Classes
 
         }
 
-        public static double[] CalculateReactions(SH_SimpleShape ss, double[] forces, double h_thrust)
+        public static double[] CalculateReactions(SG_Shape ss, double[] forces, double h_thrust)
         {
 
             // find index of supports 
@@ -177,7 +177,7 @@ namespace ShapeGrammar.Classes
 
             return new double[] { r1, r2 };
         }
-        public static Dictionary<string, List<Line> > DrawReciprocal(SH_SimpleShape ss, double[] reactions, double[] forces, double h_thrust)
+        public static Dictionary<string, List<Line> > DrawReciprocal(SG_Shape ss, double[] reactions, double[] forces, double h_thrust)
         {
 
 
@@ -289,7 +289,7 @@ namespace ShapeGrammar.Classes
             return reciprocal_diagram;
         }
 
-        public static List<Line> DrawFunicular(SH_SimpleShape ss, Dictionary<string, List<Line>> reciprocal)
+        public static List<Line> DrawFunicular(SG_Shape ss, Dictionary<string, List<Line>> reciprocal)
         {
             List<Line> funiculars = new List<Line>();
 
@@ -302,7 +302,7 @@ namespace ShapeGrammar.Classes
 
             return funiculars; 
         }
-        public static void SortNodes(SH_SimpleShape ss, SH_Node node, ref List<SH_Node> nodes, ref List<int> sort_ind)
+        public static void SortNodes(SG_Shape ss, SH_Node node, ref List<SH_Node> nodes, ref List<int> sort_ind)
         {
             
             List<SH_Element> els = ss.Elems.Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node

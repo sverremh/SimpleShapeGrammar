@@ -17,11 +17,12 @@ namespace ShapeGrammar.Classes.Rules
             
         }
 
-        public abstract void NewRuleParameters(Random random, SH_SimpleShape ss);
+        public abstract void NewRuleParameters(Random random, SG_Shape ss);
         public abstract SH_Rule CopyRule(SH_Rule rule);
 
-        public abstract string RuleOperation(ref SH_SimpleShape _ss);
-        
+        public virtual string RuleOperation(ref SG_Shape _ss) { return ""; }
+        public virtual string RuleOperation(ref SG_Shape _ss, ref SG_Genotype _st) { return ""; }
+
         public abstract State GetNextState();
 
         // for child class

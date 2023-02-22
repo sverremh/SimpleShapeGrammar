@@ -1,19 +1,23 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using Grasshopper.Kernel;
+using Rhino.Geometry;
+
 using ShapeGrammar.Classes;
-namespace ShapeGrammar.Components
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Components.RuleComponents
 {
-    public class CreateGeometry : GH_Component
+    public class AutoRule01 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the CreateGeometry class.
+        /// Initializes a new instance of the AutoRule01 class.
         /// </summary>
-        public CreateGeometry()
-          : base("CreateGeometry", "geom",
-              "Create geometry from Simple Shape",
-              "SimpleGrammar", "Utility")
+        public AutoRule01()
+          : base("Auto rule 01", "A-Rule01",
+              "Split curves at a given parameter",
+              Util.CAT, Util.GR_RLS)
         {
         }
 
@@ -22,7 +26,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape", "sShape", "The Simple Shape element", GH_ParamAccess.item) ;
+            pManager.AddTextParameter("Elem Name", "eName", "element name", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -30,8 +34,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddLineParameter("Lines", "l", "Lines from the simple shape", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Test", "test", "test", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Rule", "Rule", "Rule", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -41,21 +44,18 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SG_Shape simpleShape = new SG_Shape();
+            List<string> eNames = new List<string>();
 
-            // --- input --- 
-            if (!DA.GetData(0, ref simpleShape)) return;
+            // --- input ---
+            if(!DA.GetDataList(0, eNames)) return;
 
             // --- solve ---
-            List<Line> lines = simpleShape.GetLinesFromShape();
-            List<int?> ids = new List<int?>();
-            foreach (var item in simpleShape.Elems)
-            {
-                ids.Add(item.ID);
-            }
+
+            SG_AutoRule01 ar1 = new SG_AutoRule01();
+
             // --- output ---
-            DA.SetDataList(0, lines);
-            DA.SetDataList(1, ids);
+
+
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace ShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return ShapeGrammar.Properties.Resources.icons_I_DrawCS;
+                return null;
             }
         }
 
@@ -76,7 +76,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("70361ee6-5a32-45c9-a4c7-8e7228a2c48d"); }
+            get { return new Guid("f3e48098-635b-49f3-b840-f490a8ac83eb"); }
         }
     }
 }

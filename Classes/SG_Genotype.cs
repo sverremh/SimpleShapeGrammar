@@ -14,6 +14,9 @@ namespace ShapeGrammar.Classes
 
         // --- constructors ---
 
+        public SG_Genotype()
+        { 
+        }
         public SG_Genotype(List<int> _ints, List<double> _ds)
         {
             IntGenes = _ints;

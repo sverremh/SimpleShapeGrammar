@@ -35,7 +35,7 @@ namespace ShapeGrammar.Classes.Rules
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(ref SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
             // test for correct state
             if (_ss.SimpleShapeState != State.gamma)
@@ -86,7 +86,7 @@ namespace ShapeGrammar.Classes.Rules
             this.bounds[1] = upperBound;
         }
         
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             HorizontalThrustParameter = Util.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
