@@ -101,7 +101,7 @@ namespace SimpleShapeGrammar.Components
                 foreach (SH_Node node in e.Nodes)
                 {
                     // test if there is already a node in this position
-                    if (nodes.Any(n => n.Position.DistanceToSquared(node.Position) < 0.001 ))
+                    if (nodes.Any(n => n.Pt.DistanceToSquared(node.Pt) < 0.001 ))
                     {                        
                         continue;
                     }
@@ -149,14 +149,14 @@ namespace SimpleShapeGrammar.Components
             List<SH_Support> uniqueSupports = new List<SH_Support>();
             foreach (SH_Node node in simpleShape.Nodes)
             {
-                if (uniqueSupports.Any(s => s.Position.DistanceToSquared(node.Position) < 0.001))
+                if (uniqueSupports.Any(s => s.Position.DistanceToSquared(node.Pt) < 0.001))
                 {
                     // if there is already a support at this position it is not added
                     continue;
                 }
 
                 // find the support at the node. 
-                var nodeSup = sups.Find(s => s.Position.DistanceToSquared(node.Position) < 0.01);
+                var nodeSup = sups.Find(s => s.Position.DistanceToSquared(node.Pt) < 0.01);
                 nodeSup.ID = simpleShape.supCount;
                 simpleShape.supCount++;
                 nodeSup.nodeInd = (int)node.ID;

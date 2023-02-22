@@ -9,7 +9,7 @@ using Rhino.Geometry;
 namespace SimpleShapeGrammar.Classes.Elements
 {
     [Serializable]
-    public class SH_Line : SH_Element
+    public class SH_Elem1D : SH_Element
     {
         // -- properties
 
@@ -24,18 +24,18 @@ namespace SimpleShapeGrammar.Classes.Elements
 
 
         // --- constructors ---
-        public SH_Line()
+        public SH_Elem1D()
         {
 
         }
-        public SH_Line(SH_Node[] _nodes, int? _id)
+        public SH_Elem1D(SH_Node[] _nodes, int? _id)
         {
 
             ID = _id;
             Nodes = _nodes;
             CreateLine();
         }
-        public SH_Line(SH_Node[] _nodes, int? _id, string _el_name)
+        public SH_Elem1D(SH_Node[] _nodes, int? _id, string _el_name)
         {
             ID = _id;
             Nodes = _nodes;
@@ -43,7 +43,7 @@ namespace SimpleShapeGrammar.Classes.Elements
             CreateLine();
         }
 
-        public SH_Line(Line _ln, int? _id, string _el_name, SH_CrossSection_Beam _cs)
+        public SH_Elem1D(Line _ln, int? _id, string _el_name, SH_CrossSection_Beam _cs)
         {
             ID = _id;
             elementName = _el_name;
@@ -66,7 +66,7 @@ namespace SimpleShapeGrammar.Classes.Elements
 
         private void CreateLine()
         {
-            Ln = new Line(Nodes[0].Position, Nodes[1].Position);
+            Ln = new Line(Nodes[0].Pt, Nodes[1].Pt);
         }
     }
 }

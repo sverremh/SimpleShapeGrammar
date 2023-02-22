@@ -21,6 +21,7 @@ using Karamba.Loads;
 
 namespace SimpleShapeGrammar.Classes
 {
+    
 
     // --- variables ---
 
@@ -39,6 +40,8 @@ namespace SimpleShapeGrammar.Classes
 
     public static class SH_UtilityClass
     {
+        public static double MIN_SEG_LEN = 1.0;
+
         public static T DeepCopy<T>(T target)
         {
             T result;
@@ -252,8 +255,8 @@ namespace SimpleShapeGrammar.Classes
             foreach (SH_Element el in elements)
             {
                 // get node points
-                Point3d sPt = el.Nodes[0].Position;
-                Point3d ePt = el.Nodes[1].Position;
+                Point3d sPt = el.Nodes[0].Pt;
+                Point3d ePt = el.Nodes[1].Pt;
                 // convert to karamba's Point3
                 Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
                 Point3 k_ePt = new Point3(ePt.X, ePt.Y, ePt.Z);

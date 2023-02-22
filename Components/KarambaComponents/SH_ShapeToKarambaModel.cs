@@ -165,8 +165,8 @@ namespace SimpleShapeGrammar.Components
             foreach (SH_Element el in elements)
             {                
                 // get node points
-                Point3d sPt = el.Nodes[0].Position;
-                Point3d ePt = el.Nodes[1].Position;
+                Point3d sPt = el.Nodes[0].Pt;
+                Point3d ePt = el.Nodes[1].Pt;
                 // convert to karamba's Point3
 
                 Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);

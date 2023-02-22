@@ -57,16 +57,16 @@ namespace SimpleShapeGrammar.Classes
 
         public List<Line> GetLinesFromShape()
         {
-            return Elems.Select(e => (e as SH_Line).Ln).ToList(); 
+            return Elems.Select(e => (e as SH_Elem1D).Ln).ToList(); 
         }
 
         public void TranslateNode(Vector3d vec, int nodeInd)
         {
             
             SH_Node node = Nodes[nodeInd];
-            Point3d newPoint = node.Position + vec;
+            Point3d newPoint = node.Pt + vec;
             // move the point
-            Nodes[nodeInd].Position = newPoint;
+            Nodes[nodeInd].Pt = newPoint;
             // find the correct support in the list
             int supInd = Supports.IndexOf( Supports.Find(sup => sup.nodeInd == nodeInd) );
             // move the support position if present

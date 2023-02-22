@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
-    <Compile Include="Classes\Elements\SH_Line.cs" />
+    <Compile Include="Classes\Elements\SH_Elem1D.cs" />
     <Compile Include="Classes\Elements\SH_Solid.cs" />
     <Compile Include="Classes\Elements\SH_Surface.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
@@ -119,7 +119,7 @@
     <Compile Include="Classes\MOO\SH_Variable.cs" />
     <Compile Include="Classes\MOO\SH_XReal.cs" />
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
-    <Compile Include="Classes\Rules\SH_AutoRule_01.cs" />
+    <Compile Include="Classes\Rules\SH_AutoRule01.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\Elements\SH_Element.cs" />

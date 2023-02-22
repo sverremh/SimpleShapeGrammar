@@ -33,12 +33,12 @@ namespace SimpleShapeGrammar.Classes
                 }
 
                 // find adjacent elements
-                List<SH_Line> els = new List<SH_Line>();
+                List<SH_Elem1D> els = new List<SH_Elem1D>();
                 foreach (var el in ss.Elems)
                 {
                     if (el.Nodes.Contains(node)) // true if the node is connected to the element
                     {
-                        els.Add((SH_Line)el);
+                        els.Add((SH_Elem1D)el);
                     }
                 }
 
@@ -60,7 +60,7 @@ namespace SimpleShapeGrammar.Classes
                 List<double> lengths = new List<double>();
                 foreach (var nId in adj_IDs)
                 {
-                    double length = Math.Sqrt( Math.Pow(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X, 2) + Math.Pow(ss.Nodes[(int)node.ID].Position.Y - ss.Nodes[nId].Position.Y, 2));
+                    double length = Math.Sqrt( Math.Pow(ss.Nodes[(int)node.ID].Pt.X - ss.Nodes[nId].Pt.X, 2) + Math.Pow(ss.Nodes[(int)node.ID].Pt.Y - ss.Nodes[nId].Pt.Y, 2));
                     lengths.Add(length);
                     a_1[(int)node.ID, nId] = length;
                 }
@@ -68,7 +68,7 @@ namespace SimpleShapeGrammar.Classes
                 List<double> x_lengths = new List<double>();
                 foreach (var nId in adj_IDs)
                 {
-                    double x_length = Math.Abs(ss.Nodes[(int)node.ID].Position.X - ss.Nodes[nId].Position.X);
+                    double x_length = Math.Abs(ss.Nodes[(int)node.ID].Pt.X - ss.Nodes[nId].Pt.X);
                     //a_1[(int)node.ID, nId] = x_length;
                     x_lengths.Add(x_length);
                 }
@@ -127,15 +127,15 @@ namespace SimpleShapeGrammar.Classes
                 }
                 if (adj_IDs.Count == 1)
                 {
-                    double x_dist = Math.Abs(_ss.Nodes[i].Position.X - _ss.Nodes[adj_IDs[0]].Position.X);
+                    double x_dist = Math.Abs(_ss.Nodes[i].Pt.X - _ss.Nodes[adj_IDs[0]].Pt.X);
                     double r_j = ((load / 2) * x_dist) + (moments[adj_IDs[0]] / x_dist) - (moments[(int)_ss.Nodes[i].ID] / x_dist);
                     forces[(int)_ss.Nodes[i].ID] = r_j;
                     continue;
                 }
                 if (adj_IDs.Count == 2)
                 {
-                    double x_dist1 = Math.Abs(_ss.Nodes[i].Position.X - _ss.Nodes[adj_IDs[0]].Position.X);
-                    double x_dist2 = Math.Abs(_ss.Nodes[i].Position.X - _ss.Nodes[adj_IDs[1]].Position.X);
+                    double x_dist1 = Math.Abs(_ss.Nodes[i].Pt.X - _ss.Nodes[adj_IDs[0]].Pt.X);
+                    double x_dist2 = Math.Abs(_ss.Nodes[i].Pt.X - _ss.Nodes[adj_IDs[1]].Pt.X);
 
                     double r_j = (load / 2) * (x_dist1 + x_dist2) + moments[adj_IDs[0]] / x_dist1 + moments[adj_IDs[1]] / x_dist2 - moments[(int)_ss.Nodes[i].ID] / x_dist1 - moments[(int)_ss.Nodes[i].ID] / x_dist2;
                     forces[(int)_ss.Nodes[i].ID] = r_j;
@@ -160,18 +160,18 @@ namespace SimpleShapeGrammar.Classes
 
                 if (supInd.Contains(id)) continue; // No need to continue iteration if it is a support
 
-                double x_dist = Math.Abs(ss.Nodes[id].Position.X - ss.Nodes[supInd[0]].Position.X);
+                double x_dist = Math.Abs(ss.Nodes[id].Pt.X - ss.Nodes[supInd[0]].Pt.X);
                 r2 += forces[id] * x_dist;
                 sum += forces[id];
             }
             // add the horizontal thrust
-            double h1 = ss.Nodes[0].Position.Z;
-            double h2 = ss.Nodes[1].Position.Z;
+            double h1 = ss.Nodes[0].Pt.Z;
+            double h2 = ss.Nodes[1].Pt.Z;
             double delta_h = h1 - h2;
             double m_h = delta_h * h_thrust; // the moment from the horizontal thrust 
             r2 -= m_h;
 
-            double totalLength = Math.Abs(ss.Nodes[supInd[1]].Position.X - ss.Nodes[supInd[0]].Position.X);
+            double totalLength = Math.Abs(ss.Nodes[supInd[1]].Pt.X - ss.Nodes[supInd[0]].Pt.X);
             r2 = r2 / totalLength;
             double r1 = sum - r2;
 
@@ -235,11 +235,11 @@ namespace SimpleShapeGrammar.Classes
             // Create the funicular elements and new nodes below: 
             List<double> heights = new List<double>();
             var start_node = ordered_nodes[0]; // start node
-            var h0 = ordered_nodes[0].Position.Z; // height at beginning
+            var h0 = ordered_nodes[0].Pt.Z; // height at beginning
             for (int i = 0; i < ordered_indices.Count-1; i++)
             {
-                var p1 = ordered_nodes[i].Position; // first node
-                var p2 = ordered_nodes[i + 1].Position; // second node
+                var p1 = ordered_nodes[i].Pt; // first node
+                var p2 = ordered_nodes[i + 1].Pt; // second node
                 var f = reciprocal_diagram["internal"][i]; // force line from reciprocal
                 //var h_i = (f.Direction.Y / f.Direction.X) * ( p1.DistanceTo(p2)); // the difference in height between this and the previous element
                 var h_i = (f.Direction.Y / f.Direction.X) * (p2.X - p1.X);
@@ -255,7 +255,7 @@ namespace SimpleShapeGrammar.Classes
 
                     // add new node for the funicular
                     h0 += h_i;
-                    var end_pos = new Point3d(e_node.Position.X, e_node.Position.Y, e_node.Position.Z + h0); //This is wrong. Now all the lines starts in the same point.
+                    var end_pos = new Point3d(e_node.Pt.X, e_node.Pt.Y, e_node.Pt.Z + h0); //This is wrong. Now all the lines starts in the same point.
                     SH_Node end_node = new SH_Node(end_pos, ss.nodeCount++);
                     ss.Nodes.Add(end_node);
 
@@ -263,14 +263,14 @@ namespace SimpleShapeGrammar.Classes
                     SH_Node[] nodes = new SH_Node[] {start_node , end_node};
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Line funicular = new SH_Line(nodes, id, name);
+                    SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
                     ss.Elems.Add(funicular);
 
                     // new element for verticals
                     string name_vert = "verticals";
                     int id_v = ss.elementCount++;
                     SH_Node[] nodes_v = new SH_Node[] { e_node, end_node };
-                    SH_Line ve = new SH_Line(nodes_v, id_v, name_vert);
+                    SH_Elem1D ve = new SH_Elem1D(nodes_v, id_v, name_vert);
                     start_node = end_node;
                     ss.Elems.Add(ve);
                 }
@@ -281,7 +281,7 @@ namespace SimpleShapeGrammar.Classes
                     SH_Node[] nodes = new SH_Node[] { start_node, ss.Nodes[1] };
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Line funicular = new SH_Line(nodes, id, name);
+                    SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
                     ss.Elems.Add(funicular);
                 }
             }
@@ -293,7 +293,7 @@ namespace SimpleShapeGrammar.Classes
         {
             List<Line> funiculars = new List<Line>();
 
-            Point3d startPt = ss.Nodes[0].Position;
+            Point3d startPt = ss.Nodes[0].Pt;
             
             // To calculate this I need: 
                 // - The length of the bar underneath (from sorted nodes maybe?)

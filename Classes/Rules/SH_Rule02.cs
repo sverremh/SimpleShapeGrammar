@@ -55,22 +55,22 @@ namespace SimpleShapeGrammar.Classes.Rules
 
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
-            SH_Line line = new SH_Line();
+            SH_Elem1D line = new SH_Elem1D();
             // to do: evaluate if this is the best method for avoiding an index out of range error. 
             try
             {
-                line = (SH_Line)_ss.Elems[LineIndex];
+                line = (SH_Elem1D)_ss.Elems[LineIndex];
             }
             catch (Exception ex)
             {
                 if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
                 {
-                   line = (SH_Line)_ss.Elems[_ss.elementCount-1]; // if out of range, take the last item
+                   line = (SH_Elem1D)_ss.Elems[_ss.elementCount-1]; // if out of range, take the last item
                 }
                 
             }
              
-            double line_length = line.Nodes[0].Position.DistanceTo(line.Nodes[1].Position);
+            double line_length = line.Nodes[0].Pt.DistanceTo(line.Nodes[1].Pt);
             double segment1 = line_length * Param;
             double segment2 = line_length * (1 - Param);
             // test if the line original length or the splitted segments are smaller than 1 meter. If true the rule cannot be applied. 
@@ -89,9 +89,11 @@ namespace SimpleShapeGrammar.Classes.Rules
             List<SH_Node> nodes = new List<SH_Node>();
            
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
-            SH_Line newLine0 = new SH_Line(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
+
+
+            SH_Elem1D newLine0 = new SH_Elem1D(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.elementName); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
-            SH_Line newLine1 = new SH_Line(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
+            SH_Elem1D newLine1 = new SH_Elem1D(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.elementName);
             _ss.elementCount++;
 
             
@@ -118,9 +120,9 @@ namespace SimpleShapeGrammar.Classes.Rules
         /// <returns></returns>
         private SH_Node AddNode(SH_Element _line, double _t, int _id)
         {
-            double mx = (1 - _t) * _line.Nodes[0].Position.X + _t * _line.Nodes[1].Position.X;
-            double my = (1 - _t) * _line.Nodes[0].Position.Y + _t * _line.Nodes[1].Position.Y;
-            double mz = (1 - _t) * _line.Nodes[0].Position.Z + _t * _line.Nodes[1].Position.Z;
+            double mx = (1 - _t) * _line.Nodes[0].Pt.X + _t * _line.Nodes[1].Pt.X;
+            double my = (1 - _t) * _line.Nodes[0].Pt.Y + _t * _line.Nodes[1].Pt.Y;
+            double mz = (1 - _t) * _line.Nodes[0].Pt.Z + _t * _line.Nodes[1].Pt.Z;
             Point3d newPoint = new Point3d(mx, my, mz);
             SH_Node newNode = new SH_Node(newPoint, _id);
 

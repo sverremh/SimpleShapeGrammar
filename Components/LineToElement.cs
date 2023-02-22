@@ -60,7 +60,7 @@ namespace SimpleShapeGrammar.Components
 
             // --- solve ---
 
-            SH_Line sh_Line = new SH_Line(ln, null, name, crossSection);
+            SH_Elem1D sh_Line = new SH_Elem1D(ln, null, name, crossSection);
 
             // --- output ---
             DA.SetData(0, sh_Line);
