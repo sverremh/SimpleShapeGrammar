@@ -3,6 +3,8 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Rules;
+
 namespace SimpleShapeGrammar.Components
 {
     public class GrammarInterpreter : GH_Component

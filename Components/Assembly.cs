@@ -76,6 +76,7 @@ namespace SimpleShapeGrammar.Components
             sups = SH_UtilityClass.DeepCopy(sups);
             loads = SH_UtilityClass.DeepCopy(loads);
             var curves = new List<NurbsCurve>();
+
             SH_SimpleShape simpleShape = new SH_SimpleShape();
 
             // --- solve ---
@@ -87,8 +88,6 @@ namespace SimpleShapeGrammar.Components
             simpleShape.nodeCount = 0;
             simpleShape.supCount = 0;
 
-
-            
             List<SH_Node> nodes = new List<SH_Node>();
             List<SH_Element> numberedElems = new List<SH_Element>();
             foreach (SH_Element e in elems)
@@ -107,7 +106,6 @@ namespace SimpleShapeGrammar.Components
                         continue;
                     }
                     
-
                     node.ID = simpleShape.nodeCount;
                     nodes.Add(node);
                     simpleShape.nodeCount++;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
+
 using SimpleShapeGrammar.Classes;
 using SimpleShapeGrammar.Classes.Elements;
 
@@ -16,8 +17,7 @@ namespace SimpleShapeGrammar.Classes.Rules
     public class SH_Rule02 : SH_Rule
     {
         // --- properties ---
-        //public State RuleState = State.beta;
-        
+
         public int LineIndex { get; set; }
         public double Param { get; set; }
         private double[] bounds  = { 0.2, 0.8 };

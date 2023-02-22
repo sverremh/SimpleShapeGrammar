@@ -13,11 +13,12 @@ namespace SimpleShapeGrammar.Classes.Elements
     {
         // -- properties
 
-        public NurbsCurve NurbsCurve { get; set; }
+        // Properties from SH_Element class
+        // public int? ID { get; set; }
+        // public string elementName { get; set; }
+        // public SH_Node[] Nodes { get; set; }
 
-        // Maybe we need an abstract element class with line elements and surface elements as inheriting classes?
-        //public List<Surface> Surfaces { get; set; } 
-
+        public Line Ln { get; set; }
 
         public SH_CrossSection_Beam CrossSection { get; set; }
 
@@ -32,21 +33,40 @@ namespace SimpleShapeGrammar.Classes.Elements
 
             ID = _id;
             Nodes = _nodes;
-            CreateNurbs();
+            CreateLine();
         }
         public SH_Line(SH_Node[] _nodes, int? _id, string _el_name)
         {
             ID = _id;
             Nodes = _nodes;
             elementName = _el_name;
-            CreateNurbs();
+            CreateLine();
+        }
+
+        public SH_Line(Line _ln, int? _id, string _el_name, SH_CrossSection_Beam _cs)
+        {
+            ID = _id;
+            elementName = _el_name;
+            Ln = _ln;
+
+            SH_Node[] nodes = new SH_Node[2];
+            nodes[0] = new SH_Node(Ln.From, null);
+            nodes[1] = new SH_Node(Ln.To, null);
+
+            Nodes = nodes;
         }
 
 
         // --- methods ---
-        private void CreateNurbs()
+
+        //private void CreateNurbs()
+        //{
+        //    NurbsCurve = NurbsCurve.Create(false, 1, new Point3d[] { Nodes[0].Position, Nodes[1].Position });
+        //}
+
+        private void CreateLine()
         {
-            NurbsCurve = NurbsCurve.Create(false, 1, new Point3d[] { Nodes[0].Position, Nodes[1].Position });
+            Ln = new Line(Nodes[0].Position, Nodes[1].Position);
         }
     }
 }

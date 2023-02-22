@@ -5,6 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
 using SimpleShapeGrammar.Classes;
+using SimpleShapeGrammar.Classes.Rules;
 
 namespace SimpleShapeGrammar.Components.MOOComponents
 {

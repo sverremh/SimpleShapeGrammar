@@ -7,7 +7,7 @@ using SimpleShapeGrammar.Classes.Elements;
 using Rhino.Geometry;
 
 
-namespace SimpleShapeGrammar.Classes
+namespace SimpleShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_Rule01 : SH_Rule

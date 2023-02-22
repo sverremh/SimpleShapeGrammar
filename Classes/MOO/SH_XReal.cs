@@ -5,6 +5,8 @@ using System.Text;
 using JMetalCSharp.Utils.Wrapper;
 using JMetalCSharp.Core;
 
+using SimpleShapeGrammar.Classes.Rules;
+
 namespace SimpleShapeGrammar.Classes
 {
     public class SH_XReal : XReal

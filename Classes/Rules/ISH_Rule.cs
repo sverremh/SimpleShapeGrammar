@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShapeGrammar.Classes
+namespace SimpleShapeGrammar.Classes.Rules
 {
     public interface ISH_Rule
     {

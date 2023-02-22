@@ -11,6 +11,7 @@ using Karamba.Models;
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
 using JMetalCSharp.Utils.Wrapper;
+using SimpleShapeGrammar.Classes.Rules;
 using SimpleShapeGrammar.Components.MOOComponents;
 
 namespace SimpleShapeGrammar.Classes

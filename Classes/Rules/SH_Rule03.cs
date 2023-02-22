@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
 
-namespace SimpleShapeGrammar.Classes
+namespace SimpleShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_Rule03 : SH_Rule

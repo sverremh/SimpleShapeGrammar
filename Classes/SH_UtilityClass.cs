@@ -6,7 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+
 using SimpleShapeGrammar.Classes.Elements;
+using SimpleShapeGrammar.Classes.Rules;
 
 using Karamba.Models;
 using Karamba.Utilities;

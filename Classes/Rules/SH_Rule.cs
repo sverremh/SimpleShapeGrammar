@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShapeGrammar.Classes
+namespace SimpleShapeGrammar.Classes.Rules
 {
     [Serializable]
     public abstract class SH_Rule : ISH_Rule
@@ -23,6 +23,21 @@ namespace SimpleShapeGrammar.Classes
         public abstract string RuleOperation(SH_SimpleShape _ss);
         
         public abstract State GetNextState();
+
+        // for child class
+        //public override void NewRuleParameters(Random random, SH_SimpleShape ss) { }
+        //public override SH_Rule CopyRule(SH_Rule rule)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public override string RuleOperation(SH_SimpleShape _ss)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public override State GetNextState()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 
 

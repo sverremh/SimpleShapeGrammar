@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
-using JMetalCSharp.Encoding.Variable; 
+using JMetalCSharp.Encoding.Variable;
+using SimpleShapeGrammar.Classes.Rules;
 
 namespace SimpleShapeGrammar.Classes
 {

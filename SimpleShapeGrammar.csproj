@@ -104,7 +104,6 @@
     <Compile Include="Classes\Elements\SH_Solid.cs" />
     <Compile Include="Classes\Elements\SH_Surface.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
-    <Compile Include="Classes\Kristiane\Test.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
     <Compile Include="Classes\MOO\SH_Crossover.cs" />
@@ -120,6 +119,7 @@
     <Compile Include="Classes\MOO\SH_Variable.cs" />
     <Compile Include="Classes\MOO\SH_XReal.cs" />
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
+    <Compile Include="Classes\Rules\SH_AutoRule_01.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
     <Compile Include="Classes\Elements\SH_Element.cs" />
@@ -159,14 +159,6 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
-    <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
-    <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -222,7 +214,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
+Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\McNeel\Rhinoceros\packages\7.0\Karamba3D\2.2.0.171\$(ProjectName).gha"
 
 Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
