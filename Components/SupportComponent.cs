@@ -64,7 +64,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Sup;
+                return ShapeGrammar.Properties.Resources.icons_C_Sup;
             }
         }
 
