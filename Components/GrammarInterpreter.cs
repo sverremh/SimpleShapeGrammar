@@ -2,10 +2,10 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Rules;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class GrammarInterpreter : GH_Component
     {
@@ -51,7 +51,7 @@ namespace SimpleShapeGrammar.Components
             if (!DA.GetDataList(1, rules)) return;
 
             //Create a deep copy of the simple Shape before performing rule operations
-            SH_SimpleShape copyShape = SH_UtilityClass.DeepCopy(simpleShape);
+            SH_SimpleShape copyShape = Util.DeepCopy(simpleShape);
 
             // --- solve ---
 

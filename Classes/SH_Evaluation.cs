@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Elements;
 
 using Accord.Math;
 
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public static class SH_Evaluation
     {

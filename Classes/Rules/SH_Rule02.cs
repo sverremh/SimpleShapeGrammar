@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
 
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Classes.Rules
+namespace ShapeGrammar.Classes.Rules
 {
     /// <summary>
     /// Rule splitting the line at the input parameter
@@ -165,7 +165,7 @@ namespace SimpleShapeGrammar.Classes.Rules
         {
             // the parameter to use for the rule
             int numLines = ss.elementCount;
-            Param = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
+            Param = Util.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
             LineIndex = random.Next(0, numLines-1);
             
         }

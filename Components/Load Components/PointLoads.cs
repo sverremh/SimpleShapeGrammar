@@ -1,9 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using SimpleShapeGrammar.Classes;
+using ShapeGrammar.Classes;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class PointLoads : GH_Component
     {

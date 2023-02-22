@@ -103,6 +103,7 @@
     <Compile Include="Classes\Elements\SH_Elem1D.cs" />
     <Compile Include="Classes\Elements\SH_Solid.cs" />
     <Compile Include="Classes\Elements\SH_Surface.cs" />
+    <Compile Include="Classes\SG_Genotype.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
@@ -136,13 +137,15 @@
     <Compile Include="Classes\Rules\SH_Rule03.cs" />
     <Compile Include="Classes\SH_SimpleShape.cs" />
     <Compile Include="Classes\SH_Support.cs" />
-    <Compile Include="Classes\SH_UtilityClass.cs" />
+    <Compile Include="Classes\Util.cs" />
     <Compile Include="Components\Assembly.cs" />
+    <Compile Include="Components\CreateGenotype.cs" />
     <Compile Include="Components\CreateIsotropicMaterial.cs" />
     <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
     <Compile Include="Components\Disassemble\DisassembleSimpleShape.cs" />
     <Compile Include="Components\Disassemble\DisassemleSupport.cs" />
     <Compile Include="Components\Evaluate.cs" />
+    <Compile Include="Components\GrammarInterpreter_Auto.cs" />
     <Compile Include="Components\KarambaComponents\KarambaTest.cs" />
     <Compile Include="Components\Load Components\LineLoad.cs" />
     <Compile Include="Components\LineToElement.cs" />

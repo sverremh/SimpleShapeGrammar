@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Classes.Elements
+namespace ShapeGrammar.Classes.Elements
 {
     [Serializable]
     public class SH_Solid : SH_Element

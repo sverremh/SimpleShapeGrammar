@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     /// <summary>
     /// Class for general operations using Karamba

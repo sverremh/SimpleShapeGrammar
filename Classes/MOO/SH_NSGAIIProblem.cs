@@ -11,10 +11,10 @@ using Karamba.Models;
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
 using JMetalCSharp.Utils.Wrapper;
-using SimpleShapeGrammar.Classes.Rules;
-using SimpleShapeGrammar.Components.MOOComponents;
+using ShapeGrammar.Classes.Rules;
+using ShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public class SH_NSGAIIProblem : Problem
     {
@@ -110,9 +110,9 @@ namespace SimpleShapeGrammar.Classes
 
             // create a karamba model from the SH_SimpleShape
             //Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(grammarShape);
-            Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
+            Model karambaModel = Util.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
             // analyse the karamba model and return the objective functions
-            List<double> objectives = SH_UtilityClass.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
+            List<double> objectives = Util.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
 
             // assign the objective values to the solution
             for (int i = 0; i < MyComponent.GrammarObjectives.Count; i++)

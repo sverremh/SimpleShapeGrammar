@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using JMetalCSharp.Core;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     class SH_SolutionType : SolutionType
     {

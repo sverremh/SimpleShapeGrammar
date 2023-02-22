@@ -9,9 +9,9 @@ using JMetalCSharp.Operators.Crossover;
 using JMetalCSharp.Operators.Mutation;
 using JMetalCSharp.Operators.Selection;
 using JMetalCSharp.QualityIndicator;
-using SimpleShapeGrammar.Components.MOOComponents;
+using ShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     
     class SH_NSGAIIRunner

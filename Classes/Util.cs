@@ -7,8 +7,8 @@ using System.IO;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using SimpleShapeGrammar.Classes.Elements;
-using SimpleShapeGrammar.Classes.Rules;
+using ShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Rules;
 
 using Karamba.Models;
 using Karamba.Utilities;
@@ -19,7 +19,7 @@ using Karamba.CrossSections;
 using Karamba.Supports;
 using Karamba.Loads;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     
 
@@ -38,9 +38,12 @@ namespace SimpleShapeGrammar.Classes
 
     // --- methods ---
 
-    public static class SH_UtilityClass
+    public static class Util
     {
         public static double MIN_SEG_LEN = 1.0;
+        public static string CAT = "SimpleGrammar";
+        public static string GR_INT = "04. Interpreter";
+        public static string GR_UTIL = "99. Utilities";
 
         public static T DeepCopy<T>(T target)
         {
@@ -70,7 +73,7 @@ namespace SimpleShapeGrammar.Classes
         /// <param name="ss"></param>
         public static SH_SimpleShape ApplyRulesToSimpleShape(List<SH_Rule> rules, SH_SimpleShape ss)
         {
-            SH_SimpleShape ssCopy = SH_UtilityClass.DeepCopy(ss) ; 
+            SH_SimpleShape ssCopy = Util.DeepCopy(ss) ; 
             foreach (SH_Rule rule in rules)
             {
                 try

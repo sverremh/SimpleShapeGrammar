@@ -2,9 +2,9 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
+using ShapeGrammar.Classes;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class RandomRules : GH_Component
     {
@@ -75,7 +75,7 @@ namespace SimpleShapeGrammar.Components
             var rnd = new Random(Guid.NewGuid().GetHashCode());
             for (int i = 0; i < length; i++)
             {
-                SH_UtilityClass.TakeRandomItem( rules, weights, rnd, out object rule);
+                Util.TakeRandomItem( rules, weights, rnd, out object rule);
                 out_rules.Add(rule);
             }
 

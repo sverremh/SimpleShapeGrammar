@@ -1,9 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using SimpleShapeGrammar.Classes;
+using ShapeGrammar.Classes;
 
-namespace SimpleShapeGrammar.Components.Disassemble
+namespace ShapeGrammar.Components.Disassemble
 {
     public class DisassemleSupport : GH_Component
     {

@@ -2,10 +2,10 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Rules;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class Rule02 : GH_Component
     {

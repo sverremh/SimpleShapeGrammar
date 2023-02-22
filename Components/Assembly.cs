@@ -2,12 +2,12 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
+using ShapeGrammar.Classes;
 
 using System.Linq;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     // This assembly component is not yet compatibel with other geometries than lines as for the simple bridge and truss roof grammar. 
     [Serializable]
@@ -72,9 +72,9 @@ namespace SimpleShapeGrammar.Components
             }
 
             // deep copy the input
-            elems = SH_UtilityClass.DeepCopy(elems); // How to get this into the form of Dictionary? Multiple input? 
-            sups = SH_UtilityClass.DeepCopy(sups);
-            loads = SH_UtilityClass.DeepCopy(loads);
+            elems = Util.DeepCopy(elems); // How to get this into the form of Dictionary? Multiple input? 
+            sups = Util.DeepCopy(sups);
+            loads = Util.DeepCopy(loads);
             var curves = new List<NurbsCurve>();
 
             SH_SimpleShape simpleShape = new SH_SimpleShape();

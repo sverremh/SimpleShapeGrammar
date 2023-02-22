@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     [Serializable]
     class SH_CrossSection_Rectangle : SH_CrossSection_Beam

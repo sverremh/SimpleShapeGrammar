@@ -2,8 +2,8 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+using ShapeGrammar.Classes;
+namespace ShapeGrammar.Components
 {
     public class SupportComponent : GH_Component
     {

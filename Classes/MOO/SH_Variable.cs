@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
 using JMetalCSharp.Encoding.Variable;
-using SimpleShapeGrammar.Classes.Rules;
+using ShapeGrammar.Classes.Rules;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public class SH_Variable : Variable
     {

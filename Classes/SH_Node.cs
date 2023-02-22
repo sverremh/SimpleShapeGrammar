@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.Geometry;
-using SimpleShapeGrammar.Classes.Elements;
-namespace SimpleShapeGrammar.Classes
+using ShapeGrammar.Classes.Elements;
+namespace ShapeGrammar.Classes
 {
     [Serializable]
     public class SH_Node

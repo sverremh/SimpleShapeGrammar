@@ -2,19 +2,20 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+
 using ShapeGrammar.Classes;
 
 namespace ShapeGrammar.Components
 {
-    public class LineLoad : GH_Component
+    public class CreateGenotype : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the LineLoad class.
+        /// Initializes a new instance of the CreateGenotype class.
         /// </summary>
-        public LineLoad()
-          : base("LineLoad", "l_load",
-              "Line load on element",
-              "SimpleGrammar", "Loads")
+        public CreateGenotype()
+          : base("CreateGenotype", "Genotype",
+              "Description",
+              Util.CAT, Util.GR_UTIL)
         {
         }
 
@@ -23,11 +24,8 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("ElementIds", "e_id", "The element to apply the loads onto", GH_ParamAccess.item); // 0
-            pManager.AddIntegerParameter("LoadCase", "lc", "Load case that the load applies to", GH_ParamAccess.item, 0); // 1
-            pManager.AddVectorParameter("LoadVector", "loadvec", "The direction of the line load", GH_ParamAccess.item); // 2
-
-            pManager[0].Optional = true;  // element ids are not necessary. If none are present the laod applies to all. 
+            pManager.AddIntegerParameter("Integer List", "IntLst", "", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Double List", "DblLst", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_LineLoad", "load", "SH_Load for assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Genotype", "GType", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,23 +43,20 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            string elementID = "";
-            int lc = 0;
-            Vector3d lVec = new Vector3d();
+            List<int> ints = new List<int>();
+            List<double> ds = new List<double>();
 
             // --- input ---
+            if (!DA.GetDataList(0, ints)) return;
+            if (!DA.GetDataList(1, ds)) return;
 
-            //bool idPresent = DA.GetData(0, ref elementID);
-            DA.GetData(0,ref elementID);
-            DA.GetData(1, ref lc);
-            if (!DA.GetData(2, ref lVec)) return;
             // --- solve ---
-            SH_LineLoad ll = new SH_LineLoad(lc, lVec);
-            ll.ElementId = elementID;
-            
+
+            SG_Genotype gt = new SG_Genotype(ints, ds);
 
             // --- output ---
-            DA.SetData(0, ll);
+            DA.SetData(0, gt);
+
         }
 
         /// <summary>
@@ -82,7 +77,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("d2f35a0d-76e0-4ebd-af17-8888febceab1"); }
+            get { return new Guid("89d40ccf-307e-4815-971a-8fff5ca2a2de"); }
         }
     }
 }

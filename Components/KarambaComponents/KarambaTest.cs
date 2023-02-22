@@ -12,7 +12,7 @@ using Karamba.Supports;
 using Karamba.Loads;
 
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class KarambaTest : GH_Component
     {

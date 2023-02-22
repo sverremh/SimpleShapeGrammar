@@ -2,10 +2,10 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class LineToElement : GH_Component
     {

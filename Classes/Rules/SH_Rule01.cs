@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Elements;
 using Rhino.Geometry;
 
 
-namespace SimpleShapeGrammar.Classes.Rules
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_Rule01 : SH_Rule
@@ -111,12 +111,12 @@ namespace SimpleShapeGrammar.Classes.Rules
         public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
             // create a random parameter
-            double x0 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double x1 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double y0 = SH_UtilityClass.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double y1 = SH_UtilityClass.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double z0 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
-            double z1 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double x0 = Util.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double x1 = Util.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double y0 = Util.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double y1 = Util.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double z0 = Util.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double z1 = Util.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
             
             // set the vectors
             TranslateStart = new Vector3d(x0, y0, z0);

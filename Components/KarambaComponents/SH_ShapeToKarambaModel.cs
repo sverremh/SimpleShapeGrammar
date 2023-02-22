@@ -12,11 +12,11 @@ using Karamba.CrossSections;
 using Karamba.Supports;
 using Karamba.Loads;
 using Karamba.Factories;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class SH_ShapeToKarambaModel : GH_Component
     {

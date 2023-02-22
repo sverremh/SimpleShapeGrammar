@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public enum State { alpha, beta, gamma, delta, epsilon, zeta, eta, theta, end}; // add more if needed. 
 

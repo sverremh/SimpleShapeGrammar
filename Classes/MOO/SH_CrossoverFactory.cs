@@ -5,7 +5,7 @@ using System.Linq;
 using JMetalCSharp.Operators;
 using JMetalCSharp.Operators.Crossover;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public static class SH_CrossoverFactory
     {

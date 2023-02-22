@@ -9,10 +9,10 @@ using Grasshopper.Kernel;
 using System.Windows.Forms;
 using Rhino.Geometry;
 
-using SimpleShapeGrammar.Classes.Rules;
-using SimpleShapeGrammar.Components.MOOComponents;
+using ShapeGrammar.Classes.Rules;
+using ShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     class MOOComponentAttributes : Grasshopper.Kernel.Attributes.GH_ComponentAttributes
     {

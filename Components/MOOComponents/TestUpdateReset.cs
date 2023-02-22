@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Components.MOOComponents
+namespace ShapeGrammar.Components.MOOComponents
 {
     public class TestUpdateReset : GH_Component
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
 
-namespace SimpleShapeGrammar.Classes.Rules
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_Rule03 : SH_Rule
@@ -88,7 +88,7 @@ namespace SimpleShapeGrammar.Classes.Rules
         
         public override void NewRuleParameters(Random random, SH_SimpleShape ss)
         {
-            HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
+            HorizontalThrustParameter = Util.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
 
         public override State GetNextState()

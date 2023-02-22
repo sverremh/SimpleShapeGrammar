@@ -1,22 +1,22 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using Rhino.Geometry;
+using Grasshopper.Kernel;
+
 using ShapeGrammar.Classes;
 
-using ShapeGrammar.Classes.Rules;
-
-namespace ShapeGrammar.Components.RuleComponents
+namespace ShapeGrammar.Components
 {
-    public class Rule03 : GH_Component
+    public class GrammarInterpreter_Auto : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Rule03 class.
+        /// Initializes a new instance of the GrammerInterpreter_Auto class.
         /// </summary>
-        public Rule03()
-          : base("Rule03", "r3",
-              "Rule3 adds a funicular to the simple bridge. This is the last rule to be used",
-              "SimpleGrammar", "Rules")
+        public GrammarInterpreter_Auto()
+          : base("GrammerInterpreter_Auto", "GI_Auto",
+              "Automatic Grammar Interpreter",
+              Util.CAT, Util.GR_INT)
         {
         }
 
@@ -25,8 +25,10 @@ namespace ShapeGrammar.Components.RuleComponents
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Horizontal Thrust", "thrust", "Horizontal force in the bridge as a factor of the vertical force", GH_ParamAccess.item, 0.7); // 0
-            pManager.AddBooleanParameter("Compression", "c", "True if the funicular shall be in compression; false for tension.", GH_ParamAccess.item, true); // 1
+            pManager.AddGenericParameter("Shape", "Shape", "Shape Grammar Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Automatic Rules", "Autorules", "Rules for Automatic Interpreter", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Genotype", "Genotype", "Genotype/Chromosome", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -34,7 +36,6 @@ namespace ShapeGrammar.Components.RuleComponents
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Rule03", "rule3", "", GH_ParamAccess.item); //
         }
 
         /// <summary>
@@ -43,19 +44,6 @@ namespace ShapeGrammar.Components.RuleComponents
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // --- variables ---
-            double h = 0.0;
-            bool c = true;
-
-            // --- input ---
-            DA.GetData(0, ref h);
-            DA.GetData(1, ref c);
-
-            // --- solve ---
-            SH_Rule03 rule3 = new SH_Rule03(h, c);
-
-            // --- output ---
-            DA.SetData(0, rule3);
         }
 
         /// <summary>
@@ -76,7 +64,7 @@ namespace ShapeGrammar.Components.RuleComponents
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("e9cbf9fe-9c49-4e27-9fcd-071000a1ff3b"); }
+            get { return new Guid("38d35ef6-a3b2-44b2-bfa7-23d1292d37f5"); }
         }
     }
 }

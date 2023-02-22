@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShapeGrammar.Classes.Rules
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_RuleA : SH_Rule

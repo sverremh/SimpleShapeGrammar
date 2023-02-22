@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 using Rhino.Geometry;
 
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Classes.Rules
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
     public class SH_AutoRule01 : SH_Rule
@@ -53,12 +53,10 @@ namespace SimpleShapeGrammar.Classes.Rules
         {
             SH_Elem1D elem = _ss.Elems.Where(e => e.ID == EID).First() as SH_Elem1D; 
 
-            // int at = 
-
             double seglen1 = elem.Ln.Length * T;
             double seglen2 = elem.Ln.Length * (1 - T);
 
-            if (seglen1 < SH_UtilityClass.MIN_SEG_LEN || seglen2 < 1.0)
+            if (seglen1 < Util.MIN_SEG_LEN || seglen2 < 1.0)
             {
                 return "Segments are too short for Autorule01.";
             }

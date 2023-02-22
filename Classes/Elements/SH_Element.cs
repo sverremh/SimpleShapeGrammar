@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Rhino.Geometry;
-namespace SimpleShapeGrammar.Classes.Elements
+namespace ShapeGrammar.Classes.Elements
 {
     [Serializable] 
     public abstract class SH_Element //: SH_CrossSection_Beam
