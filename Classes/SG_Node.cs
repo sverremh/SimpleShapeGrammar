@@ -13,7 +13,7 @@ namespace ShapeGrammar.Classes
         public int ID { get; set;}
         public Point3d Pt { get; set; }
         public SG_Support Support { get; set; }
-        public List<SH_Element> Elements { get; set; } = new List<SH_Element>();
+        public List<SG_Element> Elements { get; set; } = new List<SG_Element>();
 
         // --- constructors --- 
         public SG_Node()
@@ -25,6 +25,7 @@ namespace ShapeGrammar.Classes
             Pt = _location;
 
             Support = new SG_Support("000000", Pt);
+            Support.Node = this;
             
         }
 

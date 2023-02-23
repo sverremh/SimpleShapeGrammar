@@ -55,17 +55,17 @@ namespace ShapeGrammar.Classes.Rules
 
             // choose the line to split
             //SH_Element line = _ss.Lines.Where(l => l.ID == LineID).First(); DELETE IF OK
-            SH_Elem1D line = new SH_Elem1D();
+            SG_Elem1D line = new SG_Elem1D();
             // to do: evaluate if this is the best method for avoiding an index out of range error. 
             try
             {
-                line = (SH_Elem1D)_ss.Elems[LineIndex];
+                line = (SG_Elem1D)_ss.Elems[LineIndex];
             }
             catch (Exception ex)
             {
                 if (ex is ArgumentOutOfRangeException || ex is IndexOutOfRangeException)
                 {
-                   line = (SH_Elem1D)_ss.Elems[_ss.elementCount-1]; // if out of range, take the last item
+                   line = (SG_Elem1D)_ss.Elems[_ss.elementCount-1]; // if out of range, take the last item
                 }
                 
             }
@@ -91,9 +91,9 @@ namespace ShapeGrammar.Classes.Rules
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
 
 
-            SH_Elem1D newLine0 = new SH_Elem1D(new SG_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
+            SG_Elem1D newLine0 = new SG_Elem1D(new SG_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
-            SH_Elem1D newLine1 = new SH_Elem1D(new SG_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
+            SG_Elem1D newLine1 = new SG_Elem1D(new SG_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
             _ss.elementCount++;
 
             
@@ -118,7 +118,7 @@ namespace ShapeGrammar.Classes.Rules
         /// <param name="_t"> Splitting parameter</param>
         /// <param name="_id">ID of the line</param>
         /// <returns></returns>
-        private SG_Node AddNode(SH_Element _line, double _t, int _id)
+        private SG_Node AddNode(SG_Element _line, double _t, int _id)
         {
             double mx = (1 - _t) * _line.Nodes[0].Pt.X + _t * _line.Nodes[1].Pt.X;
             double my = (1 - _t) * _line.Nodes[0].Pt.Y + _t * _line.Nodes[1].Pt.Y;

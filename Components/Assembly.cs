@@ -53,7 +53,7 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            List<SH_Element> elems = new List<SH_Element>();
+            List<SG_Element> elems = new List<SG_Element>();
             List<SG_Support> sups = new List<SG_Support>();
             List<SH_Load> loads = new List<SH_Load>();
             
@@ -85,10 +85,10 @@ namespace ShapeGrammar.Components
             shape.nodeCount = 0;
 
             List<SG_Node> nodes = new List<SG_Node>();
-            List<SH_Element> renumberedElems = new List<SH_Element>();
+            List<SG_Element> renumberedElems = new List<SG_Element>();
             List<SG_Support> uniqueSupports = new List<SG_Support>();
 
-            foreach (SH_Element e in elems)
+            foreach (SG_Element e in elems)
             {
                 // element counter
                 e.ID = shape.elementCount;
@@ -106,6 +106,7 @@ namespace ShapeGrammar.Components
                         targetNode = nodes.Where(n => n.Pt.DistanceToSquared(nd.Pt) < 0.001).First();
 
                         targetNode.Elements.Add(e);
+                        continue;
                     }
                     
                     // new node case
@@ -125,9 +126,9 @@ namespace ShapeGrammar.Components
                 if (nd != null)
                 {
                     sup.Node = nd;
-                    uniqueSupports.Add(sup);
+                    nd.Support = sup;
+                    uniqueSupports.Add(sup); 
                 }
-
             }
             
             // add the loads to the simple shape            

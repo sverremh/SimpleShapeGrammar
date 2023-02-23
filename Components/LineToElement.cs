@@ -60,7 +60,7 @@ namespace ShapeGrammar.Components
 
             // --- solve ---
 
-            SH_Elem1D sh_Line = new SH_Elem1D(ln, null, name, crossSection);
+            SG_Elem1D sh_Line = new SG_Elem1D(ln, null, name, crossSection);
 
             // --- output ---
             DA.SetData(0, sh_Line);

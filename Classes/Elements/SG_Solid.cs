@@ -9,30 +9,30 @@ using Rhino.Geometry;
 namespace ShapeGrammar.Classes.Elements
 {
     [Serializable]
-    public class SH_Solid : SH_Element
+    public class SG_Solid : SG_Element
     {
         // -- properties --
         public Brep Brep { get; set; }
 
         // -- constructors --
-        public SH_Solid()
+        public SG_Solid()
         {
             // empty constructor
         }
 
-        public SH_Solid(string _name, int _id)
+        public SG_Solid(string _name, int _id)
         {
             Name = _name;
             ID = _id;
         }
 
-        public SH_Solid(string _name, int _id, Brep _brep)
+        public SG_Solid(string _name, int _id, Brep _brep)
         {
             Name = _name;
             ID = _id;
             Brep = _brep;
         }
-        public SH_Solid(string _name, Brep _brep)
+        public SG_Solid(string _name, Brep _brep)
         {
             Name = _name;
             Brep = _brep;

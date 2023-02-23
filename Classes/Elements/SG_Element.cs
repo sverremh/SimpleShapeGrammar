@@ -8,7 +8,7 @@ using Rhino.Geometry;
 namespace ShapeGrammar.Classes.Elements
 {
     [Serializable] 
-    public abstract class SH_Element //: SH_CrossSection_Beam
+    public abstract class SG_Element //: SH_CrossSection_Beam
     {
         // --- properties ---
         

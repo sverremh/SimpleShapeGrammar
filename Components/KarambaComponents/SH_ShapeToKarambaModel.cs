@@ -155,14 +155,14 @@ namespace ShapeGrammar.Components
         /// <param name="elements"></param>
         /// <param name="k3d"></param>
         /// <returns></returns>
-        private List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
+        private List<Line3> SH_ElementsToKarambaLines(List<SG_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
         {
             // initiate list
             
             List<Line3> k_lines = new List<Line3>();
             List<string> k_names = new List<string>();
             // create karamabe BuilderBeam elements using Factory method
-            foreach (SH_Element el in elements)
+            foreach (SG_Element el in elements)
             {                
                 // get node points
                 Point3d sPt = el.Nodes[0].Pt;

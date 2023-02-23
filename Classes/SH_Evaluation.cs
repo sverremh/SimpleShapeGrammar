@@ -33,12 +33,12 @@ namespace ShapeGrammar.Classes
                 }
 
                 // find adjacent elements
-                List<SH_Elem1D> els = new List<SH_Elem1D>();
+                List<SG_Elem1D> els = new List<SG_Elem1D>();
                 foreach (var el in ss.Elems)
                 {
                     if (el.Nodes.Contains(node)) // true if the node is connected to the element
                     {
-                        els.Add((SH_Elem1D)el);
+                        els.Add((SG_Elem1D)el);
                     }
                 }
 
@@ -105,7 +105,7 @@ namespace ShapeGrammar.Classes
             for (int i = 0; i < _ss.Nodes.Count; i++)
             {
                 // find adjacent elements
-                List<SH_Element> els = new List<SH_Element>();
+                List<SG_Element> els = new List<SG_Element>();
                 foreach (var el in _ss.Elems)
                 {
                     if (el.Nodes.Contains(_ss.Nodes[i])) // true if the node is connected to the element
@@ -263,14 +263,14 @@ namespace ShapeGrammar.Classes
                     SG_Node[] nodes = new SG_Node[] {start_node , end_node};
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
+                    SG_Elem1D funicular = new SG_Elem1D(nodes, id, name);
                     ss.Elems.Add(funicular);
 
                     // new element for verticals
                     string name_vert = "verticals";
                     int id_v = ss.elementCount++;
                     SG_Node[] nodes_v = new SG_Node[] { e_node, end_node };
-                    SH_Elem1D ve = new SH_Elem1D(nodes_v, id_v, name_vert);
+                    SG_Elem1D ve = new SG_Elem1D(nodes_v, id_v, name_vert);
                     start_node = end_node;
                     ss.Elems.Add(ve);
                 }
@@ -281,7 +281,7 @@ namespace ShapeGrammar.Classes
                     SG_Node[] nodes = new SG_Node[] { start_node, ss.Nodes[1] };
                     string name = "funicular";
                     int id = ss.elementCount++;
-                    SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
+                    SG_Elem1D funicular = new SG_Elem1D(nodes, id, name);
                     ss.Elems.Add(funicular);
                 }
             }
@@ -305,7 +305,7 @@ namespace ShapeGrammar.Classes
         public static void SortNodes(SG_Shape ss, SG_Node node, ref List<SG_Node> nodes, ref List<int> sort_ind)
         {
             
-            List<SH_Element> els = ss.Elems.Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
+            List<SG_Element> els = ss.Elems.Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
             SG_Node new_node = new SG_Node();
             if(els.Count == 1)
             {

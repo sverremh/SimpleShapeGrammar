@@ -8,29 +8,29 @@ using Rhino.Geometry;
 namespace ShapeGrammar.Classes.Elements
 {
     [Serializable]
-    public class SH_Surface : SH_Element
+    public class SG_Surface : SG_Element
     {
         // -- properties -- 
         public Surface elementSurface { get; set; }
 
         // -- constructors --
-        public SH_Surface()
+        public SG_Surface()
         {
             // empty constructor
         }
 
-        public SH_Surface(Surface elementSurface)
+        public SG_Surface(Surface elementSurface)
         {
             this.elementSurface = elementSurface;
         }
 
-        public SH_Surface(Surface elementSurface, string _name)
+        public SG_Surface(Surface elementSurface, string _name)
         {
             this.elementSurface = elementSurface;
             Name = _name;
         }
 
-        public SH_Surface(string _name, int _id, Surface _surface)
+        public SG_Surface(string _name, int _id, Surface _surface)
         {
             Name = _name;
             ID = _id;

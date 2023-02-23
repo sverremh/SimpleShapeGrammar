@@ -57,7 +57,7 @@ namespace ShapeGrammar.Components
             // --- solve ---
 
             // list of elements
-            List<SH_Element> elems = new List<SH_Element>();
+            List<SG_Element> elems = new List<SG_Element>();
             elems.AddRange(ss.Elems);
 
             // list of supports

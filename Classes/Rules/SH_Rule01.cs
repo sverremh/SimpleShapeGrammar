@@ -54,7 +54,7 @@ namespace ShapeGrammar.Classes.Rules
 
             // take the 1st element
             // SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
-            SH_Elem1D sh_elem = (SH_Elem1D)_ss.Elems[0];
+            SG_Elem1D sh_elem = (SG_Elem1D)_ss.Elems[0];
 
             // apply the change
             #region NewMethod

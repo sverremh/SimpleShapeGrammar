@@ -24,7 +24,7 @@ namespace ShapeGrammar.Classes
         /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
         /// </summary>
         // public Dictionary<string, List<SH_Element>> Elements { get; set; } = new Dictionary<string, List<SH_Element>>();
-        public List<SH_Element> Elems { get; set; } = new List<SH_Element>();
+        public List<SG_Element> Elems { get; set; } = new List<SG_Element>();
 
         public List<SG_Node> Nodes { get; set; }
         public List<SG_Support> Supports { get; set; }
@@ -40,7 +40,7 @@ namespace ShapeGrammar.Classes
         }
 
         // --- methods ---
-        public void AddLine(SH_Element _line)
+        public void AddLine(SG_Element _line)
         {
             Elems.Add(_line);
         }
@@ -57,7 +57,7 @@ namespace ShapeGrammar.Classes
 
         public List<Line> GetLinesFromShape()
         {
-            return Elems.Select(e => (e as SH_Elem1D).Ln).ToList(); 
+            return Elems.Select(e => (e as SG_Elem1D).Ln).ToList(); 
         }
 
         public void TranslateNode(Vector3d vec, int nodeInd)

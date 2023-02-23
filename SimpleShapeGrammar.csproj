@@ -100,9 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
-    <Compile Include="Classes\Elements\SH_Elem1D.cs" />
-    <Compile Include="Classes\Elements\SH_Solid.cs" />
-    <Compile Include="Classes\Elements\SH_Surface.cs" />
+    <Compile Include="Classes\Elements\SG_Elem1D.cs" />
+    <Compile Include="Classes\Elements\SG_Solid.cs" />
+    <Compile Include="Classes\Elements\SG_Surface.cs" />
     <Compile Include="Classes\Rules\SG_AutoRule02.cs" />
     <Compile Include="Classes\SG_Genotype.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
@@ -124,7 +124,7 @@
     <Compile Include="Classes\Rules\SG_AutoRule01.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
-    <Compile Include="Classes\Elements\SH_Element.cs" />
+    <Compile Include="Classes\Elements\SG_Element.cs" />
     <Compile Include="Classes\Loads\SH_Load.cs" />
     <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
@@ -143,6 +143,7 @@
     <Compile Include="Components\CreateGenotype.cs" />
     <Compile Include="Components\CreateIsotropicMaterial.cs" />
     <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
+    <Compile Include="Components\Disassemble\DisassembleNode.cs" />
     <Compile Include="Components\Disassemble\DisassembleSimpleShape.cs" />
     <Compile Include="Components\Disassemble\DisassemleSupport.cs" />
     <Compile Include="Components\Evaluate.cs" />

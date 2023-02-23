@@ -76,7 +76,7 @@ namespace ShapeGrammar.Classes.Rules
                 if (selectedIntGenes[i] == 0) continue;
                 if (i >= ss_ref.Elems.Count) break;
 
-                SH_Elem1D elem = ss_ref.Elems[i] as SH_Elem1D;
+                SG_Elem1D elem = ss_ref.Elems[i] as SG_Elem1D;
                 double param = selectedDGenes[i];
                 if (param < bounds[0])
                 {
@@ -101,15 +101,15 @@ namespace ShapeGrammar.Classes.Rules
                 ss_ref.nodeCount++;
 
                 // create 2x Element
-                SH_Elem1D newLn0 = new SH_Elem1D(new SG_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
-                SH_Elem1D newLn1 = new SH_Elem1D(new SG_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
+                SG_Elem1D newLn0 = new SG_Elem1D(new SG_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
+                SG_Elem1D newLn1 = new SG_Elem1D(new SG_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
 
                 ss_ref.elementCount++;
 
                 // remove Element just split
                 int at = ss_ref.Elems.IndexOf(elem);
                 ss_ref.Elems.RemoveAt(at);
-                ss_ref.Elems.InsertRange(at, new List<SH_Element>() { newLn0, newLn1 });
+                ss_ref.Elems.InsertRange(at, new List<SG_Element>() { newLn0, newLn1 });
 
             }
 
@@ -122,14 +122,16 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // methods of this class
-        private SG_Node AddNode(SH_Element _e, double _t, int _id)
+        private SG_Node AddNode(SG_Element _e, double _t, int _id)
         {
             double mx = (1 - _t) * _e.Nodes[0].Pt.X + _t * _e.Nodes[1].Pt.X;
             double my = (1 - _t) * _e.Nodes[0].Pt.Y + _t * _e.Nodes[1].Pt.Y;
             double mz = (1 - _t) * _e.Nodes[0].Pt.Z + _t * _e.Nodes[1].Pt.Z;
             Point3d newPoint = new Point3d(mx, my, mz);
 
-            return new SG_Node(newPoint, _id);
+            SG_Node nd = new SG_Node(newPoint, _id);
+
+            return nd;
         }
     }
 }
