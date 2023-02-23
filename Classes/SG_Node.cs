@@ -5,7 +5,7 @@ using Rhino.Geometry;
 using ShapeGrammar.Classes.Elements;
 namespace ShapeGrammar.Classes
 {
-    [Serializable]
+    [Serializable] 
     public class SG_Node
     {           
 
