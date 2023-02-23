@@ -26,12 +26,12 @@ namespace ShapeGrammar.Classes.Rules
         public abstract State GetNextState();
 
         // for child class
-        //public override void NewRuleParameters(Random random, SH_SimpleShape ss) { }
+        //public override void NewRuleParameters(Random random, SG_Shape ss) { }
         //public override SH_Rule CopyRule(SH_Rule rule)
         //{
         //    throw new NotImplementedException();
         //}
-        //public override string RuleOperation(SH_SimpleShape _ss)
+        //public override string RuleOperation(SG_Shape _ss)
         //{
         //    throw new NotImplementedException();
         //}

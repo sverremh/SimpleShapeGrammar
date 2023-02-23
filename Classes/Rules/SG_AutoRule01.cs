@@ -22,8 +22,8 @@ namespace ShapeGrammar.Classes.Rules
 
         // from this class
         
-        public int EID { get; set; }
-        public double T { get; set; }
+        // public int EID { get; set; }
+        // public double T { get; set; }
         public List<string> ElemNames { get; set; } = new List<string>();
         private readonly double[] bounds = { 0.2, 0.8 };
 
@@ -57,23 +57,11 @@ namespace ShapeGrammar.Classes.Rules
             // find relevant range in genotype
             int sid = -999;
             int eid = -999;
-            bool fl = false;
             List<int> selectedIntGenes;
             List<double> selectedDGenes;
 
-            for (int i = 0; i < gt.IntGenes.Count; i++)
-            {
-                if (gt.IntGenes[i] == 0 || gt.IntGenes[i] == 1) continue;
-                if (gt.IntGenes[i] == Util.RULE01_MARKER)
-                {
-                    sid = i+1;
-                    fl = true;
-                }
-                if (fl == true && gt.IntGenes[i] == Util.RULE_END_MARKER)
-                {
-                    eid = i;
-                }
-            }
+            gt.FindRange(ref sid, ref eid, Util.RULE01_MARKER);
+
             if (sid == -999 || eid == -999)
             {
                 return "Autorule01 - wrong marker";
@@ -108,13 +96,13 @@ namespace ShapeGrammar.Classes.Rules
                 }
 
                 // add intermediate node
-                SH_Node newNode = AddNode(elem, param, ss_ref.nodeCount);
+                SG_Node newNode = AddNode(elem, param, ss_ref.nodeCount);
                 ss_ref.Nodes.Add(newNode);
                 ss_ref.nodeCount++;
 
                 // create 2x Element
-                SH_Elem1D newLn0 = new SH_Elem1D(new SH_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
-                SH_Elem1D newLn1 = new SH_Elem1D(new SH_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
+                SH_Elem1D newLn0 = new SH_Elem1D(new SG_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
+                SH_Elem1D newLn1 = new SH_Elem1D(new SG_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
 
                 ss_ref.elementCount++;
 
@@ -134,14 +122,14 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // methods of this class
-        private SH_Node AddNode(SH_Element _e, double _t, int _id)
+        private SG_Node AddNode(SH_Element _e, double _t, int _id)
         {
             double mx = (1 - _t) * _e.Nodes[0].Pt.X + _t * _e.Nodes[1].Pt.X;
             double my = (1 - _t) * _e.Nodes[0].Pt.Y + _t * _e.Nodes[1].Pt.Y;
             double mz = (1 - _t) * _e.Nodes[0].Pt.Z + _t * _e.Nodes[1].Pt.Z;
             Point3d newPoint = new Point3d(mx, my, mz);
 
-            return new SH_Node(newPoint, _id);
+            return new SG_Node(newPoint, _id);
         }
     }
 }

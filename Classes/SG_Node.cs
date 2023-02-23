@@ -6,26 +6,26 @@ using ShapeGrammar.Classes.Elements;
 namespace ShapeGrammar.Classes
 {
     [Serializable]
-    public class SH_Node
+    public class SG_Node
     {           
 
         // --- properties ---
-        public int? ID { get; set;}
+        public int ID { get; set;}
         public Point3d Pt { get; set; }
-        public SH_Support Support { get; set; } // Do the node need this information? It does not in Karamba3D
-        public List<SH_Element> Elements { get; set; }
+        public SG_Support Support { get; set; }
+        public List<SH_Element> Elements { get; set; } = new List<SH_Element>();
 
         // --- constructors --- 
-        public SH_Node()
+        public SG_Node()
         {
-            // empty            
         }
-        public SH_Node(Point3d _location, int? _id)
+        public SG_Node(Point3d _location, int _id)
         {
             ID = _id;
-            
-            Support = new SH_Support("000000", Pt);
             Pt = _location;
+
+            Support = new SG_Support("000000", Pt);
+            
         }
 
         // --- methods ---

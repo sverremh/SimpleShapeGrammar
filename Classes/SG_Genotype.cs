@@ -35,5 +35,24 @@ namespace ShapeGrammar.Classes
             return exportLst;
         }
 
+        public void FindRange(ref int _sid, ref int _eid, int _ruleMarker)
+        {
+            bool fl = false;
+
+            for (int i = 0; i < IntGenes.Count; i++)
+            {
+                if (IntGenes[i] == 0 || IntGenes[i] == 1) continue;
+                if (IntGenes[i] == _ruleMarker)
+                {
+                    _sid = i + 1;
+                    fl = true;
+                }
+                if (fl == true && IntGenes[i] == Util.RULE_END_MARKER)
+                {
+                    _eid = i;
+                }
+            }
+        }
+
     }
 }

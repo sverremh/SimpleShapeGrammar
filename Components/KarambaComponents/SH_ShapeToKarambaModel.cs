@@ -83,7 +83,7 @@ namespace ShapeGrammar.Components
             foreach (var sup in ss.Supports)
             {
                 // karamba point
-                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
+                Point3 loc = new Point3(sup.Node.Pt.X, sup.Node.Pt.Y, sup.Node.Pt.Z);
                 
 
                 // conditions

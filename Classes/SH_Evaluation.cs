@@ -19,7 +19,7 @@ namespace ShapeGrammar.Classes
             double[] b_1 = new double[ss.Nodes.Count];
 
             // find index of supports:
-            List<int> supInd = ss.Supports.Select(i => i.nodeInd).ToList(); // get the node index of the supports. 
+            List<int> supInd = ss.Supports.Select(i => i.Node.ID).ToList(); // get the node index of the supports. 
 
             // assemble the matrices
             foreach (var node in ss.Nodes)
@@ -150,7 +150,7 @@ namespace ShapeGrammar.Classes
         {
 
             // find index of supports 
-            List<int> supInd = ss.Supports.Select(n => n.nodeInd).ToList();
+            List<int> supInd = ss.Supports.Select(s => s.Node.ID).ToList();
 
             double r2 = 0.0;
             double sum = 0.0;
@@ -185,7 +185,7 @@ namespace ShapeGrammar.Classes
             
 
             Dictionary<string, List<Line>> reciprocal_diagram = new Dictionary<string, List<Line>>();
-            List<int> supInd = ss.Supports.Select(s => s.nodeInd).ToList();
+            List<int> supInd = ss.Supports.Select(s => s.Node.ID).ToList();
 
             // test if reciprocal can be drawn
             if (ss.Elems.Count < 2)
@@ -195,7 +195,7 @@ namespace ShapeGrammar.Classes
 
 
             // order the nodes correctly. 
-            List<SH_Node> ordered_nodes = new List<SH_Node> { ss.Nodes[ supInd[0] ] };
+            List<SG_Node> ordered_nodes = new List<SG_Node> { ss.Nodes[ supInd[0] ] };
             List<int> ordered_indices = new List<int> { 0 }; // list of the indices of the nodes after sorting            
             SortNodes(ss, ss.Nodes[supInd[0]], ref ordered_nodes, ref ordered_indices); 
 
@@ -256,11 +256,11 @@ namespace ShapeGrammar.Classes
                     // add new node for the funicular
                     h0 += h_i;
                     var end_pos = new Point3d(e_node.Pt.X, e_node.Pt.Y, e_node.Pt.Z + h0); //This is wrong. Now all the lines starts in the same point.
-                    SH_Node end_node = new SH_Node(end_pos, ss.nodeCount++);
+                    SG_Node end_node = new SG_Node(end_pos, ss.nodeCount++);
                     ss.Nodes.Add(end_node);
 
                     // new element for funicular
-                    SH_Node[] nodes = new SH_Node[] {start_node , end_node};
+                    SG_Node[] nodes = new SG_Node[] {start_node , end_node};
                     string name = "funicular";
                     int id = ss.elementCount++;
                     SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
@@ -269,7 +269,7 @@ namespace ShapeGrammar.Classes
                     // new element for verticals
                     string name_vert = "verticals";
                     int id_v = ss.elementCount++;
-                    SH_Node[] nodes_v = new SH_Node[] { e_node, end_node };
+                    SG_Node[] nodes_v = new SG_Node[] { e_node, end_node };
                     SH_Elem1D ve = new SH_Elem1D(nodes_v, id_v, name_vert);
                     start_node = end_node;
                     ss.Elems.Add(ve);
@@ -278,7 +278,7 @@ namespace ShapeGrammar.Classes
                 {
                     
                     // only adding the element
-                    SH_Node[] nodes = new SH_Node[] { start_node, ss.Nodes[1] };
+                    SG_Node[] nodes = new SG_Node[] { start_node, ss.Nodes[1] };
                     string name = "funicular";
                     int id = ss.elementCount++;
                     SH_Elem1D funicular = new SH_Elem1D(nodes, id, name);
@@ -302,11 +302,11 @@ namespace ShapeGrammar.Classes
 
             return funiculars; 
         }
-        public static void SortNodes(SG_Shape ss, SH_Node node, ref List<SH_Node> nodes, ref List<int> sort_ind)
+        public static void SortNodes(SG_Shape ss, SG_Node node, ref List<SG_Node> nodes, ref List<int> sort_ind)
         {
             
             List<SH_Element> els = ss.Elems.Where(el => el.Nodes.Contains(node)).ToList();       // find the elements adjacent to the node
-            SH_Node new_node = new SH_Node();
+            SG_Node new_node = new SG_Node();
             if(els.Count == 1)
             {
                 var el = els[0];

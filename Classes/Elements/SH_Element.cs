@@ -15,7 +15,7 @@ namespace ShapeGrammar.Classes.Elements
         public int? ID { get; set; }
         public string Name { get; set; }
 
-        public SH_Node[] Nodes { get; set; }
+        public SG_Node[] Nodes { get; set; }
 
     }
 }

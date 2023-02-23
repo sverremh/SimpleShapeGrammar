@@ -61,11 +61,11 @@ namespace ShapeGrammar.Components
             elems.AddRange(ss.Elems);
 
             // list of supports
-            List<SH_Support> sups = new List<SH_Support>();
+            List<SG_Support> sups = new List<SG_Support>();
             sups.AddRange(ss.Supports);
 
             // list of nodes
-            List<SH_Node> nodes = new List<SH_Node>();
+            List<SG_Node> nodes = new List<SG_Node>();
             nodes.AddRange(ss.Nodes);
 
             // --- output ---

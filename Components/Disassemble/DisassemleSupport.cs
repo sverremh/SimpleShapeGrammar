@@ -41,13 +41,13 @@ namespace ShapeGrammar.Components.Disassemble
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // ---variables-- -
-            SH_Support sup = new SH_Support();
+            SG_Support sup = new SG_Support();
 
             // --- input ---
             if(!DA.GetData(0, ref sup)) return;
 
             // --- solve ---
-             Point3d pt = sup.Position;
+             Point3d pt = sup.Node.Pt;
             int cond = sup.SupportCondition;
 
             // future implementations

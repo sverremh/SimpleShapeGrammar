@@ -123,7 +123,7 @@ namespace ShapeGrammar.Classes
             foreach (var sup in simpleShape.Supports)
             {
                 // karamba point
-                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
+                Point3 loc = new Point3(sup.Node.Pt.X, sup.Node.Pt.Y, sup.Node.Pt.Z);
 
                 // conditions
                 List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
@@ -169,9 +169,8 @@ namespace ShapeGrammar.Classes
 
             // -- assembly --
             // centre of gravity for the model
-            string info;
             Model model = k3d.Model.AssembleModel(elems, supports, loads,
-                out info, out double mass, out Point3 cog, out info, out bool flag);
+                out _, out _, out _, out _, out _);
 
             return model;
 

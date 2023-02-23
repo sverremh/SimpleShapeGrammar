@@ -28,14 +28,14 @@ namespace ShapeGrammar.Classes.Elements
         {
 
         }
-        public SH_Elem1D(SH_Node[] _nodes, int? _id)
+        public SH_Elem1D(SG_Node[] _nodes, int? _id)
         {
 
             ID = _id;
             Nodes = _nodes;
             CreateLine();
         }
-        public SH_Elem1D(SH_Node[] _nodes, int? _id, string _el_name)
+        public SH_Elem1D(SG_Node[] _nodes, int? _id, string _el_name)
         {
             ID = _id;
             Nodes = _nodes;
@@ -49,9 +49,9 @@ namespace ShapeGrammar.Classes.Elements
             Name = _el_name;
             Ln = _ln;
 
-            SH_Node[] nodes = new SH_Node[2];
-            nodes[0] = new SH_Node(Ln.From, null);
-            nodes[1] = new SH_Node(Ln.To, null);
+            SG_Node[] nodes = new SG_Node[2];
+            nodes[0] = new SG_Node(Ln.From, -999);
+            nodes[1] = new SG_Node(Ln.To, -999);
 
             Nodes = nodes;
         }

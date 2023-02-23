@@ -17,7 +17,7 @@ namespace ShapeGrammar.Classes
         // --- properties ---
         public int nodeCount = 0;
         public int elementCount = 0;
-        public int supCount = 0;
+        // public int supCount = 0;
         public List<NurbsCurve> NurbsCurves { get; set; }
 
         /// <summary>
@@ -26,8 +26,8 @@ namespace ShapeGrammar.Classes
         // public Dictionary<string, List<SH_Element>> Elements { get; set; } = new Dictionary<string, List<SH_Element>>();
         public List<SH_Element> Elems { get; set; } = new List<SH_Element>();
 
-        public List<SH_Node> Nodes { get; set; }
-        public List<SH_Support> Supports { get; set; }
+        public List<SG_Node> Nodes { get; set; }
+        public List<SG_Support> Supports { get; set; }
         public List<SH_LineLoad> LineLoads { get; set; }
         public List<SH_PointLoad> PointLoads { get; set; }
         public State SimpleShapeState { get; set; }
@@ -62,20 +62,10 @@ namespace ShapeGrammar.Classes
 
         public void TranslateNode(Vector3d vec, int nodeInd)
         {
-            
-            SH_Node node = Nodes[nodeInd];
+            SG_Node node = Nodes[nodeInd];
             Point3d newPoint = node.Pt + vec;
             // move the point
             Nodes[nodeInd].Pt = newPoint;
-            // find the correct support in the list
-            int supInd = Supports.IndexOf( Supports.Find(sup => sup.nodeInd == nodeInd) );
-            // move the support position if present
-            if(supInd != -1)
-            {
-                Supports[supInd].Position = newPoint;
-            }
-            
-
         }
 
         public SG_Shape DeepCopy()
@@ -83,7 +73,7 @@ namespace ShapeGrammar.Classes
             SG_Shape simpleShapeCopy = new SG_Shape();
             simpleShapeCopy.nodeCount = this.nodeCount;
             simpleShapeCopy.elementCount = this.elementCount;
-            simpleShapeCopy.supCount = this.supCount;
+            // simpleShapeCopy.supCount = this.supCount;
 
             simpleShapeCopy.Elems = this.Elems;
             simpleShapeCopy.Nodes = this.Nodes;

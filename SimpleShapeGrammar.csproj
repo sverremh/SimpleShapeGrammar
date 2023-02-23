@@ -129,7 +129,7 @@
     <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
     <Compile Include="Classes\Loads\SH_LineLoad.cs" />
-    <Compile Include="Classes\SH_Node.cs" />
+    <Compile Include="Classes\SG_Node.cs" />
     <Compile Include="Classes\CrossSections\SH_CrossSection_Rectangle.cs" />
     <Compile Include="Classes\Rules\SH_Rule.cs" />
     <Compile Include="Classes\Rules\SH_Rule01.cs" />
@@ -137,7 +137,7 @@
     <Compile Include="Classes\Rules\SH_RuleA.cs" />
     <Compile Include="Classes\Rules\SH_Rule03.cs" />
     <Compile Include="Classes\SG_Shape.cs" />
-    <Compile Include="Classes\SH_Support.cs" />
+    <Compile Include="Classes\SG_Support.cs" />
     <Compile Include="Classes\Util.cs" />
     <Compile Include="Components\Assembly.cs" />
     <Compile Include="Components\CreateGenotype.cs" />

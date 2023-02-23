@@ -81,19 +81,19 @@ namespace ShapeGrammar.Classes.Rules
 
             int elInd = _ss.Elems.IndexOf(line);
             // add the intermediate node
-            SH_Node newNode = AddNode(line, Param, _ss.nodeCount);
+            SG_Node newNode = AddNode(line, Param, _ss.nodeCount);
             _ss.Nodes.Add(newNode);
             _ss.nodeCount++;
 
             // create 2x lines 
-            List<SH_Node> nodes = new List<SH_Node>();
+            List<SG_Node> nodes = new List<SG_Node>();
            
             //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
 
 
-            SH_Elem1D newLine0 = new SH_Elem1D(new SH_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
+            SH_Elem1D newLine0 = new SH_Elem1D(new SG_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
-            SH_Elem1D newLine1 = new SH_Elem1D(new SH_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
+            SH_Elem1D newLine1 = new SH_Elem1D(new SG_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
             _ss.elementCount++;
 
             
@@ -118,13 +118,13 @@ namespace ShapeGrammar.Classes.Rules
         /// <param name="_t"> Splitting parameter</param>
         /// <param name="_id">ID of the line</param>
         /// <returns></returns>
-        private SH_Node AddNode(SH_Element _line, double _t, int _id)
+        private SG_Node AddNode(SH_Element _line, double _t, int _id)
         {
             double mx = (1 - _t) * _line.Nodes[0].Pt.X + _t * _line.Nodes[1].Pt.X;
             double my = (1 - _t) * _line.Nodes[0].Pt.Y + _t * _line.Nodes[1].Pt.Y;
             double mz = (1 - _t) * _line.Nodes[0].Pt.Z + _t * _line.Nodes[1].Pt.Z;
             Point3d newPoint = new Point3d(mx, my, mz);
-            SH_Node newNode = new SH_Node(newPoint, _id);
+            SG_Node newNode = new SG_Node(newPoint, _id);
 
             return newNode;
         }

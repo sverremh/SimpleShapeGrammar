@@ -49,7 +49,7 @@ namespace ShapeGrammar.Components
             DA.GetData(1, ref condition);
 
             // --- solve ---
-            SH_Support support = new SH_Support(condition, location);
+            SG_Support support = new SG_Support(condition, location);
 
             // --- output ---
             DA.SetData(0, support);
