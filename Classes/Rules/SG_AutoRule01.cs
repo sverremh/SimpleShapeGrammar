@@ -12,7 +12,7 @@ using ShapeGrammar.Classes.Elements;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SG_AutoRule01 : SH_Rule
+    public class SG_AutoRule01 : SG_Rule
     {
         // --- properties ---
 
@@ -48,7 +48,7 @@ namespace ShapeGrammar.Classes.Rules
         // --- methods ---
         // methods of parent class
         public override void NewRuleParameters(Random random, SG_Shape ss) { }
-        public override SH_Rule CopyRule(SH_Rule rule) 
+        public override SG_Rule CopyRule(SG_Rule rule) 
         {
             throw new NotImplementedException();
         }
@@ -71,6 +71,7 @@ namespace ShapeGrammar.Classes.Rules
             selectedIntGenes = gt.IntGenes.GetRange(sid, eid - sid);
             selectedDGenes = gt.DGenes.GetRange(sid, eid - sid);
 
+            List<int> removeIds = new List<int>();
             for (int i = 0; i < selectedIntGenes.Count; i++)
             {
                 if (selectedIntGenes[i] == 0) continue;
@@ -101,17 +102,20 @@ namespace ShapeGrammar.Classes.Rules
                 ss_ref.nodeCount++;
 
                 // create 2x Element
-                SG_Elem1D newLn0 = new SG_Elem1D(new SG_Node[] { elem.Nodes[0], newNode }, elem.ID, elem.Name);
-                SG_Elem1D newLn1 = new SG_Elem1D(new SG_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount, elem.Name);
+                SG_Elem1D newLn0 = new SG_Elem1D(new SG_Node[] { elem.Nodes[0], newNode }, ss_ref.elementCount, elem.Name) { Autorule = 1};
+                SG_Elem1D newLn1 = new SG_Elem1D(new SG_Node[] { newNode, elem.Nodes[1] }, ss_ref.elementCount+1, elem.Name) { Autorule = 1 };
 
-                ss_ref.elementCount++;
+                ss_ref.elementCount += 2;
 
                 // remove Element just split
-                int at = ss_ref.Elems.IndexOf(elem);
-                ss_ref.Elems.RemoveAt(at);
-                ss_ref.Elems.InsertRange(at, new List<SG_Element>() { newLn0, newLn1 });
-
+                // int at = ss_ref.Elems.IndexOf(elem);
+                // ss_ref.Elems.RemoveAt(at);
+                removeIds.Add(elem.ID);
+                ss_ref.Elems.AddRange(new List<SG_Element>() { newLn0, newLn1 });
+                // ss_ref.Elems.InsertRange(at, new List<SG_Element>() { newLn0, newLn1 });
             }
+
+            ss_ref.Elems = ss_ref.Elems.Where(e => removeIds.Contains(e.ID) == false).ToList();
 
             return "Auto-rule 01 successfully applied.";
 

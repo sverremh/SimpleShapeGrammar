@@ -14,13 +14,13 @@ namespace ShapeGrammar.Classes.Rules
     /// Rule splitting the line at the input parameter
     /// </summary>
     [Serializable]
-    public class SH_Rule02 : SH_Rule
+    public class SH_Rule02 : SG_Rule
     {
         // --- properties ---
 
         public int LineIndex { get; set; }
         public double Param { get; set; }
-        private double[] bounds  = { 0.2, 0.8 };
+        private readonly double[] bounds  = { 0.2, 0.8 };
 
 
         // --- constructors ---
@@ -39,7 +39,7 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // --- methods ---
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }
@@ -86,17 +86,11 @@ namespace ShapeGrammar.Classes.Rules
             _ss.nodeCount++;
 
             // create 2x lines 
-            List<SG_Node> nodes = new List<SG_Node>();
-           
-            //SH_Element newLine0 = new SH_Element(new SH_Node[] { line.Nodes[0], newNode }, _ss.elementCount, line.elementName); // add the element name here too. DELETE if line below is working!
-
 
             SG_Elem1D newLine0 = new SG_Elem1D(new SG_Node[] { line.Nodes[0], newNode }, line.ID, line.Name); // add the element name here too.
             //_ss.elementCount++;  DELETE if above method is working
             SG_Elem1D newLine1 = new SG_Elem1D(new SG_Node[] { newNode, line.Nodes[1] }, _ss.elementCount, line.Name);
             _ss.elementCount++;
-
-            
             
             // remove the line which has been split
             _ss.Elems.RemoveAt(elInd);

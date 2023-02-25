@@ -6,7 +6,7 @@ using System.Linq;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_Rule03 : SH_Rule
+    public class SH_Rule03 : SG_Rule
     {
         // --- properties ---
         public double HorizontalThrustParameter { get; set; }
@@ -30,7 +30,7 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // --- methods ---
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }

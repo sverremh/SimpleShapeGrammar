@@ -44,7 +44,7 @@ namespace ShapeGrammar.Components
         {
             // --- variables ---
             SG_Shape simpleShape = new SG_Shape();
-            List<SH_Rule> rules = new List<SH_Rule>();
+            List<SG_Rule> rules = new List<SG_Rule>();
 
             // --- input --- 
             if (!DA.GetData(0, ref simpleShape)) return;
@@ -56,7 +56,7 @@ namespace ShapeGrammar.Components
             // --- solve ---
 
             
-            foreach (SH_Rule rule in rules)
+            foreach (SG_Rule rule in rules)
             {
                 try
                 {

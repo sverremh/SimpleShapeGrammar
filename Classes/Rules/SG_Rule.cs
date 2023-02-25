@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public abstract class SH_Rule : ISH_Rule
+    public abstract class SG_Rule : ISH_Rule
     {
         public State RuleState;
         public string Name;
 
-        public SH_Rule()
+        public SG_Rule()
         { 
             
         }
 
         public abstract void NewRuleParameters(Random random, SG_Shape ss);
-        public abstract SH_Rule CopyRule(SH_Rule rule);
+        public abstract SG_Rule CopyRule(SG_Rule rule);
 
         public virtual string RuleOperation(ref SG_Shape _ss) { return ""; }
         public virtual string RuleOperation(ref SG_Shape _ss, ref SG_Genotype _st) { return ""; }
@@ -27,11 +27,11 @@ namespace ShapeGrammar.Classes.Rules
 
         // for child class
         //public override void NewRuleParameters(Random random, SG_Shape ss) { }
-        //public override SH_Rule CopyRule(SH_Rule rule)
+        //public override SG_Rule CopyRule(SG_Rule rule)
         //{
         //    throw new NotImplementedException();
         //}
-        //public override string RuleOperation(SG_Shape _ss)
+        //public override string RuleOperation(ref SG_Shape ss_ref, ref SG_Genotype gt)
         //{
         //    throw new NotImplementedException();
         //}

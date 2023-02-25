@@ -49,7 +49,7 @@ namespace ShapeGrammar.Components
         {
             // --- variables ---
             SG_Shape iniShape = new SG_Shape();
-            List<SH_Rule> rls = new List<SH_Rule>();
+            List<SG_Rule> rls = new List<SG_Rule>();
             SG_Genotype inigt = new SG_Genotype();
 
             // --- input ---

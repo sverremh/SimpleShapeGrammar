@@ -95,17 +95,18 @@ namespace ShapeGrammar.Classes
 
         public SG_Shape DeepCopy()
         {
-            SG_Shape simpleShapeCopy = new SG_Shape();
-            simpleShapeCopy.nodeCount = this.nodeCount;
-            simpleShapeCopy.elementCount = this.elementCount;
-            // simpleShapeCopy.supCount = this.supCount;
+            SG_Shape simpleShapeCopy = new SG_Shape
+            {
+                nodeCount = this.nodeCount,
+                elementCount = this.elementCount,
 
-            simpleShapeCopy.Elems = this.Elems;
-            simpleShapeCopy.Nodes = this.Nodes;
-            simpleShapeCopy.Supports = this.Supports;
-            simpleShapeCopy.LineLoads = this.LineLoads;
-            simpleShapeCopy.PointLoads = this.PointLoads;
-            simpleShapeCopy.SimpleShapeState = this.SimpleShapeState;
+                Elems = this.Elems,
+                Nodes = this.Nodes,
+                Supports = this.Supports,
+                LineLoads = this.LineLoads,
+                PointLoads = this.PointLoads,
+                SimpleShapeState = this.SimpleShapeState
+            };
 
             return simpleShapeCopy;
         }

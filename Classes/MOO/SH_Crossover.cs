@@ -34,8 +34,8 @@ namespace ShapeGrammar.Classes
             SH_Solution[] offspring = new SH_Solution[2];
            
             // get the list of SH_Rule to use for identification of splicePoints
-            List<SH_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
-            List<SH_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
+            List<SG_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
+            List<SG_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
 
             // empty list for possible splice points 
             List<int[]> splicePoints = new List<int[]>();
@@ -61,14 +61,14 @@ namespace ShapeGrammar.Classes
             int[] splicePair = splicePoints[spliceInd]; // select the random splice points
 
             // split the list
-            List<SH_Rule> p1_1 = p1Genome.GetRange(0, splicePair[0] + 1);
-            List<SH_Rule> p1_2 = p1Genome.GetRange(splicePair[0]+1, p1Genome.Count - p1_1.Count);
+            List<SG_Rule> p1_1 = p1Genome.GetRange(0, splicePair[0] + 1);
+            List<SG_Rule> p1_2 = p1Genome.GetRange(splicePair[0]+1, p1Genome.Count - p1_1.Count);
 
-            List<SH_Rule> p2_1 = p2Genome.GetRange(0, splicePair[1] + 1);
-            List<SH_Rule> p2_2 = p2Genome.GetRange(splicePair[1] +1, p2Genome.Count - p2_1.Count);
+            List<SG_Rule> p2_1 = p2Genome.GetRange(0, splicePair[1] + 1);
+            List<SG_Rule> p2_2 = p2Genome.GetRange(splicePair[1] +1, p2Genome.Count - p2_1.Count);
 
-            List<SH_Rule> o1Genome = p1_1.Concat(p2_2).ToList(); // genome for the first offspring
-            List<SH_Rule> o2Genome = p2_1.Concat(p1_2).ToList(); // genome for the second offspring
+            List<SG_Rule> o1Genome = p1_1.Concat(p2_2).ToList(); // genome for the first offspring
+            List<SG_Rule> o2Genome = p2_1.Concat(p1_2).ToList(); // genome for the second offspring
 
             // create the offspring
             SH_Variable[] o1Var = new SH_Variable[1] {new SH_Variable(o1Genome) }; // create a variable of the first offspring

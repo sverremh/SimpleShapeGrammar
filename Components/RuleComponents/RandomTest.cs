@@ -53,7 +53,7 @@ namespace ShapeGrammar.Components
             int numLines = 1; // in the beginning there is just one line
             // --- solve ---
 
-            List<SH_Rule> rulesList = new List<SH_Rule>(); // initiate empty list
+            List<SG_Rule> rulesList = new List<SG_Rule>(); // initiate empty list
             Random random = new Random(Guid.NewGuid().GetHashCode()); // create a guid and use the HashCode as seed for the random instance
             List<object> rules = new List<object>() { "r1", "r2", "rA" };
             List<double> weights = new List<double>() {0.1, 0.8, 0.1 };

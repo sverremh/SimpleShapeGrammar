@@ -22,7 +22,7 @@ namespace ShapeGrammar.Classes
         /// <summary>
         /// Stores a list of SH_Rule class which forms the basis of the genome.
         /// </summary>
-        public List<SH_Rule> RuleList { get; set; }
+        public List<SG_Rule> RuleList { get; set; }
         /// <summary>
         /// Stores the length of the list
         /// </summary>
@@ -37,7 +37,7 @@ namespace ShapeGrammar.Classes
             Size = 0;
             problem = null; 
         }
-        public SH_Variable(List<SH_Rule> ruleList)
+        public SH_Variable(List<SG_Rule> ruleList)
         {
             Size = ruleList.Count;
             RuleList = ruleList; 

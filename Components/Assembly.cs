@@ -76,13 +76,14 @@ namespace ShapeGrammar.Components
             sups = Util.DeepCopy(sups);
             loads = Util.DeepCopy(loads);
 
-            SG_Shape shape = new SG_Shape();
 
             // --- solve ---
 
-            // renumbering Element, Node
-            shape.elementCount = 0;
-            shape.nodeCount = 0;
+            SG_Shape shape = new SG_Shape
+            {
+                elementCount = 0,
+                nodeCount = 0
+            };
 
             List<SG_Node> nodes = new List<SG_Node>();
             List<SG_Element> renumberedElems = new List<SG_Element>();
@@ -160,13 +161,13 @@ namespace ShapeGrammar.Components
             // iterate through all the loads
             foreach (var l in loads)
             {
-                if (l is SH_LineLoad)
+                if (l is SH_LineLoad load)
                 {
-                    ll.Add( (SH_LineLoad) l);
+                    ll.Add( load);
                 }
-                if (l is SH_PointLoad)
+                if (l is SH_PointLoad ptload)
                 {
-                    pl.Add( (SH_PointLoad) l);
+                    pl.Add( ptload);
                 }
             }
             line_loads = ll;

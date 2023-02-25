@@ -20,7 +20,7 @@ namespace ShapeGrammar.Components.MOOComponents
               "SimpleGrammar", "MOO")
         {
             ObjectiveValues = new List<List<double>>();
-            ObjectiveVariables = new List<List<SH_Rule>>();
+            ObjectiveVariables = new List<List<SG_Rule>>();
             MyRand = new Random();
             comparer = new ObjectiveComparer();
             GrammarRules = new List<object>();
@@ -39,7 +39,7 @@ namespace ShapeGrammar.Components.MOOComponents
         public SG_Shape SimpleShape { get; private set;  }
         public bool mooDone = false;
         public List<List<double>> ObjectiveValues;
-        public List<List<SH_Rule>> ObjectiveVariables;
+        public List<List<SG_Rule>> ObjectiveVariables;
         public List<object> GrammarRules;
         public List<double> GrammarWeights;
         public List<string> GrammarObjectives;
@@ -54,7 +54,7 @@ namespace ShapeGrammar.Components.MOOComponents
 
         // create data tree of solutions as global variables
         public DataTree<double> outObjectiveTree;
-        public DataTree<SH_Rule> outRules;
+        public DataTree<SG_Rule> outRules;
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -91,7 +91,7 @@ namespace ShapeGrammar.Components.MOOComponents
         {
             // --- variables ---
             SG_Shape ss = new SG_Shape(); // 0
-            List<SH_Rule> rulesList = new List<SH_Rule>(); // 1
+            List<SG_Rule> rulesList = new List<SG_Rule>(); // 1
             List<double> weights = new List<double>();
             bool run = false;
             bool reset = false;
@@ -143,7 +143,7 @@ namespace ShapeGrammar.Components.MOOComponents
                 runBool.Value = false;
                 mooDone = false;
                 GrammarWeights = new List<double>();
-                outRules = new DataTree<SH_Rule>();
+                outRules = new DataTree<SG_Rule>();
                 outObjectiveTree = new DataTree<double>();
                 runBool.ExpireSolution(true);
 
@@ -153,14 +153,14 @@ namespace ShapeGrammar.Components.MOOComponents
             if (!run && !mooDone) // Make sure to include the "mooDone" here to avoid a complete rerun if the user refresh the solution
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Set boolean to \"True\" to run the component.");
-                outRules = new DataTree<SH_Rule>();
+                outRules = new DataTree<SG_Rule>();
                 outObjectiveTree = new DataTree<double>();
             }
 
             if (Seed != 0) { MyRand = new Random(Seed); } // reset Random to give same result each time
 
             // --- solve ---
-            DataTree<SH_Rule> genomeTree = new DataTree<SH_Rule>();
+            DataTree<SG_Rule> genomeTree = new DataTree<SG_Rule>();
             DataTree<double> objValTree = new DataTree<double>(); 
             if (run & !mooDone)
             {
@@ -208,12 +208,12 @@ namespace ShapeGrammar.Components.MOOComponents
         /// <methods>
         /// Methods used in the main solve instance
         /// </methods>
-        private List<object> RuleNamesList(List<SH_Rule> rules)
+        private List<object> RuleNamesList(List<SG_Rule> rules)
         {
 
             List<object> names = new List<object>();
 
-            foreach (SH_Rule rule in rules)
+            foreach (SG_Rule rule in rules)
             {
                 names.Add(rule.Name);
             }
@@ -263,9 +263,9 @@ namespace ShapeGrammar.Components.MOOComponents
             return slidersList;
         }
 
-        private void GetDataTreesFromResults(List<(List<SH_Rule> genome, List<double> fitness)> allSolutions, out DataTree<SH_Rule> genomes, out DataTree<double> objFitnessValues)
+        private void GetDataTreesFromResults(List<(List<SG_Rule> genome, List<double> fitness)> allSolutions, out DataTree<SG_Rule> genomes, out DataTree<double> objFitnessValues)
         {
-            DataTree<SH_Rule> tree1 = new DataTree<SH_Rule>(); // tree for list of rules
+            DataTree<SG_Rule> tree1 = new DataTree<SG_Rule>(); // tree for list of rules
             DataTree<double> tree2 = new DataTree<double>(); // tree for list of fitness values
 
             // iterate through the list of tuples

@@ -10,7 +10,7 @@ using Rhino.Geometry;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_Rule01 : SH_Rule
+    public class SH_Rule01 : SG_Rule
     {
         // --- properties ---
         public Vector3d TranslateStart { get; private set; }
@@ -39,7 +39,7 @@ namespace ShapeGrammar.Classes.Rules
         }
 
         // --- methods ---
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }

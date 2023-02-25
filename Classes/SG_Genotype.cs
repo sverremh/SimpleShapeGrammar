@@ -50,6 +50,7 @@ namespace ShapeGrammar.Classes
                 if (fl == true && IntGenes[i] == Util.RULE_END_MARKER)
                 {
                     _eid = i;
+                    break;
                 }
             }
         }

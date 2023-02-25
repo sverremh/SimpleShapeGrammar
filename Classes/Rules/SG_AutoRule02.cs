@@ -12,7 +12,7 @@ using ShapeGrammar.Classes.Elements;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SG_AutoRule02 : SH_Rule 
+    public class SG_AutoRule02 : SG_Rule 
     {
         // --- properties ---
         public List<string> ElemNames { get; set; } = new List<string>();
@@ -35,7 +35,7 @@ namespace ShapeGrammar.Classes.Rules
         // --- methods ---
 
         public override void NewRuleParameters(Random random, SG_Shape ss) { }
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }
@@ -72,7 +72,7 @@ namespace ShapeGrammar.Classes.Rules
                 if (Math.Abs(length) >= Util.MIN_SEG_LEN)
                 {
                     Line ln = new Line(ss_ref.Nodes[i].Pt, Vector3d.ZAxis, length);
-                    SG_Elem1D elem = new SG_Elem1D(ln, -999, "AR2", new SH_CrossSection_Beam());
+                    SG_Elem1D elem = new SG_Elem1D(ln, -999, "AR2", new SH_CrossSection_Beam()) { Autorule = 2 };
                     ss_ref.AddNewElement(elem);
                 }
                 else

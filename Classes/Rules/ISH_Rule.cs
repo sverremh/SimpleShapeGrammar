@@ -9,7 +9,7 @@ namespace ShapeGrammar.Classes.Rules
     public interface ISH_Rule
     {
         void NewRuleParameters(Random random, SG_Shape simpleShape);
-        SH_Rule CopyRule(SH_Rule rule);
+        SG_Rule CopyRule(SG_Rule rule);
 
         
 

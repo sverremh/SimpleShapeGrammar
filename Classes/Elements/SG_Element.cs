@@ -12,8 +12,10 @@ namespace ShapeGrammar.Classes.Elements
     {
         // --- properties ---
         
-        public int? ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
+
+        public int Autorule { get; set; }
 
         public SG_Node[] Nodes { get; set; }
 

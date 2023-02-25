@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_RuleA : SH_Rule
+    public class SH_RuleA : SG_Rule
     {
         // --- properties ---
         //public State RuleState = State.beta;
@@ -25,7 +25,7 @@ namespace ShapeGrammar.Classes.Rules
             
         }
 
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }

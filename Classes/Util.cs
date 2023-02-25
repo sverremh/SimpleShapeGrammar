@@ -80,10 +80,10 @@ namespace ShapeGrammar.Classes
         /// </summary>
         /// <param name="rules"></param>
         /// <param name="ss"></param>
-        public static SG_Shape ApplyRulesToSimpleShape(List<SH_Rule> rules, SG_Shape ss)
+        public static SG_Shape ApplyRulesToSimpleShape(List<SG_Rule> rules, SG_Shape ss)
         {
             SG_Shape ssCopy = Util.DeepCopy(ss) ; 
-            foreach (SH_Rule rule in rules)
+            foreach (SG_Rule rule in rules)
             {
                 try
                 {

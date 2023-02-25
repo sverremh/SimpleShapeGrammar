@@ -1,21 +1,23 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using ShapeGrammar.Classes;
-using ShapeGrammar.Classes.Elements;
 
-namespace ShapeGrammar.Components
+using Grasshopper.Kernel;
+using Rhino.Geometry;
+
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Components.RuleComponents
 {
-    public class LineToElement : GH_Component
+    public class AutoRule03 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the AutoRule03 class.
         /// </summary>
-        public LineToElement()
-          : base("LineToElement", "lnToEl",
-              "Creates a SH_Element from a Line",
-              "SimpleGrammar", "Element")
+        public AutoRule03()
+          : base("Auto rule 03", "A-Rule03",
+              "Create upper and lower chords",
+              Util.CAT, Util.GR_RLS)
         {
         }
 
@@ -24,11 +26,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item); // 0
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Cross Section to assign the element", GH_ParamAccess.item); // 1
-            pManager.AddTextParameter("ElementName", "name", "Name of the element", GH_ParamAccess.item); // 2
-
-            pManager[2].Optional = true;
+            pManager.AddTextParameter("Elem Name", "eName", "element name", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddGenericParameter("Rule", "Rule", "Rule", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,26 +43,18 @@ namespace ShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // --- variables ---
+            string eName = "";
 
-            Line ln = new Line();
-            SH_CrossSection_Beam crossSection = new SH_CrossSection_Beam();
-            string name = "";
-
-            // --- input --- 
-
-            if (!DA.GetData(0, ref ln)) return;
-            if (!DA.GetData(1, ref crossSection)) return;
-            DA.GetData(2, ref name);
+            // --- input ---
+            if (!DA.GetData(0, ref eName)) return;
 
             // --- solve ---
 
-            SG_Elem1D elem = new SG_Elem1D(ln, -999, name, crossSection);
+            SG_AutoRule03 ar3 = new SG_AutoRule03(eName);
 
             // --- output ---
-            DA.SetData(0, elem);
-
+            DA.SetData(0, ar3);
         }
 
         /// <summary>
@@ -76,7 +66,7 @@ namespace ShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return ShapeGrammar.Properties.Resources.icons_C_Elem1D;
+                return null;
             }
         }
 
@@ -85,7 +75,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("aafc9a33-fa55-4936-bcef-f053a8c01b8e"); }
         }
     }
 }
