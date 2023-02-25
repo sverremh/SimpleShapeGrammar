@@ -1,19 +1,17 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using System.Collections.Generic;
-
 using ShapeGrammar.Classes;
 
-namespace ShapeGrammar.Components.Disassemble
+namespace ShapeGrammar.Components
 {
-    public class DisassembleNode : GH_Component
+    public class DisassembleSupport : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassembleNode class.
+        /// Initializes a new instance of the DisassemleSupport class.
         /// </summary>
-        public DisassembleNode()
-          : base("DisassembleNode", "Exp. Node",
+        public DisassembleSupport()
+          : base("DisassemleSupport", "Exp. Sup",
               "",
               Util.CAT, Util.GR_UTIL)
         {
@@ -24,7 +22,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SG_Node", "SG_N", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SG_Support", "SG_Sup", "SG_Support", GH_ParamAccess.item) ;
         }
 
         /// <summary>
@@ -32,10 +30,8 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Node id", "NID", "", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SG_Support", "SG_Sup", "", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point", "pt", "", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("Node", "N", "", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("SupportCondition", "cond", "Integer representation of support condition", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -44,23 +40,19 @@ namespace ShapeGrammar.Components.Disassemble
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            // --- variables ---
-            SG_Node nd = new SG_Node();
+            // ---variables-- -
+            SG_Support sup = new SG_Support();
 
             // --- input ---
-            if (!DA.GetData(0, ref nd)) return;
+            if(!DA.GetData(0, ref sup)) return;
 
             // --- solve ---
-            int o_id = nd.ID;
-            SG_Support sp = nd.Support;
-            Point3d pt = nd.Pt;
+            SG_Node n = sup.Node;
+            int cond = sup.SupportCondition;
 
             // --- output ---
-            DA.SetData(0, o_id);
-            DA.SetData(1, sp);
-            DA.SetData(2, pt);
-
+            DA.SetData(0, n);
+            DA.SetData(1, cond);
         }
 
         /// <summary>
@@ -81,7 +73,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9f858f82-e087-4543-8775-c262d93b1d94"); }
+            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
         }
     }
 }

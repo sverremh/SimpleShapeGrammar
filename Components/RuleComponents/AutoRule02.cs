@@ -1,19 +1,23 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
-using ShapeGrammar.Classes;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ShapeGrammar.Components.Disassemble
+using Grasshopper.Kernel;
+using Rhino.Geometry;
+
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Components.RuleComponents
 {
-    public class DisassemleSupport : GH_Component
+    public class AutoRule02 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassemleSupport class.
+        /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
-        public DisassemleSupport()
-          : base("DisassemleSupport", "Nickname",
-              "Description",
-              "SimpleGrammar", "Disassemble")
+        public AutoRule02()
+          : base("Auto rule 02", "A-Rule02",
+              "Create a line from an existent node",
+              Util.CAT, Util.GR_RLS)
         {
         }
 
@@ -22,7 +26,8 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SG_Support", "SG_Sup", "SG_Support", GH_ParamAccess.item) ;
+            pManager.AddTextParameter("Elem Name", "eName", "element name", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Domain", "D", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -30,8 +35,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Point", "pt", "Point3d represenation of position", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("SupportCondition", "cond", "Integerr representation of support condition", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Rule", "Rule", "Rule", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,19 +44,20 @@ namespace ShapeGrammar.Components.Disassemble
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // ---variables-- -
-            SG_Support sup = new SG_Support();
+            // --- variables ---
+            List<string> eNames = new List<string>();
+            List<double> domain = new List<double>();
 
             // --- input ---
-            if(!DA.GetData(0, ref sup)) return;
+            if (!DA.GetDataList(0, eNames)) return;
+            if (!DA.GetDataList(1, domain)) return;
 
             // --- solve ---
-            Point3d pt = sup.Node.Pt;
-            int cond = sup.SupportCondition;
+
+            SG_AutoRule02 ar2 = new SG_AutoRule02(eNames, domain.ToArray());
 
             // --- output ---
-            DA.SetData(0, pt);
-            DA.SetData(1, cond);
+            DA.SetData(0, ar2);
         }
 
         /// <summary>
@@ -73,7 +78,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
+            get { return new Guid("56cd3fff-39a8-42b7-abaa-9fa7ee320488"); }
         }
     }
 }

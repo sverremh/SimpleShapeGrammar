@@ -1,21 +1,23 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using Rhino.Geometry;
+using Grasshopper.Kernel;
+
 using ShapeGrammar.Classes;
 using ShapeGrammar.Classes.Elements;
 
 namespace ShapeGrammar.Components
 {
-    public class DisassembleSimpleShape : GH_Component
+    public class DisassembleElement : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassembleSimpleShape class.
+        /// Initializes a new instance of the DisassembleElement class.
         /// </summary>
-        public DisassembleSimpleShape()
-          : base("DisassembleSimpleShape", "Nickname",
-              "Description",
-              "SimpleGrammar", "Disassemble")
+        public DisassembleElement()
+          : base("DisassembleElement1D", "Exp. Elem",
+              "",
+              Util.CAT, Util.GR_UTIL)
         {
         }
 
@@ -24,7 +26,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_SimpleShape", "sShape", "The instance of a SH_SimpleShape to disassemble", GH_ParamAccess.item); // 0
+            pManager.AddGenericParameter("SG_Element1D", "SG_E", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,14 +34,11 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Elements", "elems", "SH_Elements", GH_ParamAccess.list); // 0
-            pManager.AddGenericParameter("SH_Supports", "sups", "SH_Supports", GH_ParamAccess.list); // 1
-            pManager.AddGenericParameter("SH_Nodes", "nodes", "SH_Node", GH_ParamAccess.list); // 2
-
-            // future implementations
-
-            
-            //pManager.AddGenericParameter("SH_Loads", "loads", "SH_Loads", GH_ParamAccess.list); // 0
+            pManager.AddIntegerParameter("ID", "ID", "ID", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "Name", "Name", GH_ParamAccess.item);
+            pManager.AddLineParameter("Line", "Ln", "Line", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SG_Nodes", "SG_Ns", "", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SG_CroSec", "SG_S", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,32 +48,19 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SG_Shape ss = new SG_Shape();
+            SG_Elem1D elem = new SG_Elem1D();
 
             // --- input ---
-            if (!DA.GetData(0, ref ss)) return;
+            if (!DA.GetData(0, ref elem)) return;
 
             // --- solve ---
 
-            // list of elements
-            List<SG_Element> elems = new List<SG_Element>();
-            elems.AddRange(ss.Elems);
-
-            // list of supports
-            List<SG_Support> sups = new List<SG_Support>();
-            sups.AddRange(ss.Supports);
-
-            // list of nodes
-            List<SG_Node> nodes = new List<SG_Node>();
-            nodes.AddRange(ss.Nodes);
-
             // --- output ---
-            DA.SetDataList(0, elems);
-            DA.SetDataList(1, sups);
-            DA.SetDataList(2, nodes);
-
-
-
+            DA.SetData(0, elem.ID);
+            DA.SetData(1, elem.Name);
+            DA.SetData(2, elem.Ln);
+            DA.SetDataList(3, elem.Nodes);
+            DA.SetData(4, elem.CrossSection);
         }
 
         /// <summary>
@@ -95,7 +81,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("86c43654-6fb9-4c5f-873f-7422e06a9d38"); }
+            get { return new Guid("4cef31dc-480e-4276-898f-1e0341e78ef1"); }
         }
     }
 }

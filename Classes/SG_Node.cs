@@ -24,9 +24,11 @@ namespace ShapeGrammar.Classes
             ID = _id;
             Pt = _location;
 
-            Support = new SG_Support("000000", Pt);
-            Support.Node = this;
-            
+            Support = new SG_Support("000000", Pt)
+            {
+                Node = this
+            };
+
         }
 
         // --- methods ---

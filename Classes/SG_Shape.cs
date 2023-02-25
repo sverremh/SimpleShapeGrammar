@@ -17,13 +17,8 @@ namespace ShapeGrammar.Classes
         // --- properties ---
         public int nodeCount = 0;
         public int elementCount = 0;
-        // public int supCount = 0;
         public List<NurbsCurve> NurbsCurves { get; set; }
 
-        /// <summary>
-        /// Dictionary of possible elements. Use the keys "Line" for lines, "Surface" for surface, and "Solid" for Breps. 
-        /// </summary>
-        // public Dictionary<string, List<SH_Element>> Elements { get; set; } = new Dictionary<string, List<SH_Element>>();
         public List<SG_Element> Elems { get; set; } = new List<SG_Element>();
 
         public List<SG_Node> Nodes { get; set; }
@@ -43,6 +38,36 @@ namespace ShapeGrammar.Classes
         public void AddLine(SG_Element _line)
         {
             Elems.Add(_line);
+        }
+
+        public void AddNewElement(SG_Elem1D _e)
+        {
+            // element counter
+            _e.ID = elementCount;
+            elementCount++;
+            Elems.Add(_e);
+
+            // search existent nodes
+            foreach (SG_Node nd in _e.Nodes)
+            {
+                SG_Node targetNode;
+
+                // test if there is already a node in this position
+                if (Nodes.Any(n => n.Pt.DistanceToSquared(nd.Pt) < 0.001))
+                {
+                    targetNode = Nodes.Where(n => n.Pt.DistanceToSquared(nd.Pt) < 0.001).First();
+
+                    targetNode.Elements.Add(_e);
+                    continue;
+                }
+
+                // in case it is a new node
+                nd.ID = nodeCount;
+                nd.Elements.Add(_e);
+                Nodes.Add(nd);
+                nodeCount++;
+            }
+
         }
 
         //public void AddSurface(SH_Element _surface)

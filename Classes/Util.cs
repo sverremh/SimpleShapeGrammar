@@ -40,11 +40,14 @@ namespace ShapeGrammar.Classes
 
     public static class Util
     {
+        public static double PRES = 0.001;
+
         public static double MIN_SEG_LEN = 1.0;
 
         public static int RULE_END_MARKER = -999;
 
         public static int RULE01_MARKER = -1;
+        public static int RULE02_MARKER = -2;
 
         public static string CAT = "SimpleGrammar";
         public static string GR_RLS = "04. Rules";
@@ -102,7 +105,7 @@ namespace ShapeGrammar.Classes
         /// <returns></returns>
         public static Model Karamba3DModelFromSimpleShape(SG_Shape ss)
         {
-            var nodes = new List<Point3>();
+            // var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
             SG_Shape simpleShape = ss.DeepCopy();
@@ -111,7 +114,7 @@ namespace ShapeGrammar.Classes
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,
-                new List<CroSec>(), logger, out nodes);
+                new List<CroSec>(), logger, out _);
             /// <summary>
             /// not implemented: The cross section which should also come from the SH_SimpleElement.
             /// </summary>

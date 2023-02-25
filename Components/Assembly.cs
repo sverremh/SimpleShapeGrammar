@@ -109,12 +109,11 @@ namespace ShapeGrammar.Components
                         continue;
                     }
                     
-                    // new node case
+                    // in case it is a new node
                     nd.ID = shape.nodeCount;
                     nd.Elements.Add(e);
                     nodes.Add(nd);
                     shape.nodeCount++;
-
                 }
             }
 
@@ -134,26 +133,6 @@ namespace ShapeGrammar.Components
             // add the loads to the simple shape            
             SortLoads(loads, out List<SH_LineLoad> l_loads, out List<SH_PointLoad> p_loads);
 
-
-            //// add supports to the simple shape
-            //List<SG_Support> uniqueSupports = new List<SG_Support>();
-            //foreach (SG_Node node in shape.Nodes)
-            //{
-            //    if (uniqueSupports.Any(s => s.Node.Pt.DistanceToSquared(node.Pt) < 0.001))
-            //    {
-            //        // if there is already a support at this position it is not added
-            //        continue;
-            //    }
-
-            //    // find the support at the node. 
-            //    var nodeSup = sups.Find(s => s.Node.Pt.DistanceToSquared(node.Pt) < 0.01);
-            //    nodeSup.ID = shape.supCount;
-            //    shape.supCount++;
-            //    nodeSup.Node.ID = node.ID;
-
-            //    uniqueSupports.Add(nodeSup);
-            //}
-
             shape.Nodes = nodes;
             shape.Elems = renumberedElems;
             shape.LineLoads = l_loads;
@@ -169,6 +148,9 @@ namespace ShapeGrammar.Components
         /// <summary>
         /// Private methods for this components
         /// </summary>
+        /// 
+
+
         private void SortLoads(List<SH_Load> loads ,out List<SH_LineLoad> line_loads, out List<SH_PointLoad> point_loads)
         {
             // create the empty list

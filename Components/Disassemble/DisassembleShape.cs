@@ -2,18 +2,18 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-
 using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
-namespace ShapeGrammar.Components.Disassemble
+namespace ShapeGrammar.Components
 {
-    public class DisassembleNode : GH_Component
+    public class DisassembleShape : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassembleNode class.
+        /// Initializes a new instance of the DisassembleSimpleShape class.
         /// </summary>
-        public DisassembleNode()
-          : base("DisassembleNode", "Exp. Node",
+        public DisassembleShape()
+          : base("DisassembleShape", "Exp. Shape",
               "",
               Util.CAT, Util.GR_UTIL)
         {
@@ -24,7 +24,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SG_Node", "SG_N", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SH_SimpleShape", "sShape", "The instance of a SH_SimpleShape to disassemble", GH_ParamAccess.item); // 0
         }
 
         /// <summary>
@@ -32,10 +32,14 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Node id", "NID", "", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SG_Support", "SG_Sup", "", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point", "pt", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SH_Elements", "elems", "SH_Elements", GH_ParamAccess.list); // 0
+            pManager.AddGenericParameter("SH_Supports", "sups", "SH_Supports", GH_ParamAccess.list); // 1
+            pManager.AddGenericParameter("SH_Nodes", "nodes", "SH_Node", GH_ParamAccess.list); // 2
 
+            // future implementations
+
+            
+            //pManager.AddGenericParameter("SH_Loads", "loads", "SH_Loads", GH_ParamAccess.list); // 0
         }
 
         /// <summary>
@@ -44,22 +48,32 @@ namespace ShapeGrammar.Components.Disassemble
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // --- variables ---
-            SG_Node nd = new SG_Node();
+            SG_Shape ss = new SG_Shape();
 
             // --- input ---
-            if (!DA.GetData(0, ref nd)) return;
+            if (!DA.GetData(0, ref ss)) return;
 
             // --- solve ---
-            int o_id = nd.ID;
-            SG_Support sp = nd.Support;
-            Point3d pt = nd.Pt;
+
+            // list of elements
+            List<SG_Element> elems = new List<SG_Element>();
+            elems.AddRange(ss.Elems);
+
+            // list of supports
+            List<SG_Support> sups = new List<SG_Support>();
+            sups.AddRange(ss.Supports);
+
+            // list of nodes
+            List<SG_Node> nodes = new List<SG_Node>();
+            nodes.AddRange(ss.Nodes);
 
             // --- output ---
-            DA.SetData(0, o_id);
-            DA.SetData(1, sp);
-            DA.SetData(2, pt);
+            DA.SetDataList(0, elems);
+            DA.SetDataList(1, sups);
+            DA.SetDataList(2, nodes);
+
+
 
         }
 
@@ -81,7 +95,7 @@ namespace ShapeGrammar.Components.Disassemble
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9f858f82-e087-4543-8775-c262d93b1d94"); }
+            get { return new Guid("86c43654-6fb9-4c5f-873f-7422e06a9d38"); }
         }
     }
 }
