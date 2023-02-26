@@ -1,21 +1,23 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-using ShapeGrammar.Classes;
+using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-namespace ShapeGrammar.Components
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Components.RuleComponents
 {
-    public class DisassembleNode : GH_Component
+    public class AutoRule04 : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassembleNode class.
+        /// Initializes a new instance of the AutoRule04 class.
         /// </summary>
-        public DisassembleNode()
-          : base("DisassembleNode", "Exp. Node",
-              "",
-              Util.CAT, Util.GR_UTIL)
+        public AutoRule04()
+          : base("Auto Rule 04", "A-Rule04",
+              "Create intermediate node on r3 lines at the extension of r2 line",
+              Util.CAT, Util.GR_RLS)
         {
         }
 
@@ -24,7 +26,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SG_Node", "SG_N", "", GH_ParamAccess.item);
+            pManager.AddTextParameter("Elem Name", "eName", "element name", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,10 +34,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Node id", "NID", "", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SG_Support", "SG_Sup", "", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point", "pt", "", GH_ParamAccess.item);
-
+            pManager.AddGenericParameter("Rule", "Rule", "Rule", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -44,23 +43,18 @@ namespace ShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // --- variables ---
-            SG_Node nd = new SG_Node();
+            string eName = "";
 
             // --- input ---
-            if (!DA.GetData(0, ref nd)) return;
+            if (!DA.GetData(0, ref eName)) return;
 
             // --- solve ---
-            int o_id = nd.ID;
-            SG_Support sp = nd.Support;
-            Point3d pt = nd.Pt;
+
+            SG_AutoRule04 ar4 = new SG_AutoRule04(eName);
 
             // --- output ---
-            DA.SetData(0, o_id);
-            DA.SetData(1, sp);
-            DA.SetData(2, pt);
-
+            DA.SetData(0, ar4);
         }
 
         /// <summary>
@@ -81,7 +75,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9f858f82-e087-4543-8775-c262d93b1d94"); }
+            get { return new Guid("f67eb116-8350-4137-8061-325a52e79baa"); }
         }
     }
 }

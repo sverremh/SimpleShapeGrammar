@@ -42,7 +42,17 @@ namespace ShapeGrammar.Classes
 
 
         }*/
+        public static SG_Node CreateNode(SG_Element _e, double _t, int _id)
+        {
+            double mx = (1 - _t) * _e.Nodes[0].Pt.X + _t * _e.Nodes[1].Pt.X;
+            double my = (1 - _t) * _e.Nodes[0].Pt.Y + _t * _e.Nodes[1].Pt.Y;
+            double mz = (1 - _t) * _e.Nodes[0].Pt.Z + _t * _e.Nodes[1].Pt.Z;
+            Point3d newPoint = new Point3d(mx, my, mz);
 
+            SG_Node nd = new SG_Node(newPoint, _id);
+
+            return nd;
+        }
 
     }
 }

@@ -70,6 +70,38 @@ namespace ShapeGrammar.Classes
 
         }
 
+        public void RemoveUnusedNodes()
+        {
+            // UnregisterElemsFromNodes();
+            var newNodes = Nodes.Where(n => n.Elements.Count != 0);
+            Nodes = newNodes.ToList();
+        }
+
+        public void RegisterElemsToNodes()
+        {
+            foreach (SG_Element e in Elems)
+            {
+                if (!e.Nodes[0].Elements.Contains(e)) e.Nodes[0].Elements.Add(e);
+
+                if (!e.Nodes[1].Elements.Contains(e)) e.Nodes[1].Elements.Add(e);
+            }
+        }
+
+        public void UnregisterElemsFromNodes()
+        {
+            foreach (SG_Node n in Nodes)
+            {
+                foreach (SG_Element e in n.Elements.ToList())
+                {
+                    if (!e.Nodes.Contains(n))
+                    {
+                        n.Elements.Remove(e); 
+                    } 
+                }
+            }
+
+        }
+
         //public void AddSurface(SH_Element _surface)
         //{
         //    if (!Elements.ContainsKey("Surface"))

@@ -7,13 +7,13 @@ using ShapeGrammar.Classes;
 
 namespace ShapeGrammar.Components
 {
-    public class DisassembleNode : GH_Component
+    public class DisassembleCroSec : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassembleNode class.
+        /// Initializes a new instance of the DisassembleCroSec class.
         /// </summary>
-        public DisassembleNode()
-          : base("DisassembleNode", "Exp. Node",
+        public DisassembleCroSec()
+          : base("Disassemble SG_CroSec", "Exp. CS",
               "",
               Util.CAT, Util.GR_UTIL)
         {
@@ -24,7 +24,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SG_Node", "SG_N", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SG_Cross Section", "SG_CS", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -32,10 +32,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Node id", "NID", "", GH_ParamAccess.item);
-            pManager.AddGenericParameter("SG_Support", "SG_Sup", "", GH_ParamAccess.item);
-            pManager.AddPointParameter("Point", "pt", "", GH_ParamAccess.item);
-
+            //pManager.
         }
 
         /// <summary>
@@ -44,23 +41,13 @@ namespace ShapeGrammar.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // --- variables ---
-            SG_Node nd = new SG_Node();
 
             // --- input ---
-            if (!DA.GetData(0, ref nd)) return;
 
             // --- solve ---
-            int o_id = nd.ID;
-            SG_Support sp = nd.Support;
-            Point3d pt = nd.Pt;
 
             // --- output ---
-            DA.SetData(0, o_id);
-            DA.SetData(1, sp);
-            DA.SetData(2, pt);
-
         }
 
         /// <summary>
@@ -81,7 +68,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9f858f82-e087-4543-8775-c262d93b1d94"); }
+            get { return new Guid("653e34ed-1bfe-4edf-bef3-013b7f0f36e5"); }
         }
     }
 }

@@ -28,7 +28,6 @@ namespace ShapeGrammar.Classes.Rules
             RuleState = State.alpha;
             Name = "SH_AutoRule_03";
             ElemName = _eName;
-
         }
 
         // --- methods ---
@@ -43,16 +42,6 @@ namespace ShapeGrammar.Classes.Rules
             var selElems = ss_ref.Elems.Where(e => e.Autorule == 2);
             List<SG_Node> selNodes = ss_ref.Nodes.Where(n => n.Support.SupportCondition > 0).ToList();
             
-            //foreach (SG_Node n in ss_ref.Nodes)
-            //{
-            //    var Autorules = n.Elements.Select(e => e.Autorule);
-            //    if (Autorules.Contains(2)) continue;
-            //    if (n.Support.SupportCondition > 0)
-            //    {
-            //        selNodes.Add(n);
-            //    }
-            //}
-
             List<SG_Node> nds_side0 = selElems.Where(e => (e.Nodes[1].Pt.Z - e.Nodes[0].Pt.Z) > 0).Select(e => e.Nodes[1]).ToList();
             List<SG_Node> nds_side1 = selElems.Where(e => (e.Nodes[1].Pt.Z - e.Nodes[0].Pt.Z) < 0).Select(e => e.Nodes[1]).ToList();
 
@@ -115,7 +104,7 @@ namespace ShapeGrammar.Classes.Rules
             }
 
 
-            return "";
+            return "Auto-rule 03 successfully applied.";
         }
         public override State GetNextState()
         {
