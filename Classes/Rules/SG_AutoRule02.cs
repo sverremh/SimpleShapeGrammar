@@ -62,6 +62,10 @@ namespace ShapeGrammar.Classes.Rules
 
             double range = Domain[1] - Domain[0];
 
+            // remove unused nodes
+            ss_ref.UnregisterElemsFromNodes();
+            ss_ref.RegisterElemsToNodes();
+
             for (int i = 0; i < selectedIntGenes.Count; i++)
             {
                 if (selectedIntGenes[i] == 0) continue;
