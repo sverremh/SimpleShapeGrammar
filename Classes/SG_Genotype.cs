@@ -55,5 +55,9 @@ namespace ShapeGrammar.Classes
             }
         }
 
+        internal void FindRange(ref int sid, ref object _, int rULE04_MARKER)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

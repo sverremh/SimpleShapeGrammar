@@ -39,6 +39,27 @@ namespace ShapeGrammar.Classes.Rules
         }
         public override string RuleOperation(ref SG_Shape ss_ref, ref SG_Genotype gt)
         {
+            // find relevant range in genotype
+            int sid = -999;
+            int eid = -999;
+            List<int> selectedIntGenes;
+            List<double> selectedDGenes;
+
+            gt.FindRange(ref sid, ref eid, Util.RULE04_MARKER);
+
+            if (sid == -999 || eid == -999)
+            {
+                return "Autorule04 - wrong marker";
+            }
+
+            // extract relevant genes
+            selectedIntGenes = gt.IntGenes.GetRange(sid, eid - sid);
+            selectedDGenes = gt.DGenes.GetRange(sid, eid - sid);
+
+            if (selectedIntGenes[0] == 0) return "Auto-rule 04 not applied.";
+
+            // rule 4 content
+
             var r1_elems = ss_ref.Elems.Where(e => e.Autorule == 1).ToList();
             var r2_elems = ss_ref.Elems.Where(e => e.Autorule == 2).ToList();
             var r3_elems = ss_ref.Elems.Where(e => e.Autorule == 3).ToList();

@@ -48,6 +48,7 @@ namespace ShapeGrammar.Classes
 
         public static int RULE01_MARKER = -1;
         public static int RULE02_MARKER = -2;
+        public static int RULE04_MARKER = -4;
 
         public static string CAT = "SimpleGrammar";
         public static string GR_RLS = "04. Rules";
