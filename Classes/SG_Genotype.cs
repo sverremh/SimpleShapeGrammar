@@ -47,7 +47,7 @@ namespace ShapeGrammar.Classes
                     _sid = i + 1;
                     fl = true;
                 }
-                if (fl == true && IntGenes[i] == Util.RULE_END_MARKER)
+                if (fl == true && IntGenes[i] == UT.RULE_END_MARKER)
                 {
                     _eid = i;
                     break;

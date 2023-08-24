@@ -111,12 +111,12 @@ namespace ShapeGrammar.Classes.Rules
         public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             // create a random parameter
-            double x0 = Util.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double x1 = Util.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double y0 = Util.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double y1 = Util.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double z0 = Util.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
-            double z1 = Util.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double x0 = UT.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double x1 = UT.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double y0 = UT.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double y1 = UT.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double z0 = UT.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double z1 = UT.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
             
             // set the vectors
             TranslateStart = new Vector3d(x0, y0, z0);

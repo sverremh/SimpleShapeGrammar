@@ -17,7 +17,7 @@ namespace ShapeGrammar.Components.RuleComponents
         public AutoRule01()
           : base("Auto rule 01", "A-Rule01",
               "Split curves at a given parameter",
-              Util.CAT, Util.GR_RLS)
+              UT.CAT, UT.GR_RLS)
         {
         }
 

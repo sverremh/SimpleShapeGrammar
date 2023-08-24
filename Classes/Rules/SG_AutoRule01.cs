@@ -60,7 +60,7 @@ namespace ShapeGrammar.Classes.Rules
             List<int> selectedIntGenes;
             List<double> selectedDGenes;
 
-            gt.FindRange(ref sid, ref eid, Util.RULE01_MARKER);
+            gt.FindRange(ref sid, ref eid, UT.RULE01_MARKER);
 
             if (sid == -999 || eid == -999)
             {
@@ -91,8 +91,9 @@ namespace ShapeGrammar.Classes.Rules
                 double seglen1 = elem.Ln.Length * param;
                 double seglen2 = elem.Ln.Length * (1 - param);
 
-                if (seglen1 < Util.MIN_SEG_LEN || seglen2 < Util.MIN_SEG_LEN)
+                if (seglen1 < UT.MIN_SEG_LEN || seglen2 < UT.MIN_SEG_LEN)
                 {
+                    ss_ref.Elems = ss_ref.Elems.Where(e => removeIds.Contains(e.ID) == false).ToList();
                     return "Segments are too short for Autorule01.";
                 }
 

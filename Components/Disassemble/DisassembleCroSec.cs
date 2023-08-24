@@ -15,7 +15,7 @@ namespace ShapeGrammar.Components
         public DisassembleCroSec()
           : base("Disassemble SG_CroSec", "Exp. CS",
               "",
-              Util.CAT, Util.GR_UTIL)
+              UT.CAT, UT.GR_UTIL)
         {
         }
 

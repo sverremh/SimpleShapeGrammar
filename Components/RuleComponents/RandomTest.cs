@@ -95,15 +95,15 @@ namespace ShapeGrammar.Components
         private SH_Rule01 NewRule01(Random rnd)
         {
             // create start and end vector vector3d
-            var v1 = new Vector3d(0, 0, Util.RandomExtensions.NextDouble(rnd, -1.0, 1.0));
-            var v2 = new Vector3d(0, 0, Util.RandomExtensions.NextDouble(rnd, -2.0, 2.0));
+            var v1 = new Vector3d(0, 0, UT.RandomExtensions.NextDouble(rnd, -1.0, 1.0));
+            var v2 = new Vector3d(0, 0, UT.RandomExtensions.NextDouble(rnd, -2.0, 2.0));
             return new SH_Rule01(v1, v2);
         }
         private SH_Rule02 NewRule02(Random rnd, ref int numLines)
         {
             int ind = rnd.Next(0, numLines);
              // double check if this will include the final item in the list. 
-            double param = Util.RandomExtensions.NextDouble(rnd, 0.3, 0.7);
+            double param = UT.RandomExtensions.NextDouble(rnd, 0.3, 0.7);
             var r2 = new SH_Rule02(ind, param);
             numLines += 1;
             return r2;

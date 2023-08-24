@@ -51,7 +51,7 @@ namespace ShapeGrammar.Components
             if (!DA.GetDataList(1, rules)) return;
 
             //Create a deep copy of the simple Shape before performing rule operations
-            SG_Shape copyShape = Util.DeepCopy(simpleShape);
+            SG_Shape copyShape = UT.DeepCopy(simpleShape);
 
             // --- solve ---
 

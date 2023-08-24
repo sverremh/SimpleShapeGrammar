@@ -13,7 +13,7 @@ namespace ShapeGrammar.Components
         public DisassembleSupport()
           : base("DisassemleSupport", "Exp. Sup",
               "",
-              Util.CAT, Util.GR_UTIL)
+              UT.CAT, UT.GR_UTIL)
         {
         }
 

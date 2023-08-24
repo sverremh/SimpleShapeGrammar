@@ -78,10 +78,10 @@ namespace ShapeGrammar.Classes
             offspring[1] = new SH_Solution(problem, o2Var);
 
             SG_Shape ss01 =
-                Util.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
+                UT.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
             offspring[0].SH_Variable[0].SimpleShape = ss01;
             SG_Shape ss02 =
-                Util.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
+                UT.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
             offspring[1].SH_Variable[0].SimpleShape = ss02;
 
             //offspring[1] = new SH_Solution(o2Var); // the constructor should take the list of SH_Rule as input

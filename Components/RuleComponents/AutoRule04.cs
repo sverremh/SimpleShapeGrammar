@@ -17,7 +17,7 @@ namespace ShapeGrammar.Components.RuleComponents
         public AutoRule04()
           : base("Auto Rule 04", "A-Rule04",
               "Create intermediate node on r3 lines at the extension of r2 line",
-              Util.CAT, Util.GR_RLS)
+              UT.CAT, UT.GR_RLS)
         {
         }
 

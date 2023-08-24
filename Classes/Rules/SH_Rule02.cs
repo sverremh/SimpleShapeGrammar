@@ -159,7 +159,7 @@ namespace ShapeGrammar.Classes.Rules
         {
             // the parameter to use for the rule
             int numLines = ss.elementCount;
-            Param = Util.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
+            Param = UT.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);
             LineIndex = random.Next(0, numLines-1);
             
         }

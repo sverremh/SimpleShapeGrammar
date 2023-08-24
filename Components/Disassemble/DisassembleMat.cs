@@ -15,7 +15,7 @@ namespace ShapeGrammar.Components
         public DisassembleMat()
           : base("Disassemble SG_Mat", "Exp. Mat",
               "",
-              Util.CAT, Util.GR_UTIL)
+              UT.CAT, UT.GR_UTIL)
         {
         }
 

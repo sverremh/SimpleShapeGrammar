@@ -40,7 +40,6 @@ namespace ShapeGrammar.Classes
             // update the corresponding node. 
             Support.Position += vector;
 
-
         }*/
         public static SG_Node CreateNode(SG_Element _e, double _t, int _id)
         {

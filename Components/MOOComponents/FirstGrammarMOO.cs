@@ -109,7 +109,7 @@ namespace ShapeGrammar.Components.MOOComponents
             maxEvals = populationSize * generations; // total number of evaluations
 
             //Create a deep copy of the simple Shape before performing rule operations
-            SG_Shape copyShape = Util.DeepCopy(ss);
+            SG_Shape copyShape = UT.DeepCopy(ss);
             SimpleShape = copyShape; // assign the SH_SimpleShape instance to the component's property
 
             // Control the input

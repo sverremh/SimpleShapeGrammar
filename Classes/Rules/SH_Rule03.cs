@@ -88,7 +88,7 @@ namespace ShapeGrammar.Classes.Rules
         
         public override void NewRuleParameters(Random random, SG_Shape ss)
         {
-            HorizontalThrustParameter = Util.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
+            HorizontalThrustParameter = UT.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
 
         public override State GetNextState()

@@ -15,7 +15,7 @@ namespace ShapeGrammar.Components
         public DisassembleShape()
           : base("DisassembleShape", "Exp. Shape",
               "",
-              Util.CAT, Util.GR_UTIL)
+              UT.CAT, UT.GR_UTIL)
         {
         }
 

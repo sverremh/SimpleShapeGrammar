@@ -110,9 +110,9 @@ namespace ShapeGrammar.Classes
 
             // create a karamba model from the SH_SimpleShape
             //Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(grammarShape);
-            Model karambaModel = Util.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
+            Model karambaModel = UT.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
             // analyse the karamba model and return the objective functions
-            List<double> objectives = Util.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
+            List<double> objectives = UT.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
 
             // assign the objective values to the solution
             for (int i = 0; i < MyComponent.GrammarObjectives.Count; i++)

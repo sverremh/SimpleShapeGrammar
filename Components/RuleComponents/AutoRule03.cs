@@ -17,7 +17,7 @@ namespace ShapeGrammar.Components.RuleComponents
         public AutoRule03()
           : base("Auto rule 03", "A-Rule03",
               "Create upper and lower chords",
-              Util.CAT, Util.GR_RLS)
+              UT.CAT, UT.GR_RLS)
         {
         }
 

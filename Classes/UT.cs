@@ -38,7 +38,7 @@ namespace ShapeGrammar.Classes
 
     // --- methods ---
 
-    public static class Util
+    public static class UT
     {
         public static double PRES = 0.001;
 
@@ -83,7 +83,7 @@ namespace ShapeGrammar.Classes
         /// <param name="ss"></param>
         public static SG_Shape ApplyRulesToSimpleShape(List<SG_Rule> rules, SG_Shape ss)
         {
-            SG_Shape ssCopy = Util.DeepCopy(ss) ; 
+            SG_Shape ssCopy = UT.DeepCopy(ss) ; 
             foreach (SG_Rule rule in rules)
             {
                 try

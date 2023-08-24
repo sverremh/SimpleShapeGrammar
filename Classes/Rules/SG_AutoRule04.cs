@@ -45,7 +45,7 @@ namespace ShapeGrammar.Classes.Rules
             List<int> selectedIntGenes;
             List<double> selectedDGenes;
 
-            gt.FindRange(ref sid, ref eid, Util.RULE04_MARKER);
+            gt.FindRange(ref sid, ref eid, UT.RULE04_MARKER);
 
             if (sid == -999 || eid == -999)
             {
@@ -56,6 +56,8 @@ namespace ShapeGrammar.Classes.Rules
             selectedIntGenes = gt.IntGenes.GetRange(sid, eid - sid);
             selectedDGenes = gt.DGenes.GetRange(sid, eid - sid);
 
+
+            // this below should be revised. 
             if (selectedIntGenes[0] == 0) return "Auto-rule 04 not applied.";
 
             // rule 4 content
@@ -70,12 +72,12 @@ namespace ShapeGrammar.Classes.Rules
                 foreach (var r3 in r3_elems)
                 {
                     var intersect = Intersection.CurveLine(
-                        (r3 as SG_Elem1D).Ln.ToNurbsCurve(), (r2 as SG_Elem1D).Ln, Util.PRES, Util.PRES);
+                        (r3 as SG_Elem1D).Ln.ToNurbsCurve(), (r2 as SG_Elem1D).Ln, UT.PRES, UT.PRES);
 
                     if (intersect.Count == 0) continue;
 
-                    if (intersect[0].PointA.DistanceToSquared(r2.Nodes[0].Pt) < Util.PRES) continue;
-                    else if (intersect[0].PointA.DistanceToSquared(r2.Nodes[1].Pt) < Util.PRES) continue;
+                    if (intersect[0].PointA.DistanceToSquared(r2.Nodes[0].Pt) < UT.PRES) continue;
+                    else if (intersect[0].PointA.DistanceToSquared(r2.Nodes[1].Pt) < UT.PRES) continue;
 
                     else
                     {
@@ -87,10 +89,9 @@ namespace ShapeGrammar.Classes.Rules
                         ss_ref.nodeCount++;
 
                         // create 3x Element
-                        SG_Elem1D newLn0 = new SG_Elem1D(new SG_Node[] { r3.Nodes[0], midNode }, ss_ref.elementCount, r3.Name) { Autorule = 3 };
-                        SG_Elem1D newLn1 = new SG_Elem1D(new SG_Node[] { midNode, r3.Nodes[1] }, ss_ref.elementCount + 1, r3.Name) { Autorule = 3 };
-
-                        SG_Elem1D newLn2 = new SG_Elem1D(new SG_Node[] { r2.Nodes[1], midNode }, ss_ref.elementCount + 2, r2.Name) { Autorule = 2 };
+                        SG_Elem1D newLn0 = new SG_Elem1D(new SG_Node[] { r3.Nodes[0], midNode }, ss_ref.elementCount, r3.Name) { Autorule = 4 };
+                        SG_Elem1D newLn1 = new SG_Elem1D(new SG_Node[] { midNode, r3.Nodes[1] }, ss_ref.elementCount + 1, r3.Name) { Autorule = 4 };
+                        SG_Elem1D newLn2 = new SG_Elem1D(new SG_Node[] { r2.Nodes[1], midNode }, ss_ref.elementCount + 2, r2.Name) { Autorule = 4 };
 
                         ss_ref.elementCount += 3;
 
@@ -99,25 +100,25 @@ namespace ShapeGrammar.Classes.Rules
                         ss_ref.Elems.AddRange(new List<SG_Element>(3) { newLn0, newLn1, newLn2 });
 
                         // remove B1 
-                        // functioning code below but need to be cleaned up later: 230226
-                        var selr1elems0 = r1_elems.Where(r1 =>
-                        0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) > Math.Min(newLn0.Ln.FromX, newLn0.Ln.ToX) &&
-                        0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) < Math.Max(newLn0.Ln.FromX, newLn0.Ln.ToX));
-                        foreach (SG_Element e in selr1elems0)
-                        {
-                            ss_ref.Elems.Remove(e);
-                        }
+                        //// functioning code below but need to be cleaned up later: 230226
+                        //var selr1elems0 = r1_elems.Where(r1 =>
+                        //0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) > Math.Min(newLn0.Ln.FromX, newLn0.Ln.ToX) &&
+                        //0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) < Math.Max(newLn0.Ln.FromX, newLn0.Ln.ToX));
+                        //foreach (SG_Element e in selr1elems0)
+                        //{
+                        //    ss_ref.Elems.Remove(e);
+                        //}
 
                         // remove AR2
                         ss_ref.Elems.Remove(r2);
 
-                        var selr1elems1 = r1_elems.Where(r1 =>
-                        0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) > Math.Min(newLn1.Ln.FromX, newLn1.Ln.ToX) &&
-                        0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) < Math.Max(newLn1.Ln.FromX, newLn1.Ln.ToX));
-                        foreach (SG_Element e in selr1elems1)
-                        {
-                            ss_ref.Elems.Remove(e);
-                        }
+                        //var selr1elems1 = r1_elems.Where(r1 =>
+                        //0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) > Math.Min(newLn1.Ln.FromX, newLn1.Ln.ToX) &&
+                        //0.5 * ((r1 as SG_Elem1D).Ln.FromX + (r1 as SG_Elem1D).Ln.ToX) < Math.Max(newLn1.Ln.FromX, newLn1.Ln.ToX));
+                        //foreach (SG_Element e in selr1elems1)
+                        //{
+                        //    ss_ref.Elems.Remove(e);
+                        //}
 
                     }
                 }

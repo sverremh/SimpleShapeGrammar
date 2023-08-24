@@ -140,7 +140,7 @@
     <Compile Include="Classes\Rules\SH_Rule03.cs" />
     <Compile Include="Classes\SG_Shape.cs" />
     <Compile Include="Classes\SG_Support.cs" />
-    <Compile Include="Classes\Util.cs" />
+    <Compile Include="Classes\UT.cs" />
     <Compile Include="Components\Assembly.cs" />
     <Compile Include="Components\CreateGenotype.cs" />
     <Compile Include="Components\CreateIsotropicMaterial.cs" />

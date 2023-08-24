@@ -18,7 +18,7 @@ namespace ShapeGrammar.Components
         public GrammarInterpreter_Auto()
           : base("GrammerInterpreter_Auto", "GI_Auto",
               "Automatic Grammar Interpreter",
-              Util.CAT, Util.GR_INT)
+              UT.CAT, UT.GR_INT)
         {
         }
 
@@ -60,7 +60,7 @@ namespace ShapeGrammar.Components
             // --- solve ---
 
             // Create a deep copy
-            SG_Shape shape = Util.DeepCopy(iniShape);
+            SG_Shape shape = UT.DeepCopy(iniShape);
             SG_Genotype gt = inigt; // Util.DeepCopy(inigt);
 
             // Select relevant elements

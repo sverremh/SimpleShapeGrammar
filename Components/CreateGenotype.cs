@@ -15,7 +15,7 @@ namespace ShapeGrammar.Components
         public CreateGenotype()
           : base("CreateGenotype", "Genotype",
               "Description",
-              Util.CAT, Util.GR_UTIL)
+              UT.CAT, UT.GR_UTIL)
         {
         }
 

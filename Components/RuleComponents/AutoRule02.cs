@@ -17,7 +17,7 @@ namespace ShapeGrammar.Components.RuleComponents
         public AutoRule02()
           : base("Auto rule 02", "A-Rule02",
               "Create a line from an existent node",
-              Util.CAT, Util.GR_RLS)
+              UT.CAT, UT.GR_RLS)
         {
         }
 

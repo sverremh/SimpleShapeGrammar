@@ -75,7 +75,7 @@ namespace ShapeGrammar.Components
             var rnd = new Random(Guid.NewGuid().GetHashCode());
             for (int i = 0; i < length; i++)
             {
-                Util.TakeRandomItem( rules, weights, rnd, out object rule);
+                UT.TakeRandomItem( rules, weights, rnd, out object rule);
                 out_rules.Add(rule);
             }
 

@@ -72,9 +72,9 @@ namespace ShapeGrammar.Components
             }
 
             // deep copy the input
-            elems = Util.DeepCopy(elems); // How to get this into the form of Dictionary? Multiple input? 
-            sups = Util.DeepCopy(sups);
-            loads = Util.DeepCopy(loads);
+            elems = UT.DeepCopy(elems); // How to get this into the form of Dictionary? Multiple input? 
+            sups = UT.DeepCopy(sups);
+            loads = UT.DeepCopy(loads);
 
 
             // --- solve ---
