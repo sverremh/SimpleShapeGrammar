@@ -6,35 +6,35 @@ using System.Threading.Tasks;
 
 using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Classes.Elements
+namespace ShapeGrammar.Classes.Elements
 {
     [Serializable]
-    public class SH_Solid : SH_Element
+    public class SG_Solid : SG_Element
     {
         // -- properties --
         public Brep Brep { get; set; }
 
         // -- constructors --
-        public SH_Solid()
+        public SG_Solid()
         {
             // empty constructor
         }
 
-        public SH_Solid(string _name, int _id)
+        public SG_Solid(string _name, int _id)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
         }
 
-        public SH_Solid(string _name, int _id, Brep _brep)
+        public SG_Solid(string _name, int _id, Brep _brep)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
             Brep = _brep;
         }
-        public SH_Solid(string _name, Brep _brep)
+        public SG_Solid(string _name, Brep _brep)
         {
-            elementName = _name;
+            Name = _name;
             Brep = _brep;
         }
 

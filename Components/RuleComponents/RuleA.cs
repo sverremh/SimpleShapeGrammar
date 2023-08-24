@@ -1,8 +1,10 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Components
 {
     public class RuleA : GH_Component
     {

@@ -2,8 +2,8 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+using ShapeGrammar.Classes;
+namespace ShapeGrammar.Components
 {
     public class Evaluate : GH_Component
     {
@@ -41,7 +41,7 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape ss = new SH_SimpleShape();
+            SG_Shape ss = new SG_Shape();
 
             // --- input ---
             if (!DA.GetData(0, ref ss)) return;

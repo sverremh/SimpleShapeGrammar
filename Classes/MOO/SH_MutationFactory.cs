@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using JMetalCSharp.Operators.Mutation;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public static class SH_MutationFactory
     {

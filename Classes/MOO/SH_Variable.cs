@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
-using JMetalCSharp.Encoding.Variable; 
+using JMetalCSharp.Encoding.Variable;
+using ShapeGrammar.Classes.Rules;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public class SH_Variable : Variable
     {
@@ -21,13 +22,13 @@ namespace SimpleShapeGrammar.Classes
         /// <summary>
         /// Stores a list of SH_Rule class which forms the basis of the genome.
         /// </summary>
-        public List<SH_Rule> RuleList { get; set; }
+        public List<SG_Rule> RuleList { get; set; }
         /// <summary>
         /// Stores the length of the list
         /// </summary>
         public int Size { get; set; }
 
-        public SH_SimpleShape SimpleShape { get; set; }
+        public SG_Shape SimpleShape { get; set; }
 
         // -- constructors -- 
         public SH_Variable()
@@ -36,7 +37,7 @@ namespace SimpleShapeGrammar.Classes
             Size = 0;
             problem = null; 
         }
-        public SH_Variable(List<SH_Rule> ruleList)
+        public SH_Variable(List<SG_Rule> ruleList)
         {
             Size = ruleList.Count;
             RuleList = ruleList; 

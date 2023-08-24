@@ -2,8 +2,8 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+using ShapeGrammar.Classes;
+namespace ShapeGrammar.Components
 {
     public class CreateGeometry : GH_Component
     {
@@ -41,7 +41,7 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape simpleShape = new SH_SimpleShape();
+            SG_Shape simpleShape = new SG_Shape();
 
             // --- input --- 
             if (!DA.GetData(0, ref simpleShape)) return;
@@ -49,7 +49,7 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
             List<Line> lines = simpleShape.GetLinesFromShape();
             List<int?> ids = new List<int?>();
-            foreach (var item in simpleShape.Elements["Line"])
+            foreach (var item in simpleShape.Elems)
             {
                 ids.Add(item.ID);
             }
@@ -67,7 +67,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_I_DrawCS;
+                return ShapeGrammar.Properties.Resources.icons_I_DrawCS;
             }
         }
 

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_RuleA : SH_Rule
+    public class SH_RuleA : SG_Rule
     {
         // --- properties ---
         //public State RuleState = State.beta;
@@ -20,18 +20,18 @@ namespace SimpleShapeGrammar.Classes
             Name = "SH_RuleA";
         }
 
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             
         }
 
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }
 
         // --- methods ---
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
             // check if the state maches the simple shape state
             if (_ss.SimpleShapeState != RuleState)

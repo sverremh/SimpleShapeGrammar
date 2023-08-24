@@ -11,9 +11,10 @@ using Karamba.Models;
 using JMetalCSharp.Core;
 using JMetalCSharp.Encoding.SolutionType;
 using JMetalCSharp.Utils.Wrapper;
-using SimpleShapeGrammar.Components.MOOComponents;
+using ShapeGrammar.Classes.Rules;
+using ShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     public class SH_NSGAIIProblem : Problem
     {
@@ -29,7 +30,7 @@ namespace SimpleShapeGrammar.Classes
         //public List<string> objectives; // string list of possible objectives
         //List<double> objectives = new List<double>();
 
-        public List<(List<SH_Rule> genome, List<double> fitness)> allSolutions = new List<(List<SH_Rule> genome, List<double> fitness)>(); // a list of tuples containing all the solutions 
+        public List<(List<SG_Rule> genome, List<double> fitness)> allSolutions = new List<(List<SG_Rule> genome, List<double> fitness)>(); // a list of tuples containing all the solutions 
 
         // -- constructors -- 
         /// <summary>
@@ -96,11 +97,11 @@ namespace SimpleShapeGrammar.Classes
         {
             //SH_Solution shSolution = solution as SH_Solution;
             // the current solution to evaluate
-            (List<SH_Rule> ruleList, List<double> objectiveValues) currentSolution; // the current solution to evaluate
+            (List<SG_Rule> ruleList, List<double> objectiveValues) currentSolution; // the current solution to evaluate
 
             SH_XReal x = new SH_XReal(solution); // using the wrapper when working with the solution. I will probably have to modify the wrapper as well for it to be compatible with shape grammars
 
-            List<SH_Rule> ruleList = x.GetRuleList(); // gets the list of rules used by this variable
+            List<SG_Rule> ruleList = x.GetRuleList(); // gets the list of rules used by this variable
 
             // modify the initial simple shape by the list of rules
             //SH_SimpleShape simpleShape = MyComponent.SimpleShape;
@@ -109,9 +110,9 @@ namespace SimpleShapeGrammar.Classes
 
             // create a karamba model from the SH_SimpleShape
             //Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(grammarShape);
-            Model karambaModel = SH_UtilityClass.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
+            Model karambaModel = UT.Karamba3DModelFromSimpleShape(x.GetSimpleShape());
             // analyse the karamba model and return the objective functions
-            List<double> objectives = SH_UtilityClass.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
+            List<double> objectives = UT.AnalyseKarambaModel(MyComponent.GrammarObjectives, karambaModel);
 
             // assign the objective values to the solution
             for (int i = 0; i < MyComponent.GrammarObjectives.Count; i++)

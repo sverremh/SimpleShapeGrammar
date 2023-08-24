@@ -8,9 +8,9 @@ using JMetalCSharp.Core;
 using JMetalCSharp.QualityIndicator;
 using JMetalCSharp.Utils;
 using JMetalCSharp.Utils.Comparators;
-using SimpleShapeGrammar.Components.MOOComponents;
+using ShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     class SH_NSGAII: Algorithm
     {

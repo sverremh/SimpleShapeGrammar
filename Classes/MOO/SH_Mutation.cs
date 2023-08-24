@@ -8,7 +8,7 @@ using JMetalCSharp.Operators.Mutation;
 using JMetalCSharp.Core;
 using JMetalCSharp.Utils;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     class SH_Mutation : Mutation
     {

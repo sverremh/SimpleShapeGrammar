@@ -4,32 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
     [Serializable]
-    public class SH_Support
+    public class SG_Support
     {
         // --- properties ---
-        //public SH_Node node;
+        
         public int ID;
-        // Not implemented. Change the SH_Node to simply the node index: When done the SH_Node property may be removed.
-        //public int? nodeInd;
-        public int nodeInd;
-        public Point3d Position { get; set; }
+        // public int nodeInd;
+        public SG_Node Node { get; set; }
+        public Point3d Pt { get; set; }
         public int SupportCondition { get; set; }
 
         // --- constructors ---
 
-        public SH_Support()
+        public SG_Support()
         {
 
         }
-        public SH_Support(string _support_conditions, Point3d _position)
+        public SG_Support(string _sup_cond_txt, Point3d _pt) //  SG_Node _node
         {
             // Test if the support condition are in the correct format
-            if (_support_conditions.Length != 6) throw new Exception("The length of the string must be exactly 6 characters");
+            if (_sup_cond_txt.Length != 6) throw new Exception("The length of the string must be exactly 6 characters");
+
             //Test if the elements in the string are correct
-            foreach (char item in _support_conditions)
+            foreach (char item in _sup_cond_txt)
             {
                 if (item != '0' && item != '1')
                 {
@@ -37,10 +37,9 @@ namespace SimpleShapeGrammar.Classes
                 }
             }
 
-            // Create the support
-            SupportCondition = SetConditions(_support_conditions);
-
-            Position = _position;
+            // Create the support condition 
+            SupportCondition = SetConditions(_sup_cond_txt);
+            Pt = _pt;
             
         }
         // --- methods ---
@@ -59,6 +58,5 @@ namespace SimpleShapeGrammar.Classes
             return condition;            
         }
 
-        
     }
 }

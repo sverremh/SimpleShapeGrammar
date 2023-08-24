@@ -12,11 +12,11 @@ using Karamba.CrossSections;
 using Karamba.Supports;
 using Karamba.Loads;
 using Karamba.Factories;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
     public class SH_ShapeToKarambaModel : GH_Component
     {
@@ -56,7 +56,7 @@ namespace SimpleShapeGrammar.Components
             var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
-            var ss = new SH_SimpleShape();
+            var ss = new SG_Shape();
 
 
             // --- input ---
@@ -67,7 +67,7 @@ namespace SimpleShapeGrammar.Components
 
             // create karamba Line3 elements
             List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elements["Line"], k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(ss.Elems, k3d, out element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,
@@ -83,7 +83,7 @@ namespace SimpleShapeGrammar.Components
             foreach (var sup in ss.Supports)
             {
                 // karamba point
-                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
+                Point3 loc = new Point3(sup.Node.Pt.X, sup.Node.Pt.Y, sup.Node.Pt.Z);
                 
 
                 // conditions
@@ -155,18 +155,18 @@ namespace SimpleShapeGrammar.Components
         /// <param name="elements"></param>
         /// <param name="k3d"></param>
         /// <returns></returns>
-        private List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
+        private List<Line3> SH_ElementsToKarambaLines(List<SG_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
         {
             // initiate list
             
             List<Line3> k_lines = new List<Line3>();
             List<string> k_names = new List<string>();
             // create karamabe BuilderBeam elements using Factory method
-            foreach (SH_Element el in elements)
+            foreach (SG_Element el in elements)
             {                
                 // get node points
-                Point3d sPt = el.Nodes[0].Position;
-                Point3d ePt = el.Nodes[1].Position;
+                Point3d sPt = el.Nodes[0].Pt;
+                Point3d ePt = el.Nodes[1].Pt;
                 // convert to karamba's Point3
 
                 Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
@@ -178,7 +178,7 @@ namespace SimpleShapeGrammar.Components
                 k_lines.Add(k_line);
 
                 // add name
-                k_names.Add(el.elementName);
+                k_names.Add(el.Name);
                 
                 
             }

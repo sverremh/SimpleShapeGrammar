@@ -1,19 +1,21 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System;
-using SimpleShapeGrammar.Classes;
+using System.Collections.Generic;
 
-namespace SimpleShapeGrammar.Components.Disassemble
+using ShapeGrammar.Classes;
+
+namespace ShapeGrammar.Components
 {
-    public class DisassemleSupport : GH_Component
+    public class DisassembleMat : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DisassemleSupport class.
+        /// Initializes a new instance of the DisassembleMat class.
         /// </summary>
-        public DisassemleSupport()
-          : base("DisassemleSupport", "Nickname",
-              "Description",
-              "SimpleGrammar", "Disassemble")
+        public DisassembleMat()
+          : base("Disassemble SG_Mat", "Exp. Mat",
+              "",
+              UT.CAT, UT.GR_UTIL)
         {
         }
 
@@ -22,7 +24,6 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Support", "sup", "SH_Support", GH_ParamAccess.item) ;
         }
 
         /// <summary>
@@ -30,8 +31,6 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPointParameter("Position", "pos", "Point3d represenation of position", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("SupportCondition", "cond", "Integerr representation of support condition", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,23 +39,13 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // ---variables-- -
-            SH_Support sup = new SH_Support();
+            // --- variables ---
 
             // --- input ---
-            if(!DA.GetData(0, ref sup)) return;
 
             // --- solve ---
-             Point3d pt = sup.Position;
-            int cond = sup.SupportCondition;
-
-            // future implementations
-            // - Node index
-            // - Support ID
 
             // --- output ---
-            DA.SetData(0, pt);
-            DA.SetData(1, cond);
         }
 
         /// <summary>
@@ -77,7 +66,7 @@ namespace SimpleShapeGrammar.Components.Disassemble
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
+            get { return new Guid("18958a60-3a20-4297-80ab-681c8c046bcd"); }
         }
     }
 }

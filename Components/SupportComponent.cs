@@ -2,8 +2,8 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-namespace SimpleShapeGrammar.Components
+using ShapeGrammar.Classes;
+namespace ShapeGrammar.Components
 {
     public class SupportComponent : GH_Component
     {
@@ -49,7 +49,7 @@ namespace SimpleShapeGrammar.Components
             DA.GetData(1, ref condition);
 
             // --- solve ---
-            SH_Support support = new SH_Support(condition, location);
+            SG_Support support = new SG_Support(condition, location);
 
             // --- output ---
             DA.SetData(0, support);
@@ -64,7 +64,7 @@ namespace SimpleShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return SimpleShapeGrammar.Properties.Resources.icons_C_Sup;
+                return ShapeGrammar.Properties.Resources.icons_C_Sup;
             }
         }
 

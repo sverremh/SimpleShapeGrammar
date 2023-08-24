@@ -5,7 +5,9 @@ using System.Text;
 using JMetalCSharp.Utils.Wrapper;
 using JMetalCSharp.Core;
 
-namespace SimpleShapeGrammar.Classes
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Classes
 {
     public class SH_XReal : XReal
     {
@@ -25,9 +27,9 @@ namespace SimpleShapeGrammar.Classes
         /// Returns the list of rules used by the genome
         /// </summary>
         /// <returns></returns>
-        public List<SH_Rule> GetRuleList()
+        public List<SG_Rule> GetRuleList()
         {
-            List<SH_Rule> results;
+            List<SG_Rule> results;
             Type type = this.type.GetType();
             if (type == typeof(SH_SolutionType))
             {
@@ -42,9 +44,9 @@ namespace SimpleShapeGrammar.Classes
             return results;
         }
 
-        public SH_SimpleShape GetSimpleShape()
+        public SG_Shape GetSimpleShape()
         {
-            SH_SimpleShape ss;
+            SG_Shape ss;
             Type type = this.type.GetType();
             if (type == typeof(SH_SolutionType))
             {
@@ -65,10 +67,10 @@ namespace SimpleShapeGrammar.Classes
         /// Sets the list of rules used by the genome
         /// </summary>
         /// <param name="ruleList"></param>
-        public void SetRuleList(List<SH_Rule> ruleList)
+        public void SetRuleList(List<SG_Rule> ruleList)
         {
             Type type = this.type.GetType();
-            List<SH_Rule> results;
+            // List<SH_Rule> results;
 
             if (type == typeof(SH_SolutionType))
             {

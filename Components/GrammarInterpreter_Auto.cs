@@ -1,21 +1,24 @@
-﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using Rhino.Geometry;
+using Grasshopper.Kernel;
+
 using ShapeGrammar.Classes;
 using ShapeGrammar.Classes.Rules;
 
 namespace ShapeGrammar.Components
 {
-    public class GrammarInterpreter : GH_Component
+    public class GrammarInterpreter_Auto : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GrammarInterpreter class.
+        /// Initializes a new instance of the GrammerInterpreter_Auto class.
         /// </summary>
-        public GrammarInterpreter()
-          : base("GrammarInterpreter", "interpreter",
-              "Description",
-              "SimpleGrammar", "Interpreter")
+        public GrammarInterpreter_Auto()
+          : base("GrammerInterpreter_Auto", "GI_Auto",
+              "Automatic Grammar Interpreter",
+              UT.CAT, UT.GR_INT)
         {
         }
 
@@ -24,8 +27,10 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Simple Shape", "sShape", "Simple Shape to be modified with the rules", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Rules", "rls", "Rules to apply to the Interpreter", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SG_Shape", "SG_Shape", "SG Assembly", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Automatic Rules", "Autorules", "Rules for Automatic Interpreter", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Genotype", "Genotype", "Genotype/Chromosome", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -33,7 +38,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Modified Shape", "mShape", "Shape Class after Grammar derivation", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SG_Shape", "SG_Shape", "SG Assembly", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,40 +48,40 @@ namespace ShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SG_Shape simpleShape = new SG_Shape();
-            List<SG_Rule> rules = new List<SG_Rule>();
+            SG_Shape iniShape = new SG_Shape();
+            List<SG_Rule> rls = new List<SG_Rule>();
+            SG_Genotype inigt = new SG_Genotype();
 
-            // --- input --- 
-            if (!DA.GetData(0, ref simpleShape)) return;
-            if (!DA.GetDataList(1, rules)) return;
-
-            //Create a deep copy of the simple Shape before performing rule operations
-            SG_Shape copyShape = UT.DeepCopy(simpleShape);
+            // --- input ---
+            if (!DA.GetData(0, ref iniShape)) return;
+            if (!DA.GetDataList(1, rls)) return;
+            if (!DA.GetData(2, ref inigt)) return;
 
             // --- solve ---
 
-            
-            foreach (SG_Rule rule in rules)
+            // Create a deep copy
+            SG_Shape shape = UT.DeepCopy(iniShape);
+            SG_Genotype gt = inigt; // Util.DeepCopy(inigt);
+
+            // Select relevant elements
+            for (int i = 0; i < rls.Count; i++)
             {
                 try
                 {
-                    string message = rule.RuleOperation(ref copyShape);
+                    string message = rls[i].RuleOperation(ref shape, ref gt);
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
                 }
+
                 catch (Exception ex)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
                     return;
                 }
-                
             }
-            
 
             // --- output ---
-            DA.SetData(0, copyShape);
+            DA.SetData(0, shape);
         }
-
-
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -87,7 +92,7 @@ namespace ShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return ShapeGrammar.Properties.Resources.icons_C_Sol_LS;
+                return null;
             }
         }
 
@@ -96,7 +101,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6f3252a6-31bb-4d33-9123-447465a8185b"); }
+            get { return new Guid("38d35ef6-a3b2-44b2-bfa7-23d1292d37f5"); }
         }
     }
 }

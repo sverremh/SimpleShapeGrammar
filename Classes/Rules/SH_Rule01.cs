@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Elements;
 using Rhino.Geometry;
 
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_Rule01 : SH_Rule
+    public class SH_Rule01 : SG_Rule
     {
         // --- properties ---
         public Vector3d TranslateStart { get; private set; }
@@ -39,21 +39,22 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
-            // check if the state maches the simple shape state
+            // check if the state matches the simple shape state
             if (_ss.SimpleShapeState != RuleState)
             {
                 return "The State is not compatible with Rule01.";
             }
 
             // take the 1st element
-            SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
+            // SH_Line sh_elem = (SH_Line) _ss.Elements["Line"][0];
+            SG_Elem1D sh_elem = (SG_Elem1D)_ss.Elems[0];
 
             // apply the change
             #region NewMethod
@@ -107,15 +108,15 @@ namespace SimpleShapeGrammar.Classes
             zBounds[1] = zHigh;
         }
 
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
             // create a random parameter
-            double x0 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double x1 = SH_UtilityClass.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
-            double y0 = SH_UtilityClass.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double y1 = SH_UtilityClass.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
-            double z0 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
-            double z1 = SH_UtilityClass.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double x0 = UT.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double x1 = UT.RandomExtensions.NextDouble(random, xBounds[0], xBounds[1]);
+            double y0 = UT.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double y1 = UT.RandomExtensions.NextDouble(random, yBounds[0], yBounds[1]);
+            double z0 = UT.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
+            double z1 = UT.RandomExtensions.NextDouble(random, zBounds[0], zBounds[1]);
             
             // set the vectors
             TranslateStart = new Vector3d(x0, y0, z0);

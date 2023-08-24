@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 using Rhino.Geometry;
 
-namespace SimpleShapeGrammar.Components.MOOComponents
+namespace ShapeGrammar.Components.MOOComponents
 {
     public class TestUpdateReset : GH_Component
     {
@@ -69,14 +69,13 @@ namespace SimpleShapeGrammar.Components.MOOComponents
 
 
             double? outputData = null;
-            double testOut = 0.0;
-            var runBool = this.Params.Input[0].Sources[0] as GH_BooleanToggle;
-            if (runBool == null)
+            // double testOut = 0.0;
+            if (!(this.Params.Input[0].Sources[0] is GH_BooleanToggle runBool))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Input component \"Run\" should be a Boolean Toggle.");
                 return;
             }
-             
+
             if (run)
             {
                 /*

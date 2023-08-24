@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 
-namespace SimpleShapeGrammar
+namespace ShapeGrammar
 {
     public class SimpleShapeGrammarInfo : GH_AssemblyInfo
     {

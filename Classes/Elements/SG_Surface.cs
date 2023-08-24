@@ -5,35 +5,34 @@ using System.Text;
 using System.Threading.Tasks;
 using Rhino.Geometry;
 
-using Rhino.Geometry;
-namespace SimpleShapeGrammar.Classes.Elements
+namespace ShapeGrammar.Classes.Elements
 {
     [Serializable]
-    public class SH_Surface : SH_Element
+    public class SG_Surface : SG_Element
     {
         // -- properties -- 
         public Surface elementSurface { get; set; }
 
         // -- constructors --
-        public SH_Surface()
+        public SG_Surface()
         {
             // empty constructor
         }
 
-        public SH_Surface(Surface elementSurface)
+        public SG_Surface(Surface elementSurface)
         {
             this.elementSurface = elementSurface;
         }
 
-        public SH_Surface(Surface elementSurface, string _name)
+        public SG_Surface(Surface elementSurface, string _name)
         {
             this.elementSurface = elementSurface;
-            elementName = _name;
+            Name = _name;
         }
 
-        public SH_Surface(string _name, int _id, Surface _surface)
+        public SG_Surface(string _name, int _id, Surface _surface)
         {
-            elementName = _name;
+            Name = _name;
             ID = _id;
             elementSurface = _surface;
         }

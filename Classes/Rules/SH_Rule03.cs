@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using System.Linq;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes.Rules
 {
     [Serializable]
-    public class SH_Rule03 : SH_Rule
+    public class SH_Rule03 : SG_Rule
     {
         // --- properties ---
         public double HorizontalThrustParameter { get; set; }
@@ -30,12 +30,12 @@ namespace SimpleShapeGrammar.Classes
         }
 
         // --- methods ---
-        public override SH_Rule CopyRule(SH_Rule rule)
+        public override SG_Rule CopyRule(SG_Rule rule)
         {
             throw new NotImplementedException();
         }
 
-        public override string RuleOperation(SH_SimpleShape _ss)
+        public override string RuleOperation(ref SG_Shape _ss)
         {
             // test for correct state
             if (_ss.SimpleShapeState != State.gamma)
@@ -65,7 +65,7 @@ namespace SimpleShapeGrammar.Classes
                 
                 
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 throw new Exception("The number of elements are not sufficient to create the funicular. There must be at least two lines.");
                 //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not enough elements to draw reciprocal. Minimum number is 2.");
@@ -86,9 +86,9 @@ namespace SimpleShapeGrammar.Classes
             this.bounds[1] = upperBound;
         }
         
-        public override void NewRuleParameters(Random random, SH_SimpleShape ss)
+        public override void NewRuleParameters(Random random, SG_Shape ss)
         {
-            HorizontalThrustParameter = SH_UtilityClass.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
+            HorizontalThrustParameter = UT.RandomExtensions.NextDouble(random, bounds[0], bounds[1]);            
         }
 
         public override State GetNextState()

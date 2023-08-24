@@ -6,7 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using SimpleShapeGrammar.Classes.Elements;
+
+using ShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes.Rules;
 
 using Karamba.Models;
 using Karamba.Utilities;
@@ -17,8 +19,9 @@ using Karamba.CrossSections;
 using Karamba.Supports;
 using Karamba.Loads;
 
-namespace SimpleShapeGrammar.Classes
+namespace ShapeGrammar.Classes
 {
+    
 
     // --- variables ---
 
@@ -35,8 +38,23 @@ namespace SimpleShapeGrammar.Classes
 
     // --- methods ---
 
-    public static class SH_UtilityClass
+    public static class UT
     {
+        public static double PRES = 0.001;
+
+        public static double MIN_SEG_LEN = 1.0;
+
+        public static int RULE_END_MARKER = -999;
+
+        public static int RULE01_MARKER = -1;
+        public static int RULE02_MARKER = -2;
+        public static int RULE04_MARKER = -4;
+
+        public static string CAT = "SimpleGrammar";
+        public static string GR_RLS = "04. Rules";
+        public static string GR_INT = "07. Interpreter";
+        public static string GR_UTIL = "99. Utilities";
+
         public static T DeepCopy<T>(T target)
         {
             T result;
@@ -63,17 +81,17 @@ namespace SimpleShapeGrammar.Classes
         /// </summary>
         /// <param name="rules"></param>
         /// <param name="ss"></param>
-        public static SH_SimpleShape ApplyRulesToSimpleShape(List<SH_Rule> rules, SH_SimpleShape ss)
+        public static SG_Shape ApplyRulesToSimpleShape(List<SG_Rule> rules, SG_Shape ss)
         {
-            SH_SimpleShape ssCopy = SH_UtilityClass.DeepCopy(ss) ; 
-            foreach (SH_Rule rule in rules)
+            SG_Shape ssCopy = UT.DeepCopy(ss) ; 
+            foreach (SG_Rule rule in rules)
             {
                 try
                 {
-                    string message = rule.RuleOperation(ssCopy);
+                    string message = rule.RuleOperation(ref ssCopy);
                     //comp.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, message);
                 }
-                catch (Exception ex)
+                catch // (Exception ex)
                 {
                     //comp.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);;
                 }
@@ -86,19 +104,18 @@ namespace SimpleShapeGrammar.Classes
         /// </summary>
         /// <param name="ss">Simple shape model to create Karamba model from.</param>
         /// <returns></returns>
-        public static Model Karamba3DModelFromSimpleShape(SH_SimpleShape ss)
+        public static Model Karamba3DModelFromSimpleShape(SG_Shape ss)
         {
-            var nodes = new List<Point3>();
+            // var nodes = new List<Point3>();
             var logger = new MessageLogger();
             var k3d = new KarambaCommon.Toolkit();
-            SH_SimpleShape simpleShape = ss.DeepCopy();
+            SG_Shape simpleShape = ss.DeepCopy();
             // create karamba Line3 elements
-            List<string> element_names;
-            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elements["Line"], k3d, out element_names);
+            List<Line3> k_lines = SH_ElementsToKarambaLines(simpleShape.Elems, k3d, out List<string> element_names);
 
             // create Karamba Builder Beams from Line3 list. 
             List<BuilderBeam> elems = k3d.Part.LineToBeam(k_lines, element_names,
-                new List<CroSec>(), logger, out nodes);
+                new List<CroSec>(), logger, out _);
             /// <summary>
             /// not implemented: The cross section which should also come from the SH_SimpleElement.
             /// </summary>
@@ -110,7 +127,7 @@ namespace SimpleShapeGrammar.Classes
             foreach (var sup in simpleShape.Supports)
             {
                 // karamba point
-                Point3 loc = new Point3(sup.Position.X, sup.Position.Y, sup.Position.Z);
+                Point3 loc = new Point3(sup.Node.Pt.X, sup.Node.Pt.Y, sup.Node.Pt.Z);
 
                 // conditions
                 List<bool> conditions = CreateBooleanConditions(sup.SupportCondition);
@@ -155,12 +172,9 @@ namespace SimpleShapeGrammar.Classes
             // point loads : not implemented yet
 
             // -- assembly --
-            double mass;
-            Point3 cog; // centre of gravity for the model
-            bool flag;
-            string info;
+            // centre of gravity for the model
             Model model = k3d.Model.AssembleModel(elems, supports, loads,
-                out info, out mass, out cog, out info, out flag);
+                out _, out _, out _, out _, out _);
 
             return model;
 
@@ -173,14 +187,10 @@ namespace SimpleShapeGrammar.Classes
 
             var k3d = new KarambaCommon.Toolkit();
             // calculate Th.I response
-            List<double> max_disp;
-            List<double> out_g;
-            List<double> out_comp;
-            string message;
 
             try
             {
-                Model analysedModel = k3d.Algorithms.AnalyzeThI(model, out max_disp, out out_g, out out_comp, out message);
+                Model analysedModel = k3d.Algorithms.AnalyzeThI(model, out List<double> max_disp, out List<double> out_g, out List<double> out_comp, out string message);
                 // iterate through each objective function
                 foreach (string objective in objectives)
                 {
@@ -198,7 +208,7 @@ namespace SimpleShapeGrammar.Classes
 
                 }
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 // to do: log this error
                 // if there is an exception, there is an error in the model. Add high objective values to avoid these solution. 
@@ -207,9 +217,9 @@ namespace SimpleShapeGrammar.Classes
                     results.Add(double.PositiveInfinity);
                 }
             }
-            
-            
-            
+
+
+
             return results;
         }
 
@@ -240,18 +250,18 @@ namespace SimpleShapeGrammar.Classes
         /// <param name="k3d"></param>
         /// <param name="el_names"></param>
         /// <returns></returns>
-        private static List<Line3> SH_ElementsToKarambaLines(List<SH_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
+        private static List<Line3> SH_ElementsToKarambaLines(List<SG_Element> elements, KarambaCommon.Toolkit k3d, out List<string> el_names)
         {
             // initiate list
 
             List<Line3> k_lines = new List<Line3>();
             List<string> k_names = new List<string>();
             // create karamabe BuilderBeam elements using Factory method
-            foreach (SH_Element el in elements)
+            foreach (SG_Element el in elements)
             {
                 // get node points
-                Point3d sPt = el.Nodes[0].Position;
-                Point3d ePt = el.Nodes[1].Position;
+                Point3d sPt = el.Nodes[0].Pt;
+                Point3d ePt = el.Nodes[1].Pt;
                 // convert to karamba's Point3
                 Point3 k_sPt = new Point3(sPt.X, sPt.Y, sPt.Z);
                 Point3 k_ePt = new Point3(ePt.X, ePt.Y, ePt.Z);
@@ -261,7 +271,7 @@ namespace SimpleShapeGrammar.Classes
                 k_lines.Add(k_line);
 
                 // add name
-                k_names.Add(el.elementName);
+                k_names.Add(el.Name);
 
 
             }
@@ -274,7 +284,6 @@ namespace SimpleShapeGrammar.Classes
             // find the sum of weights
             double sum_of_weights = weights.Sum();
             object el = new object();
-            int ind = 0;
             // initiate random
             //var random = new Random();
             double rnd = RandomExtensions.NextDouble(random, 0, sum_of_weights);
@@ -284,7 +293,6 @@ namespace SimpleShapeGrammar.Classes
                 if (rnd < weights[i])
                 {
                     el = fromList[i];
-                    ind = i;
                     break;
                 }
                 rnd -= weights[i];

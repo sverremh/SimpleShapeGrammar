@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System;
+using ShapeGrammar.Classes;
 
-namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
+namespace ShapeGrammar.Components
 {
-    public class PrimaryRoofStructure : GH_Component
+    public class DisassembleSupport : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PrimaryRoofStructure class.
+        /// Initializes a new instance of the DisassemleSupport class.
         /// </summary>
-        public PrimaryRoofStructure()
-          : base("PrimaryRoofStructure", "Nickname",
-              "Description",
-              "SimpleGrammar", "Kristiane")
+        public DisassembleSupport()
+          : base("DisassemleSupport", "Exp. Sup",
+              "",
+              UT.CAT, UT.GR_UTIL)
         {
         }
 
@@ -23,6 +22,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddGenericParameter("SG_Support", "SG_Sup", "SG_Support", GH_ParamAccess.item) ;
         }
 
         /// <summary>
@@ -30,7 +30,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Mitchell Rule Class 3", "MRule3", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Node", "N", "", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("SupportCondition", "cond", "Integer representation of support condition", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -39,18 +40,19 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // variables
-            //double nrSub = 0; //number of subsection
-            //double h = 0; // height
-            //input
-            //if (!DA.GetData(0, ref nrSub)) return;
-            //if (!DA.GetData(1, ref h)) return;
+            // ---variables-- -
+            SG_Support sup = new SG_Support();
 
-            // solve
-            PrimaryRoofStructureRule MRule3 = new PrimaryRoofStructureRule();
+            // --- input ---
+            if(!DA.GetData(0, ref sup)) return;
 
-            // output
-            DA.SetData(0, MRule3);
+            // --- solve ---
+            SG_Node n = sup.Node;
+            int cond = sup.SupportCondition;
+
+            // --- output ---
+            DA.SetData(0, n);
+            DA.SetData(1, cond);
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("CCFB04D1-E269-42FA-96C4-875F218EE865"); }
+            get { return new Guid("164ecb23-1d4b-4fd1-8fdc-8536a51eb685"); }
         }
     }
 }

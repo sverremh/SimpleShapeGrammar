@@ -2,20 +2,20 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
+
 using ShapeGrammar.Classes;
-using ShapeGrammar.Classes.Elements;
 
 namespace ShapeGrammar.Components
 {
-    public class LineToElement : GH_Component
+    public class DisassembleNode : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the Assembly class.
+        /// Initializes a new instance of the DisassembleNode class.
         /// </summary>
-        public LineToElement()
-          : base("LineToElement", "lnToEl",
-              "Creates a SH_Element from a Line",
-              "SimpleGrammar", "Element")
+        public DisassembleNode()
+          : base("DisassembleNode", "Exp. Node",
+              "",
+              UT.CAT, UT.GR_UTIL)
         {
         }
 
@@ -24,11 +24,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddLineParameter("Initial Line", "initLine", "Line to be used in the simple grammar derivaiton.", GH_ParamAccess.item); // 0
-            pManager.AddGenericParameter("Cross Section", "crossSec", "Cross Section to assign the element", GH_ParamAccess.item); // 1
-            pManager.AddTextParameter("ElementName", "name", "Name of the element", GH_ParamAccess.item); // 2
-
-            pManager[2].Optional = true;
+            pManager.AddGenericParameter("SG_Node", "SG_N", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -36,7 +32,10 @@ namespace ShapeGrammar.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SH_Element", "sH_el", "An instance of a SH_Element", GH_ParamAccess.item); 
+            pManager.AddIntegerParameter("Node id", "NID", "", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SG_Support", "SG_Sup", "", GH_ParamAccess.item);
+            pManager.AddPointParameter("Point", "pt", "", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -47,23 +46,20 @@ namespace ShapeGrammar.Components
         {
 
             // --- variables ---
+            SG_Node nd = new SG_Node();
 
-            Line ln = new Line();
-            SH_CrossSection_Beam crossSection = new SH_CrossSection_Beam();
-            string name = "";
-
-            // --- input --- 
-
-            if (!DA.GetData(0, ref ln)) return;
-            if (!DA.GetData(1, ref crossSection)) return;
-            DA.GetData(2, ref name);
+            // --- input ---
+            if (!DA.GetData(0, ref nd)) return;
 
             // --- solve ---
-
-            SG_Elem1D elem = new SG_Elem1D(ln, -999, name, crossSection);
+            int o_id = nd.ID;
+            SG_Support sp = nd.Support;
+            Point3d pt = nd.Pt;
 
             // --- output ---
-            DA.SetData(0, elem);
+            DA.SetData(0, o_id);
+            DA.SetData(1, sp);
+            DA.SetData(2, pt);
 
         }
 
@@ -76,7 +72,7 @@ namespace ShapeGrammar.Components
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return ShapeGrammar.Properties.Resources.icons_C_Elem1D;
+                return null;
             }
         }
 
@@ -85,7 +81,7 @@ namespace ShapeGrammar.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("beaaf8ac-603a-49bf-9a4b-39ce573c5f44"); }
+            get { return new Guid("9f858f82-e087-4543-8775-c262d93b1d94"); }
         }
     }
 }

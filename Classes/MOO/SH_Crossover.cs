@@ -8,7 +8,9 @@ using JMetalCSharp.Core;
 using JMetalCSharp.Operators.Crossover;
 using JMetalCSharp.Utils;
 
-namespace SimpleShapeGrammar.Classes
+using ShapeGrammar.Classes.Rules;
+
+namespace ShapeGrammar.Classes
 {
     class SH_Crossover : Crossover
     {
@@ -32,8 +34,8 @@ namespace SimpleShapeGrammar.Classes
             SH_Solution[] offspring = new SH_Solution[2];
            
             // get the list of SH_Rule to use for identification of splicePoints
-            List<SH_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
-            List<SH_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
+            List<SG_Rule> p1Genome = ((SH_Variable)parent1.SH_Variable[0]).RuleList;
+            List<SG_Rule> p2Genome = ((SH_Variable)parent2.SH_Variable[0]).RuleList;
 
             // empty list for possible splice points 
             List<int[]> splicePoints = new List<int[]>();
@@ -59,14 +61,14 @@ namespace SimpleShapeGrammar.Classes
             int[] splicePair = splicePoints[spliceInd]; // select the random splice points
 
             // split the list
-            List<SH_Rule> p1_1 = p1Genome.GetRange(0, splicePair[0] + 1);
-            List<SH_Rule> p1_2 = p1Genome.GetRange(splicePair[0]+1, p1Genome.Count - p1_1.Count);
+            List<SG_Rule> p1_1 = p1Genome.GetRange(0, splicePair[0] + 1);
+            List<SG_Rule> p1_2 = p1Genome.GetRange(splicePair[0]+1, p1Genome.Count - p1_1.Count);
 
-            List<SH_Rule> p2_1 = p2Genome.GetRange(0, splicePair[1] + 1);
-            List<SH_Rule> p2_2 = p2Genome.GetRange(splicePair[1] +1, p2Genome.Count - p2_1.Count);
+            List<SG_Rule> p2_1 = p2Genome.GetRange(0, splicePair[1] + 1);
+            List<SG_Rule> p2_2 = p2Genome.GetRange(splicePair[1] +1, p2Genome.Count - p2_1.Count);
 
-            List<SH_Rule> o1Genome = p1_1.Concat(p2_2).ToList(); // genome for the first offspring
-            List<SH_Rule> o2Genome = p2_1.Concat(p1_2).ToList(); // genome for the second offspring
+            List<SG_Rule> o1Genome = p1_1.Concat(p2_2).ToList(); // genome for the first offspring
+            List<SG_Rule> o2Genome = p2_1.Concat(p1_2).ToList(); // genome for the second offspring
 
             // create the offspring
             SH_Variable[] o1Var = new SH_Variable[1] {new SH_Variable(o1Genome) }; // create a variable of the first offspring
@@ -75,11 +77,11 @@ namespace SimpleShapeGrammar.Classes
             offspring[0] = new SH_Solution(problem, o1Var);
             offspring[1] = new SH_Solution(problem, o2Var);
 
-            SH_SimpleShape ss01 =
-                SH_UtilityClass.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
+            SG_Shape ss01 =
+                UT.ApplyRulesToSimpleShape(o1Var[0].RuleList, parent1.sh_problem.MyComponent.SimpleShape);
             offspring[0].SH_Variable[0].SimpleShape = ss01;
-            SH_SimpleShape ss02 =
-                SH_UtilityClass.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
+            SG_Shape ss02 =
+                UT.ApplyRulesToSimpleShape(o2Var[0].RuleList, parent2.sh_problem.MyComponent.SimpleShape.DeepCopy());
             offspring[1].SH_Variable[0].SimpleShape = ss02;
 
             //offspring[1] = new SH_Solution(o2Var); // the constructor should take the list of SH_Rule as input

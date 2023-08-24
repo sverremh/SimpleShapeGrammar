@@ -2,20 +2,20 @@
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using SimpleShapeGrammar.Classes.Elements;
+using ShapeGrammar.Classes;
+using ShapeGrammar.Classes.Elements;
 
-namespace SimpleShapeGrammar.Components
+namespace ShapeGrammar.Components
 {
-    public class DisassembleSimpleShape : GH_Component
+    public class DisassembleShape : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DisassembleSimpleShape class.
         /// </summary>
-        public DisassembleSimpleShape()
-          : base("DisassembleSimpleShape", "Nickname",
-              "Description",
-              "SimpleGrammar", "Disassemble")
+        public DisassembleShape()
+          : base("DisassembleShape", "Exp. Shape",
+              "",
+              UT.CAT, UT.GR_UTIL)
         {
         }
 
@@ -49,7 +49,7 @@ namespace SimpleShapeGrammar.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // --- variables ---
-            SH_SimpleShape ss = new SH_SimpleShape();
+            SG_Shape ss = new SG_Shape();
 
             // --- input ---
             if (!DA.GetData(0, ref ss)) return;
@@ -57,15 +57,15 @@ namespace SimpleShapeGrammar.Components
             // --- solve ---
 
             // list of elements
-            List<SH_Element> elems = new List<SH_Element>();
-            elems.AddRange(ss.Elements["Line"]);
+            List<SG_Element> elems = new List<SG_Element>();
+            elems.AddRange(ss.Elems);
 
             // list of supports
-            List<SH_Support> sups = new List<SH_Support>();
+            List<SG_Support> sups = new List<SG_Support>();
             sups.AddRange(ss.Supports);
 
             // list of nodes
-            List<SH_Node> nodes = new List<SH_Node>();
+            List<SG_Node> nodes = new List<SG_Node>();
             nodes.AddRange(ss.Nodes);
 
             // --- output ---

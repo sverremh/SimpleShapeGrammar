@@ -8,8 +8,8 @@
     <ProjectGuid>{2AAC884B-EBFE-4DF2-BE18-39D11E6EF5E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SimpleShapeGrammar</RootNamespace>
-    <AssemblyName>SimpleShapeGrammar</AssemblyName>
+    <RootNamespace>ShapeGrammar</RootNamespace>
+    <AssemblyName>ShapeGrammar</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -34,6 +34,25 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>
@@ -45,11 +64,11 @@
       <HintPath>packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Core.dll</HintPath>
     </Reference>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
+      <HintPath>..\_ref\ShapeGrammar\GH_IO.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\..\Program Files\Rhino 7\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
+      <HintPath>..\_ref\ShapeGrammar\Grasshopper.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="JMetalCSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -57,16 +76,16 @@
       <HintPath>Libraries\JMetalCSharp.dll</HintPath>
     </Reference>
     <Reference Include="karamba.gha">
-      <HintPath>Libraries\karamba.gha.dll</HintPath>
+      <HintPath>..\_ref\ShapeGrammar\karamba.gha.dll</HintPath>
     </Reference>
     <Reference Include="karambaCommon">
-      <HintPath>Libraries\karambaCommon.dll</HintPath>
+      <HintPath>..\_ref\ShapeGrammar\KarambaCommon.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\..\Program Files\Rhino 7\System\RhinoCommon.dll</HintPath>
+      <HintPath>..\_ref\ShapeGrammar\RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -81,11 +100,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CrossSections\SH_CrossSection_Beam.cs" />
-    <Compile Include="Classes\Elements\SH_Line.cs" />
-    <Compile Include="Classes\Elements\SH_Solid.cs" />
-    <Compile Include="Classes\Elements\SH_Surface.cs" />
+    <Compile Include="Classes\Elements\SG_Elem1D.cs" />
+    <Compile Include="Classes\Elements\SG_Solid.cs" />
+    <Compile Include="Classes\Elements\SG_Surface.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule02.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule03.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule04.cs" />
+    <Compile Include="Classes\SG_Genotype.cs" />
     <Compile Include="Classes\KarambaUtility.cs" />
-    <Compile Include="Classes\Kristiane\Test.cs" />
     <Compile Include="Classes\MOO\MOOComponentAttributes.cs" />
     <Compile Include="Classes\MOO\MOO_Utility.cs" />
     <Compile Include="Classes\MOO\SH_Crossover.cs" />
@@ -101,29 +123,36 @@
     <Compile Include="Classes\MOO\SH_Variable.cs" />
     <Compile Include="Classes\MOO\SH_XReal.cs" />
     <Compile Include="Classes\Rules\ISH_Rule.cs" />
+    <Compile Include="Classes\Rules\SG_AutoRule01.cs" />
     <Compile Include="Classes\SH_Evaluation.cs" />
     <Compile Include="Classes\Material\SH_Material.cs" />
-    <Compile Include="Classes\Elements\SH_Element.cs" />
+    <Compile Include="Classes\Elements\SG_Element.cs" />
     <Compile Include="Classes\Loads\SH_Load.cs" />
     <Compile Include="Classes\Material\SH_Material_Isotrop.cs" />
     <Compile Include="Classes\Loads\SH_PointLoad.cs" />
     <Compile Include="Classes\Loads\SH_LineLoad.cs" />
-    <Compile Include="Classes\SH_Node.cs" />
+    <Compile Include="Classes\SG_Node.cs" />
     <Compile Include="Classes\CrossSections\SH_CrossSection_Rectangle.cs" />
-    <Compile Include="Classes\Rules\SH_Rule.cs" />
+    <Compile Include="Classes\Rules\SG_Rule.cs" />
     <Compile Include="Classes\Rules\SH_Rule01.cs" />
     <Compile Include="Classes\Rules\SH_Rule02.cs" />
     <Compile Include="Classes\Rules\SH_RuleA.cs" />
     <Compile Include="Classes\Rules\SH_Rule03.cs" />
-    <Compile Include="Classes\SH_SimpleShape.cs" />
-    <Compile Include="Classes\SH_Support.cs" />
-    <Compile Include="Classes\SH_UtilityClass.cs" />
+    <Compile Include="Classes\SG_Shape.cs" />
+    <Compile Include="Classes\SG_Support.cs" />
+    <Compile Include="Classes\UT.cs" />
     <Compile Include="Components\Assembly.cs" />
+    <Compile Include="Components\CreateGenotype.cs" />
     <Compile Include="Components\CreateIsotropicMaterial.cs" />
     <Compile Include="Components\CrossSections\RectangleCrossSection.cs" />
-    <Compile Include="Components\Disassemble\DisassembleSimpleShape.cs" />
-    <Compile Include="Components\Disassemble\DisassemleSupport.cs" />
+    <Compile Include="Components\Disassemble\DisassembleCroSec.cs" />
+    <Compile Include="Components\Disassemble\DisassembleElement.cs" />
+    <Compile Include="Components\Disassemble\DisassembleMat.cs" />
+    <Compile Include="Components\Disassemble\DisassembleNode.cs" />
+    <Compile Include="Components\Disassemble\DisassembleShape.cs" />
+    <Compile Include="Components\Disassemble\DisassembleSupport.cs" />
     <Compile Include="Components\Evaluate.cs" />
+    <Compile Include="Components\GrammarInterpreter_Auto.cs" />
     <Compile Include="Components\KarambaComponents\KarambaTest.cs" />
     <Compile Include="Components\Load Components\LineLoad.cs" />
     <Compile Include="Components\LineToElement.cs" />
@@ -132,6 +161,10 @@
     <Compile Include="Components\Load Components\PointLoads.cs" />
     <Compile Include="Components\MOOComponents\FirstGrammarMOO.cs" />
     <Compile Include="Components\MOOComponents\TestUpdateReset.cs" />
+    <Compile Include="Components\RuleComponents\AutoRule01.cs" />
+    <Compile Include="Components\RuleComponents\AutoRule02.cs" />
+    <Compile Include="Components\RuleComponents\AutoRule03.cs" />
+    <Compile Include="Components\RuleComponents\AutoRule04.cs" />
     <Compile Include="Components\RuleComponents\RandomTest.cs" />
     <Compile Include="Components\RuleComponents\RandomRules.cs" />
     <Compile Include="Components\RuleComponents\Rule01.cs" />
@@ -140,14 +173,6 @@
     <Compile Include="Components\RuleComponents\RuleA.cs" />
     <Compile Include="Components\KarambaComponents\SH_ShapeToKarambaModel.cs" />
     <Compile Include="Components\SupportComponent.cs" />
-    <Compile Include="Kristiane\Classes\SurfaceClass.cs" />
-    <Compile Include="Kristiane\Components\Rule_BrepToSurface.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\BrepToSurfaceRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\PrimaryRoofStructureRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Classes\SubStructureRule.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\BrepToSurface.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\PrimaryRoofStructure.cs" />
-    <Compile Include="Kristiane\MitchellGrammar\Components\SubStructure.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -203,16 +228,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Copy "$(SolutionDir)\Libraries\JMetalCSharp.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\JMetalCSharp.dll""
-Copy "$(SolutionDir)\packages\log4net.2.0.13\lib\net45\log4net.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\log4net.dll""
-Copy "$(SolutionDir)\Libraries\karamba.gha.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\karamba.gha.dll""
-Copy "$(SolutionDir)\packages\Accord.3.8.0\lib\net462\Accord.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.dll""
-Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.dll""
-Copy "$(SolutionDir)\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Cor.
-'dll" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\Accord.Math.Core.dll""
-
-Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).gha""
-Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\Grasshopper\7\Libraries\Karamba\$(ProjectName).dll""
+Copy "$(TargetPath)" "%25UserProfile%25\AppData\Roaming\McNeel\Rhinoceros\packages\7.0\Karamba3D\2.2.0.171\$(ProjectName).gha"
 
 Erase "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
@@ -226,6 +242,7 @@ Erase "$(TargetPath)"</PostBuildEvent>
     <StartAction>Program</StartAction>
     <DocumentationFile>
     </DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <Import Project="packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('packages\Accord.3.8.0\build\Accord.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

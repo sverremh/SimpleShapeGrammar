@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using SimpleShapeGrammar.Classes;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
+using System;
+using System.Collections.Generic;
 
+using ShapeGrammar.Classes;
 
-namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
+namespace ShapeGrammar.Components
 {
-    public class BrepToSurface : GH_Component
+    public class CreateGenotype : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the BrepToSurface class.
+        /// Initializes a new instance of the CreateGenotype class.
         /// </summary>
-        public BrepToSurface()
-          : base("Rule_BrepToSurface", "Nickname",
-              "Exploding brep into surfaces",
-              "SimpleGrammar", "Kristiane")
+        public CreateGenotype()
+          : base("CreateGenotype", "Genotype",
+              "Description",
+              UT.CAT, UT.GR_UTIL)
         {
         }
 
@@ -24,7 +24,8 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //pManager.AddBrepParameter("Brep", "B", "Input geometry is a Brep", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Integer List", "IntLst", "", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Double List", "DblLst", "", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -32,9 +33,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Mitchell Rule Class 1", "MRule1", "The Rule to be applied in the Shape Grammar", GH_ParamAccess.item);
-            //pManager.AddSurfaceParameter("Surfaces", "SrfLst", "List of Surfaces", GH_ParamAccess.list);
-            //pManager.AddTextParameter("Surface Name", "SrfName", "List with name of Surfaces", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Genotype", "GType", "", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -43,17 +42,20 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // variables
-            //Brep geo = new Brep();
+            // --- variables ---
+            List<int> ints = new List<int>();
+            List<double> ds = new List<double>();
 
-            // inputs
-            //if (!DA.GetData(0, ref geo)) return;
+            // --- input ---
+            if (!DA.GetDataList(0, ints)) return;
+            if (!DA.GetDataList(1, ds)) return;
 
-            // solve
-            BrepToSurfaceRule MRule1 = new BrepToSurfaceRule();
+            // --- solve ---
 
-            // output
-            DA.SetData(0, MRule1);
+            SG_Genotype gt = new SG_Genotype(ints, ds);
+
+            // --- output ---
+            DA.SetData(0, gt);
 
         }
 
@@ -75,7 +77,7 @@ namespace SimpleShapeGrammar.Kristiane.MitchellGrammar
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("74EECE0E-63E4-46C5-8C92-45B62D80857E"); }
+            get { return new Guid("89d40ccf-307e-4815-971a-8fff5ca2a2de"); }
         }
     }
 }

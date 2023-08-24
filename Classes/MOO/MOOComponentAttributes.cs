@@ -8,9 +8,11 @@ using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel;
 using System.Windows.Forms;
 using Rhino.Geometry;
-using SimpleShapeGrammar.Components.MOOComponents;
 
-namespace SimpleShapeGrammar.Classes
+using ShapeGrammar.Classes.Rules;
+using ShapeGrammar.Components.MOOComponents;
+
+namespace ShapeGrammar.Classes
 {
     class MOOComponentAttributes : Grasshopper.Kernel.Attributes.GH_ComponentAttributes
     {
@@ -18,7 +20,7 @@ namespace SimpleShapeGrammar.Classes
         FirstGrammarMOO MyComponent;
         List<GH_NumberSlider> variablesSliders = new List<GH_NumberSlider>();
         public int solutionsCounter = 0; // count the number of designs evaluated
-        (List<SH_Rule> genome, List<double> fitness) allSolutionsTrack;
+        // (List<SH_Rule> genome, List<double> fitness) allSolutionsTrack;
         
         public MOOComponentAttributes(IGH_Component component ) : base(component)
         {
